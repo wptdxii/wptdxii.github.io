@@ -7,12 +7,6 @@ categories: Android
 
 <!-- more -->
 
-Dagger 是一个全静态的，编译时的依赖注入框架。
-
-* 项目地址： [dagger](https://github.com/google/dagger)
-* 文档地址： [User documentation](https://google.github.io/dagger/)
-* stackoverflow tag [dagger-2](https://stackoverflow.com/questions/tagged/dagger-2)
-
 # Dependency Injection
 
 控制反转(Inversion of Control，简称 IoC) 是面向对象编程中的一个设计原则，用来降低对象之间的耦合。
@@ -96,6 +90,12 @@ public class Foo implements InjectLog {
 * [Using dependency injection in Java - Introduction - Tutorial](http://www.vogella.com/tutorials/DependencyInjection/article.html#dependencyinjection_annotations)
 
 # Dagger 2.x 
+
+Dagger 是一个全静态的，编译时的依赖注入框架，基于 Java Specification Request(简称JSR) 330，
+
+* 项目地址： [dagger](https://github.com/google/dagger)
+* 文档地址： [User documentation](https://google.github.io/dagger/)
+* stackoverflow tag [dagger-2](https://stackoverflow.com/questions/tagged/dagger-2)
 
 ## @Compoennt
 
