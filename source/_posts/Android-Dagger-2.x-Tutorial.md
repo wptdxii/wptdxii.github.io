@@ -26,10 +26,11 @@ public class Foo {
     }
 }
 ```
+
 这时调用对象控制着依赖对象的创建，但这样做耦合性太大，当依赖对象改动时或者需要换一个实现的时候，调用对象也要做出相应的改动，因为紧密耦合，也不方便单独对调用对象进行测试。
 依赖反转就是就是为了解决这种强耦合的硬依赖，将调用对象创建依赖对象的的控制权反转，交给外部的依赖容器来进行创建，然后注入到调用对象中，实现松散耦合的目的。
 
-依赖注入(Dependency Injection，简称 DI)和依赖查找(Dependency Lookup)是实现控制反转的两种常见方式，下面主要说一下依赖注入，依赖注入是指通过提供注入依赖的方法，让依赖容器决定依赖关系，从而实现控制反转，将依赖对象注入到调用对象中。依赖注入主要有三种注入方式：构造器注入、方法注入和接口注入。
+依赖注入(Dependency Injection，简称 DI)和依赖查找(Dependency Lookup)是实现控制反转的两种常见方式，下面主要说一下依赖注入，依赖注入是指通过提供注入依赖的方法，让依赖容器决定依赖关系，从而实现控制反转，将依赖对象注入到调用对象中,增加代码的可维护性和可测试性。依赖注入主要有三种注入方式：构造器注入、方法注入和接口注入。
 
 ## Consturctor Injection
 
@@ -89,7 +90,7 @@ public class Foo implements InjectLog {
 * [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)
 * [Using dependency injection in Java - Introduction - Tutorial](http://www.vogella.com/tutorials/DependencyInjection/article.html#dependencyinjection_annotations)
 
-# Dagger 2.x 
+# Dagger 2.x
 
 Dagger 是一个全静态的，编译时的依赖注入框架，基于 Java Specification Request(简称JSR) 330，
 
@@ -106,3 +107,10 @@ Dagger 是一个全静态的，编译时的依赖注入框架，基于 Java Spec
 ## @Scope
 
 ## Quafiler
+
+## Ref
+
+* [Introduction to Dagger 2, Using Dependency Injection in Android: Part 1](https://blog.mindorks.com/introduction-to-dagger-2-using-dependency-injection-in-android-part-1-223289c2a01b)
+* [Introduction to Dagger 2, Using Dependency Injection in Android: Part 2](https://blog.mindorks.com/introduction-to-dagger-2-using-dependency-injection-in-android-part-2-b55857911bcd)
+[Dependency Injection with Dagger 2](https://github.com/codepath/android_guides/wiki/Dependency-Injection-with-Dagger-2)
+[Tasting Dagger 2 on Android](https://fernandocejas.com/2015/04/11/tasting-dagger-2-on-android/)
