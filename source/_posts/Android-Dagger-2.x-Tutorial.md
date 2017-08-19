@@ -92,7 +92,7 @@ public class Foo implements InjectLog {
 
 # Dagger 2.x
 
-Dagger 是一个全静态的，编译时的依赖注入框架，基于 Java Specification Request(简称JSR) 330，
+Dagger 是一个全静态的，编译时的依赖注入框架，基于 Java Specification Request(简称JSR) 330。
 
 * 项目地址： [dagger](https://github.com/google/dagger)
 * 文档地址： [User documentation](https://google.github.io/dagger/)
@@ -106,11 +106,13 @@ Dagger 是一个全静态的，编译时的依赖注入框架，基于 Java Spec
 
 ## @Scope
 
-## Quafiler
+## @Quafiler
 
-## Ref
+# Dagger 2.x on Android
+
+# Ref
 
 * [Introduction to Dagger 2, Using Dependency Injection in Android: Part 1](https://blog.mindorks.com/introduction-to-dagger-2-using-dependency-injection-in-android-part-1-223289c2a01b)
 * [Introduction to Dagger 2, Using Dependency Injection in Android: Part 2](https://blog.mindorks.com/introduction-to-dagger-2-using-dependency-injection-in-android-part-2-b55857911bcd)
-[Dependency Injection with Dagger 2](https://github.com/codepath/android_guides/wiki/Dependency-Injection-with-Dagger-2)
-[Tasting Dagger 2 on Android](https://fernandocejas.com/2015/04/11/tasting-dagger-2-on-android/)
+* [Dependency Injection with Dagger 2](https://github.com/codepath/android_guides/wiki/Dependency-Injection-with-Dagger-2)
+* [Tasting Dagger 2 on Android](https://fernandocejas.com/2015/04/11/tasting-dagger-2-on-android/)
