@@ -92,21 +92,35 @@ public class Foo implements InjectLog {
 
 # Dagger 2.x
 
-Dagger 是一个全静态的，编译时的依赖注入框架，基于 Java Specification Request(简称JSR) 330。
-
-* 项目地址： [dagger](https://github.com/google/dagger)
+* 项目地址： [dagger 2](https://github.com/google/dagger)
 * 文档地址： [User documentation](https://google.github.io/dagger/)
 * stackoverflow tag [dagger-2](https://stackoverflow.com/questions/tagged/dagger-2)
 
-## @Compoennt
+Dagger 2 是一个全静态的，编译时的依赖注入框架，通过注解处理器(Annotation Processor)在编译时生成高度可读的类似手写的依赖图，消除了运行时使用反射带来的性能问题。Dagger 2 描述依赖的注解基于 Java Specification Request(简称JSR) 330，注入的顺序是：
 
-## @Module
+1. 构造器注入(Constructor Injection)：注入构造方法参数
+1. 字段注入(Field Injection)：注入非私有的成员变量
+1. 方法注入(Method Injection)：注入方法参数
+
+被 @Inject 注解标注的字段或者方法被调用的顺序是由 JSR 330 定义的，而不是在类中被声明的顺序。因字段注入和方法参数注入是在构造参数注入之后进行的，所以在构造器中不能使用被被注入的成员变量和方法参数。
+
+Dagger 2 依赖注入框架主要由三部分组成：
+
+* 依赖提供者(Dependency Provider): 使用 @Module 注解
+* 依赖消费者(Dependency Consumer): 使用 @Inject 注解
+* 依赖连接器(Dependency Connector): 使用 @Component 注解
 
 ## @Inject
 
-## @Scope
 
-## @Quafiler
+
+## @Compoennt
+
+## @Module & @Provides
+
+## @Qualifier
+
+## Scope
 
 # Dagger 2.x on Android
 
