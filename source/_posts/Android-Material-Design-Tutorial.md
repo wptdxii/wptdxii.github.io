@@ -57,6 +57,8 @@ res/values/themes.xml:
 </resources>
 ```
 
+将其应用在 AndroidManifest.xml 中的 application 标签。
+
 在布局文件中引入 support V7 包下的 Toolbar：
 
 ```xml
@@ -96,11 +98,9 @@ public class MainActivity extends AppCompatActivity {
 > * Activity 需要继承 AppCompatActivity
 > * 调用 setSupportActionBar(), 可以将 Toolbar 设置为应用栏，否则作为独立控件使用。
 
-## 使用 Toolbar
-
-
-
 ## 配置 Toolbar
+
+### 设置导航图标
 
 其中各个属性如下图所示：
 
