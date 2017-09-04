@@ -22,8 +22,7 @@ Toolbar 有两种使用方式：
 * 应用栏(Action Bar)
 * 独立控件(Standalone Widget)
 
-Toolbar 既可以作为 app 的应用栏使用，也可以作为一个独立的普通控件使用。当作为应用栏使用时，需要通过 setSupportActionBar() 将 Toolbar 设置为应用栏；当作为一个独立的控件使用时，
-用法同普通的 ViewGroup 用法一样。从功能上讲，Toolbar 继承并扩展了 ActionBar 的所有功能，所以 Toolbar 可以作为独立的普通控件完全代替 ActionBar，而不必将其设置为应用栏，但是对于使用了 ActionBar 的老项目，为了复用其代码，减少迁移成本，将 Toolbar 设置为应用栏最简便。所以对于有历史包袱的老项目，应该将 Toolbar 设置为系统应用栏使用；对于新项目，可以将 Toolbar 作为普通控件使用。
+Toolbar 既可以作为 app 的应用栏使用，也可以作为一个独立的普通控件使用。当作为应用栏使用时，需要通过 setSupportActionBar() 将 Toolbar 设置为应用栏，可以使用 ActionBar 提供的一些 API；当作为一个独立的控件使用时，用法同普通的 ViewGroup 用法一样。从功能上讲，Toolbar 继承并扩展了 ActionBar 的所有功能，所以 Toolbar 可以作为独立的普通控件完全代替 ActionBar，而不必将其设置为应用栏，但是对于使用了 ActionBar 的老项目，为了复用其代码，减少迁移成本，将 Toolbar 设置为应用栏最简便。所以对于有历史包袱的老项目，应该将 Toolbar 设置为系统应用栏使用；对于新项目，可以将 Toolbar 作为普通控件使用。
 
 可以参看：
 
@@ -38,7 +37,7 @@ Toolbar 既可以作为 app 的应用栏使用，也可以作为一个独立的�
 compile 'com.android.support:appcompat-v7:$supportVersion'
 ```
 
-设置隐藏 ActionBar 的主题，根据应用风格，可以选择深色主题和浅色主题：
+为了防止使用原生 ActionBar 类作为应用栏，需要设置隐藏 ActionBar 的主题，根据应用风格，可以选择深色主题和浅色主题：
 
 * Theme.AppCompat.NoActionBar
 * Theme.AppCompat.Light.NoActionBar
@@ -100,19 +99,33 @@ public class MainActivity extends AppCompatActivity {
 
 ## 配置 Toolbar
 
-### 设置导航图标
+### 设置 Up Button
+
+应用栏提供了 Up Buttion，位于左上角，通常用于返回主页面或者抽屉触发，图标和点击触发的逻辑都是可以定义的。
+
+当 Toolbar 设置为应用栏时，调用 ActionBar.setDisplayHomeAsUpEnabled()
+
+```java
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        }
+    }
+```
 
 其中各个属性如下图所示：
 
 ![ThemeColor](http://otg3f8t90.bkt.clouddn.com/2017/8/29/ThemeColors.png)
 
-
-Activity 需要继承 AppCompatActivity：
-
-
-这样就实现了用 Toolbar 替换 ActionBar
-
-## 溢出菜单(Overflow Menu)
+## 设置溢出菜单(Overflow Menu)
 
 ### 定制溢出菜单按钮(Overflow Menu Button)
 
