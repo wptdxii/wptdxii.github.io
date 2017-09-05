@@ -101,25 +101,72 @@ public class MainActivity extends AppCompatActivity {
 
 ### 设置 Up Button
 
-应用栏提供了 Up Buttion，位于左上角，通常用于返回主页面或者抽屉触发，图标和点击触发的逻辑都是可以定义的。
+应用栏提供了 Up Buttion，位于左上角，通常用于返回主页面或者抽屉触发，图标和点击触发的逻辑都是可以自定义。
+Up Button 默认用于返回父 Activity，为了实现该功能，首先要在清单文件中声明父 Activity：
 
-当 Toolbar 设置为应用栏时，调用 ActionBar.setDisplayHomeAsUpEnabled()
+```xml
+
+<application ... >
+    ...
+
+    <activity
+        android:name="com.example.MainActivity" ...>
+        ...
+    </activity>
+
+    <activity
+        android:name="com.example.MyChildActivity"
+        android:label="@string/title_activity_child"
+        android:parentActivityName="com.example.MainActivity" >
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.example.myfirstapp.MainActivity" />
+    </activity>
+</application>
+
+```
+
+> * android:parentActivityName 属性支持 API 16 及其以上的版本
+> * < meta-data > 标签为了兼容 API 16 以下的版本
+
+此时 Toolbar 需要设置为应用栏，调用 ActionBar.setDisplayHomeAsUpEnabled()即可使用 Up button。
+Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeAsUpIndicator() 定义图标：
 
 ```java
+    Activity:
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-            }
-        }
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_near_me_white_24dp);
     }
 ```
+
+点击 Up button 默认返回父 Activity，但可以自定义：
+
+```java
+    Activity:
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Toast.makeText(this, "Toast", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+```
+
+> Up button 的 id 固定为：android.R.id.home
 
 其中各个属性如下图所示：
 
