@@ -22,7 +22,9 @@ Toolbar 有两种使用方式：
 * 应用栏(Action Bar)
 * 独立控件(Standalone Widget)
 
-Toolbar 既可以作为 app 的应用栏使用，也可以作为一个独立的普通控件使用。当作为应用栏使用时，需要通过 setSupportActionBar() 将 Toolbar 设置为应用栏，可以使用 ActionBar 提供的一些 API；当作为一个独立的控件使用时，用法同普通的 ViewGroup 用法一样。从功能上讲，Toolbar 继承并扩展了 ActionBar 的所有功能，所以 Toolbar 可以作为独立的普通控件完全代替 ActionBar，而不必将其设置为应用栏，但是对于使用了 ActionBar 的老项目，为了复用其代码，减少迁移成本，将 Toolbar 设置为应用栏最简便。所以对于有历史包袱的老项目，应该将 Toolbar 设置为系统应用栏使用；对于新项目，可以将 Toolbar 作为普通控件使用。
+Toolbar 既可以作为 app 的应用栏使用，也可以作为一个独立的普通控件使用。当作为应用栏使用时，需要通过 setSupportActionBar() 将 Toolbar 设置为应用栏，可以使用 ActionBar 提供的一些 API；
+当作为一个独立的控件使用时，用法同普通的 ViewGroup 用法一样。从功能上讲，Toolbar 继承并扩展了 ActionBar 的所有功能，所以 Toolbar 可以作为独立的普通控件完全代替 ActionBar，
+而不必将其设置为应用栏；但是对于使用了 ActionBar 的老项目，为了复用其代码，减少迁移成本，将 Toolbar 设置为应用栏最简便。所以对于有历史包袱的老项目或者需要使用 ActionBar 的特有功能，应该将 Toolbar 设置为系统应用栏使用；对于新项目，可以将 Toolbar 作为普通控件使用。
 
 可以参看：
 
@@ -99,10 +101,11 @@ public class MainActivity extends AppCompatActivity {
 
 ## 配置 Toolbar
 
-### 设置 Up Button
+### 设置 Up button
 
-应用栏提供了 Up Buttion，位于左上角，通常用于返回主页面或者抽屉触发，图标和点击触发的逻辑都是可以自定义。
-Up Button 默认用于返回父 Activity，为了实现该功能，首先要在清单文件中声明父 Activity：
+应用栏提供了 Up buttion，位于左上角，设计的初衷是用于返回主页面，与 Back 物理按键的区别是，Back 键用于实现根据回退栈逐级返回，即 finish() 当前 Activity，
+而 Up button 则直接回到声明的父 Activity，即清空回退栈内父 Activity 上边的 Activity 实例。
+为了实现 Up button 默认的功能，首先要在清单文件中声明父 Activity：
 
 ```xml
 
@@ -134,8 +137,6 @@ Up Button 默认用于返回父 Activity，为了实现该功能，首先要在�
 Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeAsUpIndicator() 定义图标：
 
 ```java
-    Activity:
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,16 +149,19 @@ Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeA
     }
 ```
 
-点击 Up button 默认返回父 Activity，但可以自定义：
+默认情况下，点击 Up button 返回父 Activity，但如果在清单文件中未声明父 Activity，这时点击 Up button 是没有响应的，
+通过重写 onOptionsItemSelected() 实现 Back 键的功能：
 
 ```java
-    Activity:
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Toast.makeText(this, "Toast", Toast.LENGTH_SHORT).show();
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                if (upIntent != null) {
+                    return super.onOptionsItemSelected(item);
+                }
+                finish();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -166,17 +170,18 @@ Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeA
     }
 ```
 
-> Up button 的 id 固定为：android.R.id.home
+> * Up button 的 id 固定为：android.R.id.home
+> * Up button 的触发逻辑可以根据需求自定义
 
-其中各个属性如下图所示：
+### 设置 Action View
 
-![ThemeColor](http://otg3f8t90.bkt.clouddn.com/2017/8/29/ThemeColors.png)
+### 设置 Action Provider
 
-## 设置溢出菜单(Overflow Menu)
+### 设置 Overflow Menu
 
-### 定制溢出菜单按钮(Overflow Menu Button)
+#### 定制溢出菜单按钮(Overflow Menu Button)
 
-### 显示溢出菜单 Icon
+#### 显示溢出菜单 Icon
 
 溢出菜单(Overflow Menu) 的条目图标默认是不显示的，需要通过 MenuBuilder 设置，当 Tool 替换 ActionBar 使用时：
 
@@ -215,12 +220,9 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-## 配置 Toolbar
+其中各个属性如下图所示：
 
-
-## Action Bar
-
-## Standalone
+![ThemeColor](http://otg3f8t90.bkt.clouddn.com/2017/8/29/ThemeColors.png)
 
 ## Ref
 
