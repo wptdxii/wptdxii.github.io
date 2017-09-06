@@ -150,7 +150,7 @@ Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeA
 ```
 
 默认情况下，点击 Up button 返回父 Activity，但如果在清单文件中未声明父 Activity，这时点击 Up button 是没有响应的，
-通过重写 onOptionsItemSelected() 实现 Back 键的功能：
+通过重写 onOptionsItemSelected() 可以实现 Back 键的功能：
 
 ```java
     @Override
@@ -169,6 +169,8 @@ Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeA
         return true;
     }
 ```
+
+
 
 > * Up button 的 id 固定为：android.R.id.home
 > * Up button 的触发逻辑可以根据需求自定义
