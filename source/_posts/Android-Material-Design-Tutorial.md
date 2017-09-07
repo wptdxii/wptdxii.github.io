@@ -101,11 +101,15 @@ public class MainActivity extends AppCompatActivity {
 
 ## 配置 Toolbar
 
-### 设置 Up button
+应用栏各部分所指，如下图所示：
 
-应用栏提供了 Up buttion，位于左上角，设计的初衷是用于返回主页面，与 Back 物理按键的区别是，Back 键用于实现根据回退栈逐级返回，即 finish() 当前 Activity，
-而 Up button 则直接回到声明的父 Activity，即清空回退栈内父 Activity 上边的 Activity 实例。
-为了实现 Up button 默认的功能，首先要在清单文件中声明父 Activity：
+![toolbar.png](http://otg3f8t90.bkt.clouddn.com/2017/9/7/toolbar.png)
+
+### 设置 Navigation
+
+应用栏的导航图标(Navigation)位于左上角，通常用于返回或者抽屉的触发。ActionBar 默认提供了 Up Button 的功能(可以认为是导航的一种实现)，根据标准规范，其设计的初衷是用于返回主页，
+与 Back 物理按键的区别是，Back 键用于实现根据回退栈逐级返回，即 finish() 当前 Activity，而 Up button 则直接回到声明的父 Activity，即清空回退栈内父 Activity 上边的 Activity 实例。
+为了实现 Up Button 默认的功能，首先要在清单文件中声明父 Activity：
 
 ```xml
 
@@ -170,10 +174,29 @@ Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeA
     }
 ```
 
-
-
 > * Up button 的 id 固定为：android.R.id.home
 > * Up button 的触发逻辑可以根据需求自定义
+
+当 Toolbar 作为独立控件使用时，可以模拟出 Up Button 的效果：
+
+```java
+        Toolbar toolbar = findView(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent upIntent = NavUtils.getParentActivityIntent(MainActivity.this);
+                if (upIntent == null) {
+                    finish();
+                    return;
+                }
+                NavUtils.navigateUpTo(MainActivity.this, upIntent);
+            }
+        });
+```
+
+### 设置 Logo
+
 
 ### 设置 Action View
 
