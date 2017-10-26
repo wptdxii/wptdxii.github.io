@@ -22,7 +22,7 @@ Toolbar 有两种使用方式：
 * 应用栏(Action Bar)
 * 独立控件(Standalone Widget)
 
-Toolbar 既可以作为 app 的应用栏使用，也可以作为一个独立的普通控件使用。当作为应用栏使用时，需要通过 setSupportActionBar() 将 Toolbar 设置为应用栏，可以使用 ActionBar 提供的一些 API；当作为一个独立的控件使用时，用法同普通的 ViewGroup 用法一样。从功能上讲，Toolbar 继承并扩展了 ActionBar 的所有功能，所以 Toolbar 可以作为独立的普通控件完全代替 ActionBar，而不必将其设置为应用栏，但是对于使用了 ActionBar 的老项目，为了复用其代码，减少迁移成本，将 Toolbar 设置为应用栏最简便。所以对于有历史包袱的老项目，应该将 Toolbar 设置为系统应用栏使用；对于新项目，可以将 Toolbar 作为普通控件使用。
+Toolbar 既可以作为 app 的应用栏使用，也可以作为一个独立的普通控件使用。当作为应用栏使用时，需要通过 setSupportActionBar() 将 Toolbar 设置为应用栏，此时可以使用 ActionBar 提供的一些 API；当作为一个独立的控件使用时，用法同普通的 ViewGroup 用法一样。从功能上讲，Toolbar 继承并扩展了 ActionBar 的所有功能，所以 Toolbar 可以作为独立的普通控件完全代替 ActionBar，而不必将其设置为应用栏，但是对于使用了 ActionBar 的老项目，为了复用其代码，减少迁移成本，将 Toolbar 设置为应用栏最简便。所以对于有历史包袱的老项目，应该将 Toolbar 设置为系统应用栏使用；对于新项目，可以将 Toolbar 作为普通控件使用。
 
 可以参看：
 
@@ -37,7 +37,7 @@ Toolbar 既可以作为 app 的应用栏使用，也可以作为一个独立的�
 compile 'com.android.support:appcompat-v7:$supportVersion'
 ```
 
-为了防止使用原生 ActionBar 类作为应用栏，需要设置隐藏 ActionBar 的主题，根据应用风格，可以选择深色主题和浅色主题：
+然后通过设置主题隐藏原生 ActionBar 类提供的应用栏，根据应用风格可以选择深色主题和浅色主题：
 
 * Theme.AppCompat.NoActionBar
 * Theme.AppCompat.Light.NoActionBar
@@ -56,26 +56,25 @@ res/values/themes.xml:
 </resources>
 ```
 
-将其应用在 AndroidManifest.xml 中的 application 标签。
+接着将其应用在 AndroidManifest.xml 中的 application 标签即可。
 
-在布局文件中引入 support V7 包下的 Toolbar：
+在布局文件中相应位置引入 Toolbar：
 
 ```xml
 res/layout/toolbar.xml:
 
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:elevation="4dp"
     android:background="?attr/colorPrimary"
     android:minHeight="?attr/actionBarSize">
 </android.support.v7.widget.Toolbar>
 ```
 
-> 主题配置文件中的 android:colorPrimary 指定的是 ActionBar 的背景颜色，若要应用到 Toolbar，需要为 Toolbar 指定 android:background 属性。
+> 主题配置文件中的 android:colorPrimary 指定的是 ActionBar 的背景颜色，需要将其应用到 android:background 属性才可正常显示
 
 然后就可以在 Activity 中使用 Toolbar：
 
@@ -95,13 +94,15 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 > * Activity 需要继承 AppCompatActivity
-> * 调用 setSupportActionBar(), 可以将 Toolbar 设置为应用栏，否则作为独立控件使用。
+> * 调用 setSupportActionBar() 可以将 Toolbar 设置为应用栏，否则作为独立控件使用
+> * Toolbar 设置为应用栏后，可以通过 getSupportActionBar() 获取 ActionBar 对象的引用，继而可以调用 ActionBar.hide() 之类的方法
 
 ## 配置 Toolbar
 
-### 设置 Up Button
+### 设置 Up Button(返回按钮)
 
-应用栏提供了 Up Buttion，位于左上角，通常用于返回主页面或者抽屉触发，图标和点击触发的逻辑都是可以自定义。
+应用栏左上角提供了 Up Buttion，通常用于返回主页或者侧边抽屉触发，当然了，图标和点击触发的逻辑都是可以自定义的。
+
 Up Button 默认用于返回父 Activity，为了实现该功能，首先要在清单文件中声明父 Activity：
 
 ```xml
@@ -129,9 +130,9 @@ Up Button 默认用于返回父 Activity，为了实现该功能，首先要在�
 
 > * android:parentActivityName 属性支持 API 16 及其以上的版本
 > * < meta-data > 标签为了兼容 API 16 以下的版本
+> * 当未声明 Parent Activity 时点击无响应
 
-此时 Toolbar 需要设置为应用栏，调用 ActionBar.setDisplayHomeAsUpEnabled()即可使用 Up button。
-Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeAsUpIndicator() 定义图标：
+将 Toolbar 设置为应用栏，然后调用 ActionBar 的方法即可：
 
 ```java
     Activity:
@@ -148,7 +149,10 @@ Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeA
     }
 ```
 
-点击 Up button 默认返回父 Activity，但可以自定义：
+> * 调用 ActionBar.setDisplayHomeAsUpEnabled(true) 启用 Up Button
+> * Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeAsUpIndicator() 自定义。当使用默认图标时，图标颜色可由主题中的 colorAccent 设定
+
+点击 Up Button 默认返回父 Activity，但可以自定义：
 
 ```java
     Activity:
@@ -157,7 +161,7 @@ Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeA
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Toast.makeText(this, "Toast", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Up Button", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
