@@ -56,7 +56,11 @@ res/values/themes.xml:
 </resources>
 ```
 
-接着将其应用在 AndroidManifest.xml 中的 application 标签即可。
+主题文件中各个属性对应的区域如下图所示：
+
+![ThemeColor](http://otg3f8t90.bkt.clouddn.com/2017/8/29/ThemeColors.png)
+
+接着将主题应用在 AndroidManifest.xml 中的 application 标签即可。
 
 在布局文件中相应位置引入 Toolbar：
 
@@ -95,15 +99,18 @@ public class MainActivity extends AppCompatActivity {
 
 > * Activity 需要继承 AppCompatActivity
 > * 调用 setSupportActionBar() 可以将 Toolbar 设置为应用栏，否则作为独立控件使用
-> * Toolbar 设置为应用栏后，可以通过 getSupportActionBar() 获取 ActionBar 对象的引用，继而可以调用 ActionBar.hide() 之类的方法
+> * Toolbar 设置为应用栏后，可以通过 getSupportActionBar() 获取 ActionBar 对象的引用，继而可以调用 ActionBar 之类的 API
 
 ## 配置 Toolbar
 
-### 设置 Up Button(返回按钮)
+Toolbar 主要由以下几部分组成：
 
-应用栏左上角提供了 Up Buttion，通常用于返回主页或者侧边抽屉触发，当然了，图标和点击触发的逻辑都是可以自定义的。
+![toolbar_widget.jpg](http://otg3f8t90.bkt.clouddn.com/2017/10/31/toolbar_widget.jpg)
 
-Up Button 默认用于返回父 Activity，为了实现该功能，首先要在清单文件中声明父 Activity：
+### 设置 Navigation Button
+
+Toolbar 左上角提供了 Navigation Button,通常用于返回主页或者侧边抽屉触发，图标和点击触发的逻辑都是可以自定义的。当 Toolbar 作为应用栏时，
+该 Button 又叫做 Up Button，默认用于返回 Parent Activity，为了实现该功能，首先要在清单文件中声明 Parent Activity：
 
 ```xml
 
@@ -150,7 +157,7 @@ Up Button 默认用于返回父 Activity，为了实现该功能，首先要在�
 > * 调用 ActionBar.setDisplayHomeAsUpEnabled(true) 启用 Up Button
 > * Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeAsUpIndicator() 自定义。当使用默认图标时，图标颜色可由主题中的 colorAccent 设定
 
-点击 Up Button 默认返回父 Activity，但可以自定义：
+Up Button 默认触发的回调是返回父 Activity，但可以自定义：
 
 ```java
     @Override
@@ -169,7 +176,7 @@ Up Button 默认用于返回父 Activity，为了实现该功能，首先要在�
 > * Up button 的 id 固定为：android.R.id.home
 > * Up button 的触发逻辑可以根据需求自定义
 
-当 Toolbar 作为独立控件使用时，可以模拟出 Up Button 的效果：
+当 Toolbar 作为独立控件使用时，不再接收系统回调，即 onOptionsItemSelected() 方法不会被触发，可以通过 Toolbar 的方法模拟出 Up Button 的效果：
 
 ```java
         Toolbar toolbar = findView(R.id.toolbar);
@@ -187,8 +194,21 @@ Up Button 默认用于返回父 Activity，为了实现该功能，首先要在�
         });
 ```
 
-### 设置 Logo
+在给 Toolbar 设置监听时需要注意：
 
+> 如果 Toolbar 作为应用栏使用，Toolbar.setNavigationOnClickListener() 需要在 setSupportActionBar() 之后调用才有效，且会覆盖 onOptionsItemSelected() 方法的触发，否则触发的还是onOptionsItemSelected() 方法
+
+### 设置 Logo/Title/Subtitle
+
+Toolbar 可以通过以下方法设置 Logo/Title/Subtitle:
+
+```java
+        Toolbar.setLogo();
+        Toolbar.setTitle();
+        Toolbar.setSubtitle();
+```
+
+> 当 Toolbar 被设置为应用栏时，Title 会被默认设置为应用的名称，Toolbar.setTitle() 必须 在 setSupportActionBar() 之后调用才生效
 
 ### 设置 Action View
 
@@ -236,10 +256,6 @@ public class MainActivity extends AppCompatActivity {
     // ...
 }
 ```
-
-其中各个属性如下图所示：
-
-![ThemeColor](http://otg3f8t90.bkt.clouddn.com/2017/8/29/ThemeColors.png)
 
 ## Ref
 
