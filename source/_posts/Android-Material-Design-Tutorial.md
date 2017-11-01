@@ -109,8 +109,7 @@ Toolbar 主要由以下几部分组成：
 
 ### 设置 Navigation Button
 
-Toolbar 左上角提供了 Navigation Button,通常用于返回主页或者侧边抽屉触发，图标和点击触发的逻辑都是可以自定义的。当 Toolbar 作为应用栏时，
-该 Button 又叫做 Up Button，默认用于返回 Parent Activity，为了实现该功能，首先要在清单文件中声明 Parent Activity：
+Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧边抽屉触发，图标和点击触发的逻辑都是可以自定义的。当 Toolbar 作为应用栏时，该 Button 又叫做 Up Button，默认用于返回 Parent Activity，为了实现该功能，首先要在清单文件中声明 Parent Activity：
 
 ```xml
 
@@ -155,7 +154,7 @@ Toolbar 左上角提供了 Navigation Button,通常用于返回主页或者侧�
 ```
 
 > * 调用 ActionBar.setDisplayHomeAsUpEnabled(true) 启用 Up Button
-> * Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeAsUpIndicator() 自定义。当使用默认图标时，图标颜色可由主题中的 colorAccent 设定
+> * Up button 的默认图标是一个返回箭头，可以通过 ActionBar.setHomeAsUpIndicator() 自定义。当使用默认图标时，图标颜色可由主题中的 colorAccent 属性设定
 
 Up Button 默认触发的回调是返回父 Activity，但可以自定义：
 
@@ -176,7 +175,7 @@ Up Button 默认触发的回调是返回父 Activity，但可以自定义：
 > * Up button 的 id 固定为：android.R.id.home
 > * Up button 的触发逻辑可以根据需求自定义
 
-当 Toolbar 作为独立控件使用时，不再接收系统回调，即 onOptionsItemSelected() 方法不会被触发，可以通过 Toolbar 的方法模拟出 Up Button 的效果：
+当 Toolbar 作为独立控件使用时，不再触发系统回调，即 onOptionsItemSelected() 方法不会被触发，可以通过 Toolbar 的方法模拟出 Up Button 的效果：
 
 ```java
         Toolbar toolbar = findView(R.id.toolbar);
@@ -203,22 +202,53 @@ Up Button 默认触发的回调是返回父 Activity，但可以自定义：
 Toolbar 可以通过以下方法设置 Logo/Title/Subtitle:
 
 ```java
-        Toolbar.setLogo();
-        Toolbar.setTitle();
-        Toolbar.setSubtitle();
+        Toolbar toolbar = findView(R.id.toolbar);
+        toolbar.setLogo();
+        toolbar.setTitle();
+        toolbar.setSubtitle();
+        setSupportActionBar(toolbar);
 ```
 
-> 当 Toolbar 被设置为应用栏时，Title 会被默认设置为应用的名称，Toolbar.setTitle() 必须 在 setSupportActionBar() 之后调用才生效
+当 Toolbar 被设置为应用栏时，Title 会被默认设置为应用的名称，Toolbar.setTitle() 必须在 setSupportActionBar() 之前调用才生效，此时可以通过下面的方式隐藏掉 Title:
+
+```java
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+```
+
+> 当 Toolbar 作为独立控件使用时，Title 默认不显示
 
 ### 设置 Action View
+
+在 res/menu 路径下创建 menu 文件：
+
+```xml
+res/menu/sample.xml
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/ic_favorite_black_48dp"
+        android:title="@string/action_favorite"
+        app:showAsAction="ifRoom"/>
+
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          app:showAsAction="never"/>
+
+</menu>
+```
 
 ### 设置 Action Provider
 
 ### 设置 Overflow Menu
 
-#### 定制溢出菜单按钮(Overflow Menu Button)
+### 设置 Overflow Menu Button
 
-#### 显示溢出菜单 Icon
+#### 显示 Menu Item Icon
 
 溢出菜单(Overflow Menu) 的条目图标默认是不显示的，需要通过 MenuBuilder 设置，当 Tool 替换 ActionBar 使用时：
 
