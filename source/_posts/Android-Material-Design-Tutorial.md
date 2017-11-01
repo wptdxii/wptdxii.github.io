@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
 Toolbar 主要由以下几部分组成：
 
-![toolbar_widget.jpg](http://otg3f8t90.bkt.clouddn.com/2017/10/31/toolbar_widget.jpg)
+![toolbar_widget.jpg](http://otg3f8t90.bkt.clouddn.com/2017/11/1/toolbar_widget.jpg)
 
 ### 设置 Navigation Button
 
@@ -218,7 +218,7 @@ Toolbar 可以通过以下方法设置 Logo/Title/Subtitle:
 
 > 当 Toolbar 作为独立控件使用时，Title 默认不显示
 
-### 设置 Action View
+### 设置 Overflow Menu/Action Button
 
 在 res/menu 路径下创建 menu 文件：
 
@@ -236,56 +236,181 @@ res/menu/sample.xml
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
+          android:title="@string/action_settings
           app:showAsAction="never"/>
 
 </menu>
 ```
 
-### 设置 Action Provider
+> 属性 app:show AsAction 用于指定 Action Button 的位置。如果 app:showAsAction="ifRoom"，当应用栏有空间时 Action Button 会显示在应用栏上，如果没有空间则会显示在 Overflow Menu 里。如果 app:showAsAction="never"，则 Action Button 会一直显示在 Overflow Menu 而不论应用栏有空间与否。
 
-### 设置 Overflow Menu
-
-### 设置 Overflow Menu Button
-
-#### 显示 Menu Item Icon
-
-溢出菜单(Overflow Menu) 的条目图标默认是不显示的，需要通过 MenuBuilder 设置，当 Tool 替换 ActionBar 使用时：
+如果 Toolbar 被设置为应用栏，则通过下面这种方式加载 Overflow Menu:
 
 ```java
-  @Override
+  @SuppressLint("RestrictedApi")
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // 显示 Menu Item Icon
         if (menu instanceof MenuBuilder) {
+            //noinspection RestrictedApi
             ((MenuBuilder) menu).setOptionalIconsVisible(true);
         }
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getMenuInflater().inflate(R.menu.sample, menu);
+        // toolbar.inflateMenu(R.menu.sample);
         return true;
     }
 ```
 
-当 Toolbar 作为独立控件使用时：
+则相应的触发回调如下：
 
 ```java
-public class MainActivity extends AppCompatActivity {
-       @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            // 显示 Menu Item Icon
-            Menu menu = toolbar.getMenu();
-            if (menu instanceof MenuBuilder) {
-                ((MenuBuilder) menu).setOptionalIconsVisible(true);
-              }
-            toolbar.inflateMenu(R.menu.activity_main);
-        }
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+        case R.id.action_settings:
+            // ...
+            return true;
+
+        case R.id.action_favorite:
+            // ...
+            return true;
+        default:
+            // ...
+            return super.onOptionsItemSelected(item);
     }
-    // ...
 }
 ```
+
+> * Overflow Menu 中默认不显示 Action Button 的图标，可以通过 MenuBuilder.setOptionalIconsVisible() 控制其显示
+> * 如果调用了 setSupportActionBar()，则在 onCreate() 方法中再调用 Toolbar.inflateMenu() 不会生效，只有在 onCreateOptionsMenu() 回调中才能加载 Overflow Menu，使用 MenuInflater 或者 Toolbar 加载都可以。点击触发的还是 onOPtionsItemSelected() 方法
+> * 在其他地方可以通过 Toolbar.inflateMenu() 重新加载 Menu(需要先通过 Toolbar.getMenu().clear() 清除之前的 Menu)，通过 Toolbar.setOnsetOnMenuItemClickListener() 重新设置回调
+
+如果 Toolbar 作为独立控件使用，则通过下面这种方式加载 Overflow Menu 并设置触发回调:
+
+```java
+        Toolbar toolbar = findView(R.id.toolbar);
+        Menu menu = toolbar.getMenu();
+        if (menu instanceof MenuBuilder) {
+            ((MenuBuilder) menu).setOptionalIconsVisible(true);
+        }
+        toolbar.inflateMenu(R.menu.sample);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                 switch (item.getItemId()) {
+                    case R.id.action_settings:
+                        // ...
+                        return true;
+                    case R.id.action_favorite:
+                        // ...
+                        return true;
+                        default:
+                        // ...
+                        return false;
+            }
+        });
+```
+
+需要在运行时改变 Overflow Menu 时需要先清除之前的 Menu，否则两个 Menu 都会被加载:
+
+```java
+    Toolbar.getMenu().clear();
+    Toolbar.inflateMenu(R.menu.sample);
+```
+
+> 无论 Toolbar 是作为应用栏还是独立控件使用， 动态改变 Overflow Menu  的方法都一样
+
+### 设置 Action View
+
+Action View 用于扩展应用栏的功能，例如使用 Search Action View 可以在当前应用栏实现搜索功能，而不必新打开 Activity 或 Fragment，如下图所示：
+
+![action_view.png](http://otg3f8t90.bkt.clouddn.com/2017/11/1/action_view.png)
+
+首先给 Action Button 设置 app:actionViewClass 属性：
+
+```xml
+<item android:id="@+id/action_search"
+     android:title="@string/action_search"
+     android:icon="@drawable/ic_search"
+     app:showAsAction="ifRoom|collapseActionView"
+     app:actionViewClass="android.support.v7.widget.SearchView" />
+```
+
+> collapseActionView 可以控制应用栏是否展开
+
+如果 Toolbar 作为应用栏使用，通过下面代码可以获取 SearchView  实例：
+
+```java
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+    MenuItem searchItem = menu.findItem(R.id.action_search);
+    SearchView searchView = (SearchView) menuItem.getActionView();
+    return super.onCreateOptionsMenu(menu);
+}
+```
+
+如果 Toolbar 作为独立控件使用，通过下面代码可以获取 SearchView 实例：
+
+```java
+        toolbar.inflateMenu(R.menu.activity_main);
+        Menu menu = toolbar.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+```
+
+如果 Toolbar 作为应用栏使用，通过下面代码可以给 Action View 设置收缩展开监听：
+
+```java
+   @SuppressLint("RestrictedApi")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.menu_search);
+        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                Toast.makeText(MainActivity.this, "Expand", Toast.LENGTH_SHORT).show();
+                return true; // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Toast.makeText(MainActivity.this, "Collapse", Toast.LENGTH_SHORT).show();
+                return true; // Return true to expand action view
+            }
+        });
+        return true;
+    }
+```
+
+> 如果未给 MenuItem 设置 OnActionExpandListener， onCreateOptionsMenu 必须返回 super.onCreateOptionsMenu(menu) Action View 才能正常收缩展开；如果给 MenuItem 设置了 OnActionExpandListener，则返回 true;
+
+如果 Toolbar 作为独立控件使用，通过下面代码可以给 Action View 设置收缩展开监听：
+
+```java
+        toolbar.inflateMenu(R.menu.activity_main);
+        Menu menu = toolbar.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.menu_search);
+        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                Toast.makeText(MainActivity.this, "Expand", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Toast.makeText(MainActivity.this, "Collapse", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+```
+
+### 设置 Action Provider
+
+Action Provider 初始状态下以一个 Action Button 显示在应用栏，其有自定义的布局，当点击该 Action Button 时显示，如下图所示：
+
+### 设置 Overflow Menu Button
 
 ## Ref
 
