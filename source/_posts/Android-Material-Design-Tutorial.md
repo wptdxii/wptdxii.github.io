@@ -420,3 +420,4 @@ Action Provider 初始状态下以一个 Action Button 显示在应用栏，其�
 * [Using the Android Toolbar (ActionBar) - Tutorial](http://www.vogella.com/tutorials/AndroidActionBar/article.html)
 * [Goodbye ActionBar APIs, hello Toolbar](https://medium.com/@ZakTaccardi/goodbye-actionbar-apis-hello-toolbar-af6ae7b31e5d)
 * [Have you been calling 'setSupportActionBar()'? You don't have to!](https://www.reddit.com/r/androiddev/comments/3m3pd0/have_you_been_calling_setsupportactionbartoolbar/?st=j6yhe4s9&sh=6528a88d)
+* [Using Custom Views As Menu Items](https://stablekernel.com/using-custom-views-as-menu-items/#top)
