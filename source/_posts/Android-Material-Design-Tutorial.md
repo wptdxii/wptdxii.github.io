@@ -312,11 +312,16 @@ public boolean onOptionsItemSelected(MenuItem item) {
 
 ### 设置 Action View
 
-Action View 用于扩展应用栏的功能，例如使用 Search Action View 可以在当前应用栏实现搜索功能，而不必新打开 Activity 或 Fragment，如下图所示：
+Action View 用于在无需启动新页面的情况下扩展应用栏的功能，例如使用 Search Action View 可以在当前应用栏实现搜索功能，而不必新打开 Activity 或 Fragment，如下图所示：
 
 ![action_view.png](http://otg3f8t90.bkt.clouddn.com/2017/11/1/action_view.png)
 
-首先给 Action Button 设置 app:actionViewClass 属性：
+为了使用 Action View，需要给菜单文件的 \<item\> 添加下面两个属性之一：
+
+* app:actionViewClass：实现功能扩展
+* app:actionLayout：在应用栏显示自定义布局
+
+ 下面代码示例了 actionViewClass 的使用：
 
 ```xml
 <item android:id="@+id/action_search"
@@ -326,9 +331,10 @@ Action View 用于扩展应用栏的功能，例如使用 Search Action View 可
      app:actionViewClass="android.support.v7.widget.SearchView" />
 ```
 
-> collapseActionView 可以控制应用栏是否展开
+> * 当 Action Button/Menu Item 不与用户交互时显示 android:icon，交互时扩展开 app:actionViewClass
+> * collapseActionView 可以控制应用栏是否展开
 
-如果 Toolbar 作为应用栏使用，通过下面代码可以获取 SearchView  实例：
+当使用应用栏时，通过下面代码可以获取 SearchView  实例：
 
 ```java
 @Override
@@ -349,57 +355,136 @@ public boolean onCreateOptionsMenu(Menu menu) {
         SearchView searchView = (SearchView) menuItem.getActionView();
 ```
 
-如果 Toolbar 作为应用栏使用，通过下面代码可以给 Action View 设置收缩展开监听：
+可以通过下面代码可以给 Menu Item 设置收缩展开监听：
 
 ```java
-   @SuppressLint("RestrictedApi")
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        MenuItem menuItem = menu.findItem(R.id.menu_search);
-        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                Toast.makeText(MainActivity.this, "Expand", Toast.LENGTH_SHORT).show();
-                return true; // Return true to collapse action view
-            }
+    getMenuInflater().inflate(R.menu.activity_main, menu);
+    MenuItem menuItem = menu.findItem(R.id.menu_search);
+    menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+        @Override
+        public boolean onMenuItemActionExpand(MenuItem item) {
+            Toast.makeText(MainActivity.this, "Expand", Toast.LENGTH_SHORT).show();
+            return true; // Return true to collapse action view
+        }
 
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                Toast.makeText(MainActivity.this, "Collapse", Toast.LENGTH_SHORT).show();
-                return true; // Return true to expand action view
-            }
-        });
-        return true;
-    }
+        @Override
+        public boolean onMenuItemActionCollapse(MenuItem item) {
+            Toast.makeText(MainActivity.this, "Collapse", Toast.LENGTH_SHORT).show();
+            return true; // Return true to expand action view
+        }
+    });
 ```
 
-> 如果未给 MenuItem 设置 OnActionExpandListener， onCreateOptionsMenu 必须返回 super.onCreateOptionsMenu(menu) Action View 才能正常收缩展开；如果给 MenuItem 设置了 OnActionExpandListener，则返回 true;
+> 当使用应用栏时，如果 \<item\> 元素添加了 collapseActionView 属性，并且 onOptionsItemSelected() 方法被重写，被重写的子类必须调用 super.onCreateOptionsMenu(menu)，Action View 才能正常伸缩
 
-如果 Toolbar 作为独立控件使用，通过下面代码可以给 Action View 设置收缩展开监听：
+actionLayout 用于在应用栏显示 Action 的自定义布局，如下图效果：
+
+![]()
+
+实现该效果需要先定义布局文件：
+
+```xml
+res/layout/message_action.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/menu_item_size"
+    android:layout_height="@dimen/menu_item_size">
+
+    <FrameLayout
+        android:layout_width="@dimen/menu_item_container_size"
+        android:layout_height="@dimen/menu_item_container_size"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_message"
+            android:layout_width="@dimen/menu_item_icon_size"
+            android:layout_height="@dimen/menu_item_icon_size"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_message_white_24dp" />
+
+        <TextView
+            android:id="@+id/tv_badge"
+            android:layout_width="@dimen/menu_item_badge_size"
+            android:layout_height="@dimen/menu_item_badge_size"
+            android:layout_gravity="top|end"
+            android:background="@drawable/shape_badge_bg_red"
+            android:gravity="center"
+            android:textColor="@color/color_white_ffffffff"
+            android:textSize="10sp"
+            android:visibility="visible"
+            android:text="5"
+            tools:ignore="SmallSp"
+            tools:visibility="visible" />
+    </FrameLayout>
+</FrameLayout>
+```
+
+使用 actionLayou 属性：
+
+```xml
+...
+<item
+        android:id="@+id/menu_message_modified"
+        android:icon="@drawable/ic_message_white_24dp"
+        android:title="消息"
+        app:actionLayout="@layout/provider_message_action"
+        app:showAsAction="always" />
+```
+
+与 actionViewClass 的使用类似，通过下面代码可以获取对应的 View 实例，继而给子 View 添加对应的逻辑：
 
 ```java
-        toolbar.inflateMenu(R.menu.activity_main);
-        Menu menu = toolbar.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.menu_search);
-        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                Toast.makeText(MainActivity.this, "Expand", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                Toast.makeText(MainActivity.this, "Collapse", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
+    ...
+    MenuItem menuItem = menu.findItem(R.id.menu_message);
+    FrameLayout flAction = (FrameLayout)menuIte.getActionView();
+    ...
 ```
 
 ### 设置 Action Provider
 
-Action Provider 初始状态下以一个 Action Button 显示在应用栏，其有自定义的布局，当点击该 Action Button 时显示，如下图所示：
+Action Provider 用于对应用栏上的 Action 进行自定义操作，作用与 actionLayout 属性类似，可以自定义布局，主要用来对固定操作的封装，其需要继承 android.support.v4.view.ActionProvider， 下面用 Action Provider 实现与上边 actionLayout 相同的效果。
+
+首先定义 ActionProvider 子类：
+
+```java
+// MessageActionProvider.java
+
+public class MessageActionProvider extends ActionProvider {
+    private View actionView;
+    private TextView tvBadge;
+
+    public MessageActionProvider(Context context) {
+        super(context);
+        actionView = View.inflate(context, R.layout.provider_message_action, null);
+        tvBadge = actionView.findViewById(R.id.tv_badge);
+    }
+
+    @Override
+    public View onCreateActionView() {
+        return actionView;
+    }
+
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        actionView.setOnClickListener(onClickListener);
+    }
+
+    public void setMessageCount(int count) {
+        tvBadge.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
+        tvBadge.setText(String.valueOf(count));
+    }
+
+    public void setMessageCount(String count) {
+        if (TextUtils.isDigitsOnly(count)) {
+            setMessageCount(Integer.parseInt(count));
+        }
+    }
+}
+```
+
+> 当使用应用栏时，
 
 ### 设置 Overflow Menu Button
 
