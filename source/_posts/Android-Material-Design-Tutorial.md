@@ -19,13 +19,13 @@ Material Design 是 Google 推出的一套视觉设计语言，主要面向 UI �
 ActionBar 由于其设计的原因，被限定只能位于 Activity 的顶部，不能自定义布局，而且不能实现 Material Design 的效果，所以不再推荐使用，官方推出了灵活性更高的 Toolbar 作为替代。
 Toolbar 有两种使用方式：
 
-* 应用栏(Action Bar)
+* 应用栏(ActionBar)
 * 独立控件(Standalone Widget)
 
 当作为应用栏使用时，需要通过setSupportActionBar() 将 Toolbar 设置为应用栏，此时可以使用 ActionBar 提供的一些诸如 ActionBar.show()/hide() 之类的 API，但以这种方式使用 Toolbar 时具有以下缺点：
 
 * 屏幕上只能显示一个应用栏，如果在多个 Fragment 中都使用 Toolbar 作为应用栏，当几个 Fragment 需要并列同时显示，例如在对平板进行适配时，其各自的应用栏无法同时显示
-* 在 Fragment 中创建溢出菜单时会遇到回调地狱，只用调用 setHasOptionsMenu(true) 后，onCreateOptionsMenu() 回调才会被触发
+* 在 Fragment 中创建溢出菜单时会遇到回调地狱，只有调用 setHasOptionsMenu(true) 后，onCreateOptionsMenu() 回调才会被触发
 
 当作为独立的控件使用时，用法同普通的 ViewGroup 用法一样。从功能上讲，Toolbar 继承并扩展了 ActionBar 的所有功能，所以 Toolbar 可以作为独立的普通控件完全代替 ActionBar，而不必将其设置为应用栏，但是对于使用了 ActionBar 的老项目，为了复用系统回调的实现代码，减少迁移成本，将 Toolbar 设置为应用栏最简便。所以对于有历史包袱的老项目，可以将 Toolbar 设置为系统应用栏使用；对于新项目，建议将 Toolbar 作为普通控件使用。
 
@@ -89,9 +89,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-        }
+        setSupportActionBar(toolbar);
     }
     // ...
 }
@@ -99,17 +97,17 @@ public class MainActivity extends AppCompatActivity {
 
 > * Activity 需要继承 AppCompatActivity
 > * 调用 setSupportActionBar() 可以将 Toolbar 设置为应用栏，否则作为独立控件使用
-> * Toolbar 设置为应用栏后，可以通过 getSupportActionBar() 获取 ActionBar 对象的引用，继而可以调用 ActionBar 之类的 API
+> * Toolbar 设置为应用栏后，可以通过 getSupportActionBar() 获取 ActionBar 对象的引用
 
 ## 配置 Toolbar
 
 Toolbar 主要由以下几部分组成：
 
-![toolbar_widget.jpg](http://otg3f8t90.bkt.clouddn.com/2017/11/1/toolbar_widget.jpg)
+![toolbar_widget.png](http://otg3f8t90.bkt.clouddn.com/2017/11/13/toolbar_widget.png)
 
 ### 设置 Navigation Button
 
-Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧边抽屉触发，图标和点击触发的逻辑都是可以自定义的。当 Toolbar 作为应用栏时，该 Button 又叫做 Up Button，默认用于返回 Parent Activity，为了实现该功能，首先要在清单文件中声明 Parent Activity：
+Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧边抽屉触发，图标和点击触发的逻辑都是可以自定义的。当 Toolbar 作为应用栏时，该 Button 默认作为 Up Button，用于返回 Parent Activity，为了实现该功能，首先要在清单文件中声明 Parent Activity：
 
 ```xml
 
@@ -117,12 +115,7 @@ Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧
     ...
 
     <activity
-        android:name="com.example.MainActivity" ...>
-        ...
-    </activity>
-
-    <activity
-        android:name="com.example.MyChildActivity"
+        android:name="com.example.ChildActivity"
         android:label="@string/title_activity_child"
         android:parentActivityName="com.example.MainActivity" >
 
@@ -136,7 +129,7 @@ Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧
 
 > * android:parentActivityName 属性支持 API 16 及其以上的版本
 > * < meta-data > 标签为了兼容 API 16 以下的版本
-> * 当未声明 Parent Activity 时点击无响应
+> * 当未声明 Parent Activity 时返回上个 Activity
 
 将 Toolbar 设置为应用栏，然后调用 ActionBar 的方法即可：
 
@@ -173,12 +166,11 @@ Up Button 默认触发的回调是返回父 Activity，但可以自定义：
 ```
 
 > * Up button 的 id 固定为：android.R.id.home
-> * Up button 的触发逻辑可以根据需求自定义
 
 当 Toolbar 作为独立控件使用时，不再触发系统回调，即 onOptionsItemSelected() 方法不会被触发，可以通过 Toolbar 的方法模拟出 Up Button 的效果：
 
 ```java
-        Toolbar toolbar = findView(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,9 +208,9 @@ Toolbar 可以通过以下方法设置 Logo/Title/Subtitle:
         actionBar.setDisplayShowTitleEnabled(false);
 ```
 
-> 当 Toolbar 作为独立控件使用时，Title 默认不显示
+> 当 Toolbar 作为独立控件使用时，Title 不会默认显示为应用名称
 
-### 设置 Overflow Menu/Action Button
+### 设置 Overflow Menu
 
 在 res/menu 路径下创建 menu 文件：
 
@@ -242,7 +234,7 @@ res/menu/sample.xml
 </menu>
 ```
 
-> 属性 app:show AsAction 用于指定 Action Button 的位置。如果 app:showAsAction="ifRoom"，当应用栏有空间时 Action Button 会显示在应用栏上，如果没有空间则会显示在 Overflow Menu 里。如果 app:showAsAction="never"，则 Action Button 会一直显示在 Overflow Menu 而不论应用栏有空间与否。
+> 属性 app:show AsAction 用于指定 Action 类型，如果 app:showAsAction="ifRoom"，当应用栏有空间时 Action 会以 Button 的方式会显示在应用栏上，如果没有空间则会以 Menu Item 的方式显示。如果 app:showAsAction="never"，则会一直以 Menu Item 显示
 
 如果 Toolbar 被设置为应用栏，则通过下面这种方式加载 Overflow Menu:
 
@@ -251,7 +243,6 @@ res/menu/sample.xml
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (menu instanceof MenuBuilder) {
-            //noinspection RestrictedApi
             ((MenuBuilder) menu).setOptionalIconsVisible(true);
         }
         getMenuInflater().inflate(R.menu.sample, menu);
@@ -280,11 +271,11 @@ public boolean onOptionsItemSelected(MenuItem item) {
 }
 ```
 
-> * Overflow Menu 中默认不显示 Action Button 的图标，可以通过 MenuBuilder.setOptionalIconsVisible() 控制其显示
+> * Overflow Menu 中默认不显示 Menu Item 的图标，可以通过 MenuBuilder.setOptionalIconsVisible() 控制其显示
 > * 如果调用了 setSupportActionBar()，则在 onCreate() 方法中再调用 Toolbar.inflateMenu() 不会生效，只有在 onCreateOptionsMenu() 回调中才能加载 Overflow Menu，使用 MenuInflater 或者 Toolbar 加载都可以。点击触发的还是 onOPtionsItemSelected() 方法
 > * 在其他地方可以通过 Toolbar.inflateMenu() 重新加载 Menu(需要先通过 Toolbar.getMenu().clear() 清除之前的 Menu)，通过 Toolbar.setOnsetOnMenuItemClickListener() 重新设置回调
 
-如果 Toolbar 作为独立控件使用，则通过下面这种方式加载 Overflow Menu 并设置触发回调:
+如果 Toolbar 作为独立控件使用，则通过下面这种方式加载 Overflow Menu 并设置点击回调:
 
 ```java
         Toolbar toolbar = findView(R.id.toolbar);
@@ -317,7 +308,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
     Toolbar.inflateMenu(R.menu.sample);
 ```
 
-> 无论 Toolbar 是作为应用栏还是独立控件使用， 动态改变 Overflow Menu  的方法都一样
+> 无论 Toolbar 是作为应用栏还是独立控件使用， 都可以通过 Toolbar 动态改变 Overflow Menu
 
 ### 设置 Action View
 
