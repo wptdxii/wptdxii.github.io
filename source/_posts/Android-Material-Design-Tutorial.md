@@ -107,7 +107,7 @@ Toolbar 主要由以下几部分组成：
 
 ### 设置 Navigation Button
 
-Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧边抽屉触发，图标和点击触发的逻辑都是可以自定义的。当 Toolbar 作为应用栏时，该 Button 默认作为 Up Button，用于返回 Parent Activity，为了实现该功能，首先要在清单文件中声明 Parent Activity：
+Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧边抽屉触发，图标和点击触发的逻辑都是可以自定义的。当使用应用栏时，该 Button 默认作为 Up Button，用于返回 Parent Activity，为了实现该功能，首先要在清单文件中声明 Parent Activity：
 
 ```xml
 
@@ -236,7 +236,7 @@ res/menu/sample.xml
 
 > 属性 app:show AsAction 用于指定 Action 类型，如果 app:showAsAction="ifRoom"，当应用栏有空间时 Action 会以 Button 的方式会显示在应用栏上，如果没有空间则会以 Menu Item 的方式显示。如果 app:showAsAction="never"，则会一直以 Menu Item 显示
 
-如果 Toolbar 被设置为应用栏，则通过下面这种方式加载 Overflow Menu:
+如果使用应用栏，通过下面这种方式加载 Overflow Menu:
 
 ```java
   @SuppressLint("RestrictedApi")
@@ -251,7 +251,7 @@ res/menu/sample.xml
     }
 ```
 
-则相应的触发回调如下：
+此时下面的回调会被触发：
 
 ```java
 @Override
@@ -275,7 +275,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
 > * 如果调用了 setSupportActionBar()，则在 onCreate() 方法中再调用 Toolbar.inflateMenu() 不会生效，只有在 onCreateOptionsMenu() 回调中才能加载 Overflow Menu，使用 MenuInflater 或者 Toolbar 加载都可以。点击触发的还是 onOPtionsItemSelected() 方法
 > * 在其他地方可以通过 Toolbar.inflateMenu() 重新加载 Menu(需要先通过 Toolbar.getMenu().clear() 清除之前的 Menu)，通过 Toolbar.setOnsetOnMenuItemClickListener() 重新设置回调
 
-如果 Toolbar 作为独立控件使用，则通过下面这种方式加载 Overflow Menu 并设置点击回调:
+如果 Toolbar 作为独立控件使用，通过下面这种方式加载 Overflow Menu 并设置点击回调:
 
 ```java
         Toolbar toolbar = findView(R.id.toolbar);
@@ -377,9 +377,9 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
 > 当使用应用栏时，如果 \<item\> 元素添加了 collapseActionView 属性，并且 onOptionsItemSelected() 方法被重写，被重写的子类必须调用 super.onCreateOptionsMenu(menu)，Action View 才能正常伸缩
 
-actionLayout 用于在应用栏显示 Action 的自定义布局，如下图效果：
+actionLayout 用于在应用栏显示自定义布局，如下图效果：
 
-![]()
+![toolbar_action_layout.jpg](http://otg3f8t90.bkt.clouddn.com/2017/11/14/toolbar_action_layout.jpg)
 
 实现该效果需要先定义布局文件：
 
@@ -430,22 +430,22 @@ res/layout/message_action.xml
         android:id="@+id/menu_message_modified"
         android:icon="@drawable/ic_message_white_24dp"
         android:title="消息"
-        app:actionLayout="@layout/provider_message_action"
+        app:actionLayout="@layout/message_action"
         app:showAsAction="always" />
 ```
 
 与 actionViewClass 的使用类似，通过下面代码可以获取对应的 View 实例，继而给子 View 添加对应的逻辑：
 
 ```java
-    ...
+     // ...
     MenuItem menuItem = menu.findItem(R.id.menu_message);
     FrameLayout flAction = (FrameLayout)menuIte.getActionView();
-    ...
+    // ...
 ```
 
 ### 设置 Action Provider
 
-Action Provider 用于对应用栏上的 Action 进行自定义操作，作用与 actionLayout 属性类似，可以自定义布局，主要用来对固定操作的封装，其需要继承 android.support.v4.view.ActionProvider， 下面用 Action Provider 实现与上边 actionLayout 相同的效果。
+Action Provider 用于对应用栏上的 Action 进行自定义操作，可以自定义布局，其需要继承 android.support.v4.view.ActionProvider。app:actionLayout 属性主要用来比较方便的展示布局，当需要一些自定义操作比如点击时展示菜单等，可以使用 Action Provider 进行封装。下面用 Action Provider 实现与上边 actionLayout 相同的效果。
 
 首先定义 ActionProvider 子类：
 
@@ -484,7 +484,49 @@ public class MessageActionProvider extends ActionProvider {
 }
 ```
 
-> 当使用应用栏时，
+使用 app:actionProviderClass 属性：
+
+```xml
+...
+<item
+        android:id="@+id/menu_message_modified"
+        android:icon="@drawable/ic_message_white_24dp"
+        android:title="消息"
+        app:actionProviderClass="com.sample.MessageActionProvider"
+        app:showAsAction="always" />
+```
+
+使用应用栏时，通过下面代码获取 ActionProvider 实例：
+
+```java
+    @SuppressLint("RestrictedApi")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (menu instanceof MenuBuilder) {
+            ((MenuBuilder) menu).setOptionalIconsVisible(true);
+        }
+
+        getMenuInflater().inflate(R.menu.activity_toolbar_sample, menu);
+        MenuItem menuItem = menu.findItem(R.id.menu_message);
+        MessageActionProver actionProvider = (MessageActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        actionProvider.setOnClickListener(view -> onOptionsItemSelected(menuItem));
+        actionProvider.setMessageCount("9");
+        return super.onCreateOptionsMenu(menu);
+    }
+
+```
+
+> 在 onCreateOptionsMenu() 方法中获取 ActionProvider 时， ActionProvider 的 onCreateActionView() 并未被触发，如果在 onCreateActionView() 获取其子 View，并在 onCreateOptionsMenu() 中调用 ActionProvider 的子 View 会报空指针异常，所以应该在 ActionProvider 的构造器中初始化子 View
+
+或者使用 Toolbar 获取其实例：
+
+```java
+        Menu menu = toolbar.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.menu_share);
+        MessageActionProvider mActionProvider = (MessageActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        actionProvider.setMessageCount(9);
+```
+
 
 ### 设置 Overflow Menu Button
 
