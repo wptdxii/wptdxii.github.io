@@ -127,9 +127,8 @@ Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧
 
 ```
 
-> * android:parentActivityName 属性支持 API 16 及其以上的版本
-> * < meta-data > 标签为了兼容 API 16 以下的版本
-> * 当未声明 Parent Activity 时返回上个 Activity
+> * android:parentActivityName 属性支持 API 16 及其以上的版本 < meta-data > 标签为了兼容 API 16 以下的版本
+> * 当未声明 Parent Activity 时，点击 Up Button 无响应
 
 将 Toolbar 设置为应用栏，然后调用 ActionBar 的方法即可：
 
@@ -526,7 +525,6 @@ public class MessageActionProvider extends ActionProvider {
         MessageActionProvider mActionProvider = (MessageActionProvider) MenuItemCompat.getActionProvider(menuItem);
         actionProvider.setMessageCount(9);
 ```
-
 
 ### 设置 Overflow Menu Button
 
