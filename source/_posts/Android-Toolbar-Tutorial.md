@@ -1,11 +1,13 @@
 ---
-title: Android-Material-Design-Tutorial
+title: Android-Toolbar-Tutorial
 date: 2017-08-21 16:47:06
-tags: Android UI
+tags: Material Design
 categories: Android
 ---
 
 <!-- more -->
+
+# Material Design
 
 Material Design 是 Google 推出的一套视觉设计语言，主要面向 UI 设计人员，详细资料可以参看：
 
@@ -19,10 +21,10 @@ Material Design 是 Google 推出的一套视觉设计语言，主要面向 UI �
 ActionBar 由于其设计的原因，被限定只能位于 Activity 的顶部，不能自定义布局，而且不能实现 Material Design 的效果，所以不再推荐使用，官方推出了灵活性更高的 Toolbar 作为替代。
 Toolbar 有两种使用方式：
 
-* 应用栏(ActionBar)
-* 独立控件(Standalone Widget)
+* 应用栏(AS ActionBar)
+* 普通控件(As Standalone Widget)
 
-当作为应用栏使用时，需要通过setSupportActionBar() 将 Toolbar 设置为应用栏，此时可以使用 ActionBar 提供的一些诸如 ActionBar.show()/hide() 之类的 API，但以这种方式使用 Toolbar 时具有以下缺点：
+当使用应用栏时，需要通过 setSupportActionBar() 将 Toolbar 设置为应用栏，但以这种使用方式时具有以下缺点：
 
 * 屏幕上只能显示一个应用栏，如果在多个 Fragment 中都使用 Toolbar 作为应用栏，当几个 Fragment 需要并列同时显示，例如在对平板进行适配时，其各自的应用栏无法同时显示
 * 在 Fragment 中创建溢出菜单时会遇到回调地狱，只有调用 setHasOptionsMenu(true) 后，onCreateOptionsMenu() 回调才会被触发
@@ -78,7 +80,8 @@ res/layout/toolbar.xml:
 </android.support.v7.widget.Toolbar>
 ```
 
-> 主题配置文件中的 android:colorPrimary 指定的是 ActionBar 的背景颜色，需要将其应用到 android:background 属性才可正常显示
+> * 主题配置文件中的 android:colorPrimary 指定的是 ActionBar 的背景颜色，需要将其应用到 android:background 属性才可正常显示
+> * 根据  [Material-Design-Shadows](https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-shadows) 规范，应该给 Toolbar 设置 4dp 的高度阴影
 
 然后就可以在 Activity 中使用 Toolbar：
 
@@ -96,16 +99,10 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 > * Activity 需要继承 AppCompatActivity
-> * 调用 setSupportActionBar() 可以将 Toolbar 设置为应用栏，否则作为独立控件使用
+> * 调用 setSupportActionBar() 可以将 Toolbar 设置为应用栏，否则作为普通控件使用
 > * Toolbar 设置为应用栏后，可以通过 getSupportActionBar() 获取 ActionBar 对象的引用
 
-## 配置 Toolbar
-
-Toolbar 主要由以下几部分组成：
-
-![toolbar_widget.png](http://otg3f8t90.bkt.clouddn.com/2017/11/13/toolbar_widget.png)
-
-### 设置 Navigation Button
+## 设置 Navigation
 
 Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧边抽屉触发，图标和点击触发的逻辑都是可以自定义的。当使用应用栏时，该 Button 默认作为 Up Button，用于返回 Parent Activity，为了实现该功能，首先要在清单文件中声明 Parent Activity：
 
@@ -164,9 +161,9 @@ Up Button 默认触发的回调是返回父 Activity，但可以自定义：
     }
 ```
 
-> * Up button 的 id 固定为：android.R.id.home
+> Up button 的 id 固定为：android.R.id.home
 
-当 Toolbar 作为独立控件使用时，不再触发系统回调，即 onOptionsItemSelected() 方法不会被触发，可以通过 Toolbar 的方法模拟出 Up Button 的效果：
+当 Toolbar 作为普通控件使用时，不再触发系统的 onOptionsItemSelected() 回调，但可以通过下面代码模拟出 Up Button 的效果：
 
 ```java
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -186,98 +183,61 @@ Up Button 默认触发的回调是返回父 Activity，但可以自定义：
 
 在给 Toolbar 设置监听时需要注意：
 
-> 如果 Toolbar 作为应用栏使用，Toolbar.setNavigationOnClickListener() 需要在 setSupportActionBar() 之后调用才有效，且会覆盖 onOptionsItemSelected() 方法的触发，否则触发的还是onOptionsItemSelected() 方法
+> 如果使用应用栏，Toolbar.setNavigationOnClickListener() 需要在 setSupportActionBar() 之后调用才有效，且会覆盖 onOptionsItemSelected() 方法的触发，否则触发的还是onOptionsItemSelected() 方法
 
-### 设置 Logo/Title/Subtitle
+## 设置 Logo/Title/Subtitle
 
-Toolbar 可以通过以下方法设置 Logo/Title/Subtitle:
-
-```java
-        Toolbar toolbar = findView(R.id.toolbar);
-        toolbar.setLogo();
-        toolbar.setTitle();
-        toolbar.setSubtitle();
-        setSupportActionBar(toolbar);
-```
-
-当 Toolbar 被设置为应用栏时，Title 会被默认设置为应用的名称，Toolbar.setTitle() 必须在 setSupportActionBar() 之前调用才生效，此时可以通过下面的方式隐藏掉 Title:
+使用应用栏时，应用栏上的 Title 会默认显示为应用的名称，可通过下面代码隐藏：
 
 ```java
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
 ```
 
-> 当 Toolbar 作为独立控件使用时，Title 不会默认显示为应用名称
+> * 当 Toolbar 作为普通控件使用时，不会显示默认 Title
+> * 在 onCReate() 方法中初始化时，如果调用上面代码，调用 Toolbar.setTitle() 和 Toolbar.setSubtitle() 都是无效的；如果不调用上面代码，Toolbar.setTitle() 必须在 setSupportActionBar() 方法前调用才有效， Toolbar.setSubtitle() 则无影响
 
-### 设置 Overflow Menu
+## 设置 Menu
 
-在 res/menu 路径下创建 menu 文件：
+### 加载 Menu
 
-```xml
-res/menu/sample.xml
+Menu 文件中 \<item\> 标签的 app:showAsAction 属性用于指定 Menu Item 的显示方式，其有以下几种值：
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+* app:showAsAction="always"：Menu Item 一直显示在应用栏
+* app:showAsAction="ifRoom"：当应用栏有空间时，Menu  Item 显示在应用栏，如果没有足够空间则显示在溢出菜单
+* app:showAsAction="never"：Menu Item 只显示在溢出菜单
 
-    <!-- "Mark Favorite", should appear as action button if possible -->
-    <item
-        android:id="@+id/action_favorite"
-        android:icon="@drawable/ic_favorite_black_48dp"
-        android:title="@string/action_favorite"
-        app:showAsAction="ifRoom"/>
+当使用应用栏时，在初始化时下面两个方法会依次被回调：
 
-    <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings
-          app:showAsAction="never"/>
+* onCreateOptionsMenu()：系统回调该方法后，会保留被填充的 Menu 实例，除非因某些原因该实例失效，否则该方法不会被再次调用。所以在只应该在此方法中加载菜单的初始状态，不应该在 Activity 的生命周期内执行任何更改
+* onPrepareOptionsMenu()：该方法持有已经被加载的 Menu 实例，主要用于在运行时更改菜单，如添加、移除或隐藏 Menu Item
 
-</menu>
-```
+> Activity 初始化时，这两个方法会依次被调用；当调用 invalidateOptionsMenu() 时，这两个方法也都会被调用；当点击溢出菜单按钮时，只有 onPrepareOptionsMenu() 被调用
 
-> 属性 app:show AsAction 用于指定 Action 类型，如果 app:showAsAction="ifRoom"，当应用栏有空间时 Action 会以 Button 的方式会显示在应用栏上，如果没有空间则会以 Menu Item 的方式显示。如果 app:showAsAction="never"，则会一直以 Menu Item 显示
+点击对应的菜单项时，会触发下面的回调：
 
-如果使用应用栏，通过下面这种方式加载 Overflow Menu:
+* onOptionsItemSelected()
+
+> 在 setSupportActionBar() 之前调用 Toolbar.setOnsetOnMenuItemClickListener() 是无效的；在其之后调用则会覆盖系统的 onOptionsItemSelected() 回调
+
+溢出菜单 Menu Item 默认不显示图标，可在加载菜单时通过下面代码显示：
 
 ```java
-  @SuppressLint("RestrictedApi")
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (menu instanceof MenuBuilder) {
-            ((MenuBuilder) menu).setOptionalIconsVisible(true);
-        }
-        getMenuInflater().inflate(R.menu.sample, menu);
-        // toolbar.inflateMenu(R.menu.sample);
-        return true;
-    }
-```
-
-此时下面的回调会被触发：
-
-```java
-@Override
-public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-        case R.id.action_settings:
-            // ...
-            return true;
-
-        case R.id.action_favorite:
-            // ...
-            return true;
-        default:
-            // ...
-            return super.onOptionsItemSelected(item);
+@SuppressLint("RestrictedApi")
+public void showOptionalIcons(Menu menu) {
+    if(menu instanceof MenuBuilder) {
+        ((MenuBuilder)menu).setOptionalIconsVisible(true);
     }
 }
 ```
 
-> * Overflow Menu 中默认不显示 Menu Item 的图标，可以通过 MenuBuilder.setOptionalIconsVisible() 控制其显示
-> * 如果调用了 setSupportActionBar()，则在 onCreate() 方法中再调用 Toolbar.inflateMenu() 不会生效，只有在 onCreateOptionsMenu() 回调中才能加载 Overflow Menu，使用 MenuInflater 或者 Toolbar 加载都可以。点击触发的还是 onOPtionsItemSelected() 方法
-> * 在其他地方可以通过 Toolbar.inflateMenu() 重新加载 Menu(需要先通过 Toolbar.getMenu().clear() 清除之前的 Menu)，通过 Toolbar.setOnsetOnMenuItemClickListener() 重新设置回调
+> * Activity 初始化完成后，可以通过 Toolbar.inflateMenu() 重新加载 Menu(需要先通过 Toolbar.getMenu().clear() 清除之前的 Menu)，通过 Toolbar.setOnsetOnMenuItemClickListener() 重新设置回调
 
-如果 Toolbar 作为独立控件使用，通过下面这种方式加载 Overflow Menu 并设置点击回调:
+如果 Toolbar 作为普通控件使用，通过下面这种方式加载 Overflow Menu 并设置点击回调:
 
 ```java
         Toolbar toolbar = findView(R.id.toolbar);
+        // 显示 Menu Item Icon
         Menu menu = toolbar.getMenu();
         if (menu instanceof MenuBuilder) {
             ((MenuBuilder) menu).setOptionalIconsVisible(true);
@@ -299,15 +259,6 @@ public boolean onOptionsItemSelected(MenuItem item) {
             }
         });
 ```
-
-需要在运行时改变 Overflow Menu 时需要先清除之前的 Menu，否则两个 Menu 都会被加载:
-
-```java
-    Toolbar.getMenu().clear();
-    Toolbar.inflateMenu(R.menu.sample);
-```
-
-> 无论 Toolbar 是作为应用栏还是独立控件使用， 都可以通过 Toolbar 动态改变 Overflow Menu
 
 ### 设置 Action View
 
