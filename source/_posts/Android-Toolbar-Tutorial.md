@@ -248,171 +248,77 @@ Action View 可以实现在无需启动新页面的情况下扩展应用栏的�
     MenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
         @Override
         public boolean onMenuItemActionExpand(MenuItem item) {
-            // todo something
+            // todo
             return true; // Return true to collapse action view
         }
 
         @Override
         public boolean onMenuItemActionCollapse(MenuItem item) {
-            // todo something
+            // todo
             return true; // Return true to expand action view
         }
     });
 ```
 
-> 当使用应用栏时，如果 \<item\> 元素添加了 collapseActionView 属性，并且 onOptionsItemSelected() 方法被重写，被重写的子类必须调用 super.onCreateOptionsMenu(menu)，Action View 才能正常伸缩
-
-actionLayout 用于在应用栏显示自定义布局，如下图效果：
-
-![toolbar_action_layout.jpg](http://otg3f8t90.bkt.clouddn.com/2017/11/14/toolbar_action_layout.jpg)
-
-实现该效果需要先定义布局文件：
-
-```xml
-res/layout/message_action.xml
-
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/menu_item_size"
-    android:layout_height="@dimen/menu_item_size">
-
-    <FrameLayout
-        android:layout_width="@dimen/menu_item_container_size"
-        android:layout_height="@dimen/menu_item_container_size"
-        android:layout_gravity="center">
-
-        <ImageView
-            android:id="@+id/iv_message"
-            android:layout_width="@dimen/menu_item_icon_size"
-            android:layout_height="@dimen/menu_item_icon_size"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_message_white_24dp" />
-
-        <TextView
-            android:id="@+id/tv_badge"
-            android:layout_width="@dimen/menu_item_badge_size"
-            android:layout_height="@dimen/menu_item_badge_size"
-            android:layout_gravity="top|end"
-            android:background="@drawable/shape_badge_bg_red"
-            android:gravity="center"
-            android:textColor="@color/color_white_ffffffff"
-            android:textSize="10sp"
-            android:visibility="visible"
-            android:text="5"
-            tools:ignore="SmallSp"
-            tools:visibility="visible" />
-    </FrameLayout>
-</FrameLayout>
-```
-
-使用 actionLayou 属性：
-
-```xml
-...
-<item
-        android:id="@+id/menu_message_modified"
-        android:icon="@drawable/ic_message_white_24dp"
-        android:title="消息"
-        app:actionLayout="@layout/message_action"
-        app:showAsAction="always" />
-```
-
-与 actionViewClass 的使用类似，通过下面代码可以获取对应的 View 实例，继而给子 View 添加对应的逻辑：
-
-```java
-     // ...
-    MenuItem menuItem = menu.findItem(R.id.menu_message);
-    FrameLayout flAction = (FrameLayout)menuIte.getActionView();
-    // ...
-```
-
 ### 设置 Action Provider
 
-Action Provider 用于对应用栏上的 Action 进行自定义操作，可以自定义布局，其需要继承 android.support.v4.view.ActionProvider。app:actionLayout 属性主要用来比较方便的展示布局，当需要一些自定义操作比如点击时展示菜单等，可以使用 Action Provider 进行封装。下面用 Action Provider 实现与上边 actionLayout 相同的效果。
+MenuItem 可以通过代码或者在布局文件中指定 ActionProvider，ActionProvider 可以为需要显示的 MenuItem 提供布局，并为被点击的 MenuItem 提供默认的响应。自定义 ActionProvider 需要注意下面几点：
 
-首先定义 ActionProvider 子类：
+* 为了兼容性需要继承 android.support.v4.view.ActionProvider
+* 在布局文件中指定 ActionProvider 时需要使用  app:actionProviderClass 属性，并指定全类名
+* 重写 onCreateActionView() 方法，返回需要显示的布局，最好在构造器中加载布局及其子控件，因为如果 Activity 使用应用栏，在 Activity 的 onCreateOptionsMenu() 方法中获取对应的 ActionProvider 时， ActionProvider 的 onCreateOptionsMenu() 还未被回调，在 onCreateActionView() 中使用 ActionProvider 布局的子控件容易报空指针异常
+* onCreateActionView() 返回 null 时 onPrepareSubMenu() 才会被回调
+* 如果 ActionProvider 指定了子菜单，系统不会回调 onPerformDefaultAction()
+
+## 设置 Overflow Menu Button
+
+通过下面代码可以设置溢出菜单按钮的样式：
 
 ```java
-// MessageActionProvider.java
-
-public class MessageActionProvider extends ActionProvider {
-    private View actionView;
-    private TextView tvBadge;
-
-    public MessageActionProvider(Context context) {
-        super(context);
-        actionView = View.inflate(context, R.layout.provider_message_action, null);
-        tvBadge = actionView.findViewById(R.id.tv_badge);
-    }
-
-    @Override
-    public View onCreateActionView() {
-        return actionView;
-    }
-
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        actionView.setOnClickListener(onClickListener);
-    }
-
-    public void setMessageCount(int count) {
-        tvBadge.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
-        tvBadge.setText(String.valueOf(count));
-    }
-
-    public void setMessageCount(String count) {
-        if (TextUtils.isDigitsOnly(count)) {
-            setMessageCount(Integer.parseInt(count));
-        }
-    }
-}
+Toolbar.setOverflowIcon();
 ```
 
-使用 app:actionProviderClass 属性：
+也可以在主题文件中全局指定：
 
 ```xml
-...
-<item
-        android:id="@+id/menu_message_modified"
-        android:icon="@drawable/ic_message_white_24dp"
-        android:title="消息"
-        app:actionProviderClass="com.sample.MessageActionProvider"
-        app:showAsAction="always" />
-```
+ <!-- Toolbar 主题 -->
+ <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        ...
+        <item name="actionOverflowButtonStyle">@style/ToolbarTheme.OverflowButton</item>
+        ...
+  </style>
 
-使用应用栏时，通过下面代码获取 ActionProvider 实例：
-
-```java
-    @SuppressLint("RestrictedApi")
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (menu instanceof MenuBuilder) {
-            ((MenuBuilder) menu).setOptionalIconsVisible(true);
-        }
-
-        getMenuInflater().inflate(R.menu.activity_toolbar_sample, menu);
-        MenuItem menuItem = menu.findItem(R.id.menu_message);
-        MessageActionProver actionProvider = (MessageActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        actionProvider.setOnClickListener(view -> onOptionsItemSelected(menuItem));
-        actionProvider.setMessageCount("9");
-        return super.onCreateOptionsMenu(menu);
-    }
+  <style name="ToolbarTheme.OverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_add_white_24dp</item>
+  </style>
 
 ```
 
-> 在 onCreateOptionsMenu() 方法中获取 ActionProvider 时， ActionProvider 的 onCreateActionView() 并未被触发，如果在 onCreateActionView() 获取其子 View，并在 onCreateOptionsMenu() 中调用 ActionProvider 的子 View 会报空指针异常，所以应该在 ActionProvider 的构造器中初始化子 View
+## 设置 Overflow Menu
 
-或者使用 Toolbar 获取其实例：
+溢出菜单默认是覆盖在应用栏上的，可以通过主题设置在应用栏的下方：
 
-```java
-        Menu menu = toolbar.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.menu_share);
-        MessageActionProvider mActionProvider = (MessageActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        actionProvider.setMessageCount(9);
+```xml
+ <!-- Toolbar 主题 -->
+ <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        ...
+        <item name="actionOverflowMenuStyle">@style/ToolbarTheme.OverflowMenu</item>
+        ...
+  </style>
+
+<!-- res/values/styles.xml -->
+ <style name="ToolbarOverflowStyle" parent="Widget.AppCompat.PopupMenu.Overflow"">
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">-4dp</item>
+ </style>
+
+<!-- 为了兼容性 -->
+<!-- res/values-v21/styles.xml -->
+ <style name="ToolbarOverflowStyle" parent="Widget.AppCompat.PopupMenu.Overflow"">
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">4dp</item>
+ </style>
 ```
-
-### 设置 Overflow Menu Button
 
 ## Ref
 
@@ -422,4 +328,6 @@ public class MessageActionProvider extends ActionProvider {
 * [Using the Android Toolbar (ActionBar) - Tutorial](http://www.vogella.com/tutorials/AndroidActionBar/article.html)
 * [Goodbye ActionBar APIs, hello Toolbar](https://medium.com/@ZakTaccardi/goodbye-actionbar-apis-hello-toolbar-af6ae7b31e5d)
 * [Have you been calling 'setSupportActionBar()'? You don't have to!](https://www.reddit.com/r/androiddev/comments/3m3pd0/have_you_been_calling_setsupportactionbartoolbar/?st=j6yhe4s9&sh=6528a88d)
+* [Menu](https://developer.android.com/guide/topics/ui/menus.html)
 * [Using Custom Views As Menu Items](https://stablekernel.com/using-custom-views-as-menu-items/#top)
+* [ActionProvider](https://developer.android.com/reference/android/support/v4/view/ActionProvider.html)
