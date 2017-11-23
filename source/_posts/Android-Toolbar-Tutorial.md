@@ -231,95 +231,30 @@ public void showOptionalIcons(Menu menu) {
 }
 ```
 
-> * Activity 初始化完成后，可以通过 Toolbar.inflateMenu() 重新加载 Menu(需要先通过 Toolbar.getMenu().clear() 清除之前的 Menu)，通过 Toolbar.setOnsetOnMenuItemClickListener() 重新设置回调
-
-如果 Toolbar 作为普通控件使用，通过下面这种方式加载 Overflow Menu 并设置点击回调:
-
-```java
-        Toolbar toolbar = findView(R.id.toolbar);
-        // 显示 Menu Item Icon
-        Menu menu = toolbar.getMenu();
-        if (menu instanceof MenuBuilder) {
-            ((MenuBuilder) menu).setOptionalIconsVisible(true);
-        }
-        toolbar.inflateMenu(R.menu.sample);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                 switch (item.getItemId()) {
-                    case R.id.action_settings:
-                        // ...
-                        return true;
-                    case R.id.action_favorite:
-                        // ...
-                        return true;
-                        default:
-                        // ...
-                        return false;
-            }
-        });
-```
+> Activity 初始化完成后，可以通过 Toolbar.inflateMenu() 重新加载 Menu(需要先通过 Toolbar.getMenu().clear() 清除之前的 Menu)，通过 Toolbar.setOnsetOnMenuItemClickListener() 重置回调
 
 ### 设置 Action View
 
-Action View 用于在无需启动新页面的情况下扩展应用栏的功能，例如使用 Search Action View 可以在当前应用栏实现搜索功能，而不必新打开 Activity 或 Fragment，如下图所示：
+Action View 可以实现在无需启动新页面的情况下扩展应用栏的功能，为了使用 Action View，需要给菜单文件的 \<item\> 标签添加下面两个属性之一：
 
-![action_view.png](http://otg3f8t90.bkt.clouddn.com/2017/11/1/action_view.png)
+* app:actionViewClass：View 类的全类名
+* app:actionLayout：自定义布局
 
-为了使用 Action View，需要给菜单文件的 \<item\> 添加下面两个属性之一：
-
-* app:actionViewClass：实现功能扩展
-* app:actionLayout：在应用栏显示自定义布局
-
- 下面代码示例了 actionViewClass 的使用：
-
-```xml
-<item android:id="@+id/action_search"
-     android:title="@string/action_search"
-     android:icon="@drawable/ic_search"
-     app:showAsAction="ifRoom|collapseActionView"
-     app:actionViewClass="android.support.v7.widget.SearchView" />
-```
-
-> * 当 Action Button/Menu Item 不与用户交互时显示 android:icon，交互时扩展开 app:actionViewClass
-> * collapseActionView 可以控制应用栏是否展开
-
-当使用应用栏时，通过下面代码可以获取 SearchView  实例：
-
-```java
-@Override
-public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.main_activity_actions, menu);
-    MenuItem searchItem = menu.findItem(R.id.action_search);
-    SearchView searchView = (SearchView) menuItem.getActionView();
-    return super.onCreateOptionsMenu(menu);
-}
-```
-
-如果 Toolbar 作为独立控件使用，通过下面代码可以获取 SearchView 实例：
-
-```java
-        toolbar.inflateMenu(R.menu.activity_main);
-        Menu menu = toolbar.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.menu_search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-```
+当 Menu Item 不与用户交互时显示 android:icon，交互时扩展开 app:actionViewClass。通过 MenuItem.getAction() 强转后即可获取对应的 ActionView 对象。
 
 可以通过下面代码可以给 Menu Item 设置收缩展开监听：
 
 ```java
-    getMenuInflater().inflate(R.menu.activity_main, menu);
-    MenuItem menuItem = menu.findItem(R.id.menu_search);
-    menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+    MenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
         @Override
         public boolean onMenuItemActionExpand(MenuItem item) {
-            Toast.makeText(MainActivity.this, "Expand", Toast.LENGTH_SHORT).show();
+            // todo something
             return true; // Return true to collapse action view
         }
 
         @Override
         public boolean onMenuItemActionCollapse(MenuItem item) {
-            Toast.makeText(MainActivity.this, "Collapse", Toast.LENGTH_SHORT).show();
+            // todo something
             return true; // Return true to expand action view
         }
     });
