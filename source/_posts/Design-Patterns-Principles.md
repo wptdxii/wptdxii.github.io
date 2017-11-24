@@ -10,7 +10,7 @@ categories: Design Patterns
 # 单一职责原则
 
 单元职责原则(Single Responsibility Principle，简称 SRP) 的定义是：
-> 就一个类而言，应该仅有一个引起它变化的原因。简单点说，一个类中应该是一组相关性很高的函数、数据的封装。
+> 就一个类而言，应该仅有一个引起它变化的原因。简单点说就是，一个类中应该是一组相关性很高的函数、数据的封装。
 
 单一职责的划分并不总是那么清晰，最大的问题是对职责的定义，什么时类的职责，以及怎么划分类的职责，很多时候都是需要通过个人经验来界定。
 
@@ -23,4 +23,47 @@ categories: Design Patterns
 
 # 里氏替换原则
 
+里氏替换原则(Liskov's Substitution Principle，简称 LSP)的定义是：
+> 如果对每一个系统类型为 S 的对象 SO，都有类型为 T 的对象 TO，使得以 T 定义的程序在所有的对象 TO 都代换成 SO 时， 程序的行为没有发生改变，那么类型 S 是类型 T 的子类型。简单点说就是，所有引用基类的地方必须能透明地使用其子类的对象。
+
+面向对象(Object Oriented，简称 OO)的语言有三大特点：封装、继承和多态。里氏替换原则就是依赖于继承和多态两个特性。该原则通俗点讲就是，只要父类出现的地方子类就可以出现，而且替换为子类也不会产生任何错误和异常，使用者可能根本不需要知道是父类还是子类，但是，反过来就不行了，子类出现的地方，使用父类未必就可以。
+
+里氏替换原则的核心原理是抽象，抽象又依赖“继承”这个特性。在面向对象编程(Object Oriented Programminmg，简称 OOP)中，继承有以下优点：
+
+* 代码复用，减少创建类的成本，每个子类都拥有父类的属性和方法
+* 代码的高扩展性
+
+但同时有以下缺点：
+
+* 继承是侵入性的，只要是继承就必须拥有父类所有的属性和方法，可能造成子类代码冗余
+
+里氏替换原则和开闭原则是紧密联系的，里氏替换通过抽象建立规范，具体的实现在运行时替换掉抽象，保证系统的扩展性和灵活性，实现对扩展开发，对修改封闭。
+
 # 依赖倒置原则
+
+依赖倒置原则(Dependence Inversion Principle，简称 DIP) 的定义是：
+> 高层模块不应该依赖低层模块，两者都应该依赖其抽象；抽象不应该依赖细节；细节应该依赖抽象。
+> * 高层模块指的是调用端，实现了复杂的业务逻辑
+> * 低层模块指的是被调用端，实现了基础的、主要的原子逻辑
+> * 这里的"抽象"在 Java 语言中指的是接口或者抽象类
+> * 这里的"细节"在 Java 语言中指的是具体的实现类
+
+依赖倒置原则的核心思想是面向接口编程。为了消解两个模块之间的耦合关系，应该在两个模块之间定义一个抽象层，高层模块依赖该抽象层，低层模块实现该抽象层。
+
+## 控制反转
+
+## 依赖注入
+
+依赖注入是实现控制反转的一种方式。
+
+# 接口隔离原则
+
+# 迪米特原则
+
+# Ref
+
+* [Design Patterns](http://www.oodesign.com/)
+* [java-design-patterns](https://github.com/iluwatar/java-design-patterns?utm_source=gold_browser_extension)
+* [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)
+* [向依赖关系宣战|依赖倒置、控制反转和依赖注入辨析](http://zqpythonic.qiniucdn.com/data/20070605105343/index.html)
+* [抛弃依赖倒置原则](http://blog.csdn.net/yqj2065/article/details/70941763)
