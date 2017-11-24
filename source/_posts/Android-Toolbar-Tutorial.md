@@ -24,12 +24,12 @@ Toolbar 有两种使用方式：
 * 应用栏(AS ActionBar)
 * 普通控件(As Standalone Widget)
 
-当使用应用栏时，需要通过 setSupportActionBar() 将 Toolbar 设置为应用栏，但以这种使用方式时具有以下缺点：
+当使用应用栏时，需要通过 setSupportActionBar() 将 Toolbar 设置为应用栏，但这种方式时具有以下缺点：
 
 * 屏幕上只能显示一个应用栏，如果在多个 Fragment 中都使用 Toolbar 作为应用栏，当几个 Fragment 需要并列同时显示，例如在对平板进行适配时，其各自的应用栏无法同时显示
 * 在 Fragment 中创建溢出菜单时会遇到回调地狱，只有调用 setHasOptionsMenu(true) 后，onCreateOptionsMenu() 回调才会被触发
 
-当作为独立的控件使用时，用法同普通的 ViewGroup 用法一样。从功能上讲，Toolbar 继承并扩展了 ActionBar 的所有功能，所以 Toolbar 可以作为独立的普通控件完全代替 ActionBar，而不必将其设置为应用栏，但是对于使用了 ActionBar 的老项目，为了复用系统回调的实现代码，减少迁移成本，将 Toolbar 设置为应用栏最简便。所以对于有历史包袱的老项目，可以将 Toolbar 设置为系统应用栏使用；对于新项目，建议将 Toolbar 作为普通控件使用。
+从功能上讲，Toolbar 继承并扩展了 ActionBar 的所有功能，所以 Toolbar 可以作为普通控件使用而完全代替 ActionBar，而不必将其设置为应用栏，但是对于使用了 ActionBar 的老项目，为了复用系统回调的实现代码，减少迁移成本，将 Toolbar 设置为应用栏最简便。所以对于有历史包袱的老项目，可以将 Toolbar 设置为系统应用栏使用；对于新项目，建议将 Toolbar 作为普通控件使用。
 
 ## 引入 Toolbar
 
@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧边抽屉触发，图标和点击触发的逻辑都是可以自定义的。当使用应用栏时，该 Button 默认作为 Up Button，用于返回 Parent Activity，为了实现该功能，首先要在清单文件中声明 Parent Activity：
 
 ```xml
-
 <application ... >
     ...
 
@@ -121,7 +120,6 @@ Toolbar 左上角提供了 Navigation Button，通常用于返回主页或者侧
             android:value="com.example.myfirstapp.MainActivity" />
     </activity>
 </application>
-
 ```
 
 > * android:parentActivityName 属性支持 API 16 及其以上的版本 < meta-data > 标签为了兼容 API 16 以下的版本
@@ -218,7 +216,7 @@ Menu 文件中 \<item\> 标签的 app:showAsAction 属性用于指定 Menu Item 
 
 * onOptionsItemSelected()
 
-> 在 setSupportActionBar() 之前调用 Toolbar.setOnsetOnMenuItemClickListener() 是无效的；在其之后调用则会覆盖系统的 onOptionsItemSelected() 回调
+> 在 setSupportActionBar() 之前调用 Toolbar.setOnMenuItemClickListener() 是无效的；在其之后调用则会覆盖系统的 onOptionsItemSelected() 回调
 
 溢出菜单 Menu Item 默认不显示图标，可在加载菜单时通过下面代码显示：
 
@@ -272,58 +270,65 @@ MenuItem 可以通过代码或者在布局文件中指定 ActionProvider，Actio
 
 ## 设置 Overflow Menu Button
 
-通过下面代码可以设置溢出菜单按钮的样式：
+可以通过代码设置溢出菜单按钮的样式：
 
 ```java
 Toolbar.setOverflowIcon();
 ```
 
-也可以在主题文件中全局指定：
+也可以在主题文件中设定，首先在主题文件中添加如下样式：
 
 ```xml
- <!-- Toolbar 主题 -->
+  <style name="ToolbarTheme.OverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_add_white_24dp</item>
+  </style>
+```
+
+然后将其应用到 Toolbar 样式的属性：
+
+```xml
  <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         ...
         <item name="actionOverflowButtonStyle">@style/ToolbarTheme.OverflowButton</item>
         ...
   </style>
-
-  <style name="ToolbarTheme.OverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_add_white_24dp</item>
-  </style>
-
 ```
 
 ## 设置 Overflow Menu
 
-溢出菜单默认是覆盖在应用栏上的，可以通过主题设置在应用栏的下方：
+溢出菜单默认是覆盖在应用栏上的，可以通过主题将其设置在应用栏的下方。首先在 res/values/styles.xml 文件中添加样式：
 
 ```xml
- <!-- Toolbar 主题 -->
- <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        ...
-        <item name="actionOverflowMenuStyle">@style/ToolbarTheme.OverflowMenu</item>
-        ...
-  </style>
 
-<!-- res/values/styles.xml -->
  <style name="ToolbarOverflowStyle" parent="Widget.AppCompat.PopupMenu.Overflow"">
         <item name="overlapAnchor">false</item>
         <item name="android:dropDownVerticalOffset">-4dp</item>
  </style>
 
-<!-- 为了兼容性 -->
-<!-- res/values-v21/styles.xml -->
+```
+
+为了保证兼容性，同时在 res/values-v21/style.xml 文件中添加样式：
+
+```xml
  <style name="ToolbarOverflowStyle" parent="Widget.AppCompat.PopupMenu.Overflow"">
         <item name="overlapAnchor">false</item>
         <item name="android:dropDownVerticalOffset">4dp</item>
  </style>
 ```
 
+然后将上边的样式应用到 Toolbar 样式的下列属性：
+
+```xml
+ <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        ...
+        <item name="actionOverflowMenuStyle">@style/ToolbarTheme.OverflowMenu</item>
+        ...
+  </style>
+```
+
 ## Ref
 
-* [Setting Up the App Bar](https://developer.android.com/training/appbar/setting-up.html)
-* [Adding and Handling Actions](https://developer.android.com/training/appbar/actions.html#handle-actions)
+* [Adding the App Bar](https://developer.android.com/training/appbar/index.html)
 * [AppCompat v21 — Material Design for Pre-Lollipop Devices!](https://android-developers.googleblog.com/2014/10/appcompat-v21-material-design-for-pre.html)
 * [Using the Android Toolbar (ActionBar) - Tutorial](http://www.vogella.com/tutorials/AndroidActionBar/article.html)
 * [Goodbye ActionBar APIs, hello Toolbar](https://medium.com/@ZakTaccardi/goodbye-actionbar-apis-hello-toolbar-af6ae7b31e5d)
@@ -331,3 +336,4 @@ Toolbar.setOverflowIcon();
 * [Menu](https://developer.android.com/guide/topics/ui/menus.html)
 * [Using Custom Views As Menu Items](https://stablekernel.com/using-custom-views-as-menu-items/#top)
 * [ActionProvider](https://developer.android.com/reference/android/support/v4/view/ActionProvider.html)
+* [Support v7 ActionBarActivity, OnCreateOptionsMenu() called after each call to SupportInvalidateOptionsMenu()](https://stackoverflow.com/questions/28803908/support-v7-actionbaractivity-oncreateoptionsmenu-called-after-each-call-to-su)
