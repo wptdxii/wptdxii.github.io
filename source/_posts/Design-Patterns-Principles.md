@@ -1,7 +1,7 @@
 ---
 title: 设计模式(Design Patterns)
 date: 2017-08-07 23:45:03
-tags: 
+tags: Design Patterns Principles 
 categories: Design Patterns
 ---
 面向对象有六大原则
@@ -48,13 +48,30 @@ categories: Design Patterns
 > * 这里的"抽象"在 Java 语言中指的是接口或者抽象类
 > * 这里的"细节"在 Java 语言中指的是具体的实现类
 
-依赖倒置原则的核心思想是面向接口编程。为了消解两个模块之间的耦合关系，应该在两个模块之间定义一个抽象层，高层模块依赖该抽象层，低层模块实现该抽象层。
+依赖倒置原则的核心思想是面向接口编程。为了消解两个模块之间的耦合关系，应该在两个模块之间定义一个抽象层，该层是由高层模块抽象出来的规范，高层模块依赖该抽象层，低层模块实现该抽象层，这样整个依赖关系由高低层之间的强耦合变为了高低层分别与抽象层之间的强耦合，也就松散了高低层之间的耦合度。这个变化过程有两个地方体现了“依赖倒置”：
+
+* 在有抽象层之前，高层模块是直接依赖低层模块的，所以必须先实现低层模块才能实现高层模块；而有了抽象层之后，可以先实现高层模块，然后根据需求和抽象层提供的规范，再实现低层模块。即依赖模块实现的顺序发生了“倒置”
+* 在有抽象层之前，高层模块需要在内部创建对低层模块的依赖；而有了抽象层后，因为高层模块依赖的是抽象层而不是具体实现，所以要将具体实现即低层模块从外部注入到高层模块。即依赖对象由内部创建向由外部注入“倒置”
+
+实践依赖倒置原则就用到了控制反转的思想。
 
 ## 控制反转
 
+控制反转(Inversion of Control，简称 IoC)是一种设计思想，是一种面向对象编程的法则，指的是将创建被依赖对象的控制权移交给 Ioc 容器，容器负责被依赖对象的创建方式和创建时机，并将其注入到需求方，使被依赖对象由需求方的内部创建反转为容器的外部注入。
+
+控制反转有下面几种常见的实现方式：
+
+* 依赖注入
+* 依赖查找
+* 依赖拖拽
+
 ## 依赖注入
 
-依赖注入是实现控制反转的一种方式。
+依赖注入(Dependence Injecttion，简称 DI)与控制反转是对同一概念的不同角度的描述，也可以将依赖注入理解为实现控制反转的一种方式。依赖注入主要有三种注入方式：
+
+* 构造器注入(Constructor Injection)
+* setter 方法注入(Setter Injection)
+* 接口注入(Interface Injection)
 
 # 接口隔离原则
 
@@ -67,3 +84,4 @@ categories: Design Patterns
 * [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)
 * [向依赖关系宣战|依赖倒置、控制反转和依赖注入辨析](http://zqpythonic.qiniucdn.com/data/20070605105343/index.html)
 * [抛弃依赖倒置原则](http://blog.csdn.net/yqj2065/article/details/70941763)
+* [依赖注入和控制反转的理解](http://blog.csdn.net/bestone0213/article/details/47424255)
