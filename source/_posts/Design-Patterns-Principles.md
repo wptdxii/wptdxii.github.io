@@ -75,12 +75,26 @@ categories: Design Patterns
 
 # 接口隔离原则
 
+接口隔离原则(Interface Segregation Principle，简称 ISP)的定义是：
+> 客户端不应该依赖它不需要的接口。简单点说就是，类间的依赖关系应该建立在最小的接口上。
+
+接口隔离原则指的是将庞大、臃肿的接口拆分成粒度更小更具体的接口，来实现系统解耦，从而更容易重构、更改和重新部署。
+
+单一职责原则、开闭原则、里氏替换原则、接口隔离原则和依赖倒置原则简称为 SOLID 原则。
+
 # 迪米特原则
+
+迪米特原则(Law of Demeter，简称 LoD)又称为最少知道原则(Least Knowledge Principle，简称 LKP),其定义是：
+> 一个对象应该对其他对象有最少的了解。
+
+类与类之间关系越密切，耦合度就越大，当一个类发生改变时，对另一个影响就越大。迪米特法则就要求一个类应该对自己要耦合的类知道得要尽可能的少。该法则还有一个英文解释：
+> Only talk to your immedate friends
 
 # Ref
 
 * [Design Patterns](http://www.oodesign.com/)
 * [java-design-patterns](https://github.com/iluwatar/java-design-patterns?utm_source=gold_browser_extension)
+* [Inversion of Control](https://martinfowler.com/bliki/InversionOfControl.html)
 * [Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)
 * [向依赖关系宣战|依赖倒置、控制反转和依赖注入辨析](http://zqpythonic.qiniucdn.com/data/20070605105343/index.html)
 * [抛弃依赖倒置原则](http://blog.csdn.net/yqj2065/article/details/70941763)
