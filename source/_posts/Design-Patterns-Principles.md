@@ -1,10 +1,10 @@
 ---
-title: 设计模式(Design Patterns)
+title: 面向对象六大原则(Design Patterns Principles)
 date: 2017-08-07 23:45:03
 tags: Design Patterns Principles 
 categories: Design Patterns
 ---
-面向对象有六大原则
+面向对象需要遵循六大原则
 <!-- more -->
 
 # 单一职责原则
@@ -85,9 +85,9 @@ categories: Design Patterns
 # 迪米特原则
 
 迪米特原则(Law of Demeter，简称 LoD)又称为最少知道原则(Least Knowledge Principle，简称 LKP),其定义是：
-> 一个对象应该对其他对象有最少的了解。
+> 一个对象应该对其他对象尽可能少的了解。
 
-类与类之间关系越密切，耦合度就越大，当一个类发生改变时，对另一个影响就越大。迪米特法则就要求一个类应该对自己要耦合的类知道得要尽可能的少。该法则还有一个英文解释：
+类与类之间关系越密切，耦合度就越大，当一个类发生改变时，对另一个影响就越大。迪米特法则要求一个类应该只耦合自己必须知道的类，对于非必须知道的类尽可能少的关联。该法则还有一个英文解释：
 > Only talk to your immedate friends
 
 # Ref

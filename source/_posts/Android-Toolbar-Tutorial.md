@@ -4,17 +4,14 @@ date: 2017-08-21 16:47:06
 tags: Material Design
 categories: Android
 ---
-
-<!-- more -->
-
-# Material Design
-
 Material Design 是 Google 推出的一套视觉设计语言，主要面向 UI 设计人员，详细资料可以参看：
 
 * [Material Design](https://material.io/)
 * [Material Design 中文版](http://design.1sters.com/)
 
 为了方便实现 Materrial Design 规范的设计效果，Google 同时针对 Android 开发提供了 Design Support 库，将一些代表性的控件和效果进行了封装，可以很方便的将应用 Material 化。
+
+<!-- more -->
 
 # Toolbar
 
