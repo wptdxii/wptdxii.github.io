@@ -6,6 +6,7 @@ categories: Java Design Patterns
 ---
 
 单例模式是创建型模式(Creational Pattern)
+
 <!-- more -->
 
 # 意图
@@ -30,7 +31,7 @@ categories: Java Design Patterns
 * 构造函数不对外开放，一般为 Private
 * 通过一个静态方法或者枚举返回单例类对象
 * 确保单例类有且仅有一个对象，尤其是在多线程环境下
-* 确保单例类对象在反序列化时不会重新构建对象
+* 确保单例类对象在反序列化时不会重新创建对象
 
 # 实现方式
 
@@ -50,13 +51,14 @@ public class EagerSingleton {
 }
 ```
 
-饿汉式的优点是：
+优点：
 
 * 线程安全
 
-饿汉式的缺点是：
+缺点：
 
 * 在类加载的时候就进行了实例的初始化，有可能造成资源的浪费
+* 存在反序列化时对象重新生成的问题
 
 ## 懒汉式
 
@@ -77,14 +79,16 @@ public class LazySingleton {
 }
 ```
 
-懒汉式的优点是：
+优点：
 
 * 单例类的实例在第一次使用时才被初始化，在一定程度上节约了资源
+* 线程安全
 
-懒汉式的缺点是：
+缺点：
 
-* 单例类的实例在第一次使用需要进行初始化，所以第一次使用反应会稍慢
+* 单例类的实例在第一次使用时需要进行初始化，反应会稍慢
 * 每次获取实例时都会进行方法同步，造成不必要的同步开销
+* 存在反序列化时对象重新生成的问题
 
 ## 双重校验锁单例
 
@@ -109,14 +113,15 @@ public class DCLSingleton {
 }
 ```
 
-DCL 单例的优点是：
+优点：
 
 * 单例类的实例在第一次使用时才被初始化，在一定程度上节约了资源
 * 线程安全
 
-DCL 单例的缺点是：
+缺点：
 
-* 单例类的实例在第一次使用需要进行初始化，所以第一次使用反应会稍慢
+* 单例类的实例在第一次使用时需要进行初始化，反应会稍慢
+* 存在反序列化时对象重新生成的问题
 * JDK1.5 之前可能会出现 DCL 失效问题
 
 单例实例的初始化语句即 sInstance = new DCLSingleton() 不是一个原子性操作，该语句最终会被编译成多条汇编指令：
@@ -132,7 +137,9 @@ volatile 关键字主要有两个作用：
 * 保证共享变量在线程间的可见性：当共享变量被 volatile 修饰后，会保证变量在线程间的可见性，当一个线程修改了变量的值时，变量的新值对其他线程来说是立即可见的
 * 保证指令的有序性，禁止指令重排序：当程序执行到 volatile 修饰的变量时，在其前面的操作一定已经全部执行完毕，在其后面的操作还没有进行，前面操作的结果对后面的的操作是可见的。在进行指令优化时，volatile 变量前的语句不能在 volatile 变量后执行，volatile 变量后的语句也不能放到 volatile 变量前执行。
 
-利用 volatile 可以保证指令有序性，禁止指令重排序的特性，可以解决 DCL 失效 的问题。 当用 volatile 关键字修饰共享变量 sIntance 时，new DCLSingleton() 一定会执行完毕，sInstance 一定被完全的初始化。
+利用 volatile 可以保证指令有序性，禁止指令重排序的特性，可以解决 DCL 失效 的问题。 当用 volatile 关键字修饰共享变量 sIntance 时，会强制上面的 2 和 3 顺序执行，线程 B 在获取的 sInstance 要么为 null  要么一定是初始化完全的对象。
+
+> 在 JDK1.5 之前 volatile 语义较弱，只能保证共享变量在线程间的可见性，不能禁止指令重排序，所以只有在 JDK1.5 及其以后的版本使用 volatile 才能解决 DCL 失效的问题
 
 ## 静态内部类单例
 
@@ -143,23 +150,90 @@ public class HolderSingleton {
     private HolderSingleton() {}
 
     public static HolderSingleton getInstance(){
-        return SingletonHolder.sInstance;
+        return SingletonHolder.INSTANCE;
     }
 
     private static class SingletonHolder {
-        private static final HolderSingleton sInstance = new HolderSingleton();
+        private static final HolderSingleton INSTANCE = new HolderSingleton();
     }
 }
 ```
 
-使用静态内部类实现单例模式有如下优点：
+优点：
 
 * 单例类的实例在第一次使用时才被初始化，在一定程度上节约了资源
 * 线程安全
 
+缺点：
+
+* 单例类的实例在第一次使用时需要进行初始化，反应会稍慢
+
 ## 枚举单例
 
+枚举对象数量是固定的，当设定只有一个对象时，当然就实现了所谓的单例，示例代码如下：
+
+```java
+public enum EnumSingleton {
+    INSTANCE;
+}
+```
+
+优点：
+
+* 写法简单
+* 线程安全
+* 不存在反序列化时对象重新生成的问题
+
+缺点：
+
+* 思路清奇
+* 枚举在 Android 开发中有较大的性能开销，官方不建议在不必要的时候使用
+
 ## 容器单例
+
+程序初始化时，可以创建一个容器管理所有的单例类型，示例代码如下：
+
+```java
+public class SingletonContainer {
+    private static Map<String, Object> containerMap = new HashMap<>();
+
+    private SingletonContainer() {
+    }
+
+    public static void putInstance(String key, Object instance) {
+        if (!containerMap.containsKey(key)) {
+            containerMap.put(key, instance);
+        }
+    }
+
+    public static Object getInstance(String key) {
+        return containerMap.get(key);
+    }
+}
+```
+
+优点：
+
+* 通过统一的接口提供获取操作，实现单例对象的统一管理
+
+缺点：
+
+* 实现单例的方式不够优雅，还需要记住对应对象的键值
+* 会造成单例对象类型的丢失，需要强转
+* 容器类序列化时要求其管理的单例类型都可以实例化
+* 容器类本身不是单例的，其管理的类型也不是单例的，在反序列化时不能阻止重新创建对象，存在反序列化的问题
+
+# 反序列化
+
+上面几种单例模式的实现方式中，除了枚举单例外和容器单例外，单例类在实现了 Serializable 接口对单例对象序列化后，在反序列化时会造成单例对象的重新创建，通过加入下面方法可以避免这个问题：
+
+```java
+  private Object readResolve() throws ObjectStreamException {
+        return getInstance();
+    }
+```
+
+> 该方法可以在 Serializable 接口的 javadoc 中查看，其可以使用任意修饰符；getInstance() 方法返回的是单例对象
 
 # Ref
 
