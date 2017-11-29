@@ -9,4 +9,12 @@ categories: Java Design Patterns
 
 <!-- more -->
 
+# 场景
+
 # 意图
+
+# 实现
+
+# 总结
+
+# Ref
