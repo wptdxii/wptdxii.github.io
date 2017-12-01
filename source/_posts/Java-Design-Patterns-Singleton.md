@@ -28,7 +28,7 @@ categories: Java Design Patterns
 
 实现单例模式时要注意以下几点：
 
-* 构造函数不对外开放，一般为 Private
+* 构造函数不对外开放，一般为 Private，同时为了防止利用反射创建新的对象，可以在构造器中通过判断并抛出异常处理
 * 通过一个静态方法或者枚举返回单例类对象
 * 确保单例类有且仅有一个对象，尤其是在多线程环境下
 * 确保单例类对象在反序列化时不会重新创建对象
@@ -43,7 +43,12 @@ categories: Java Design Patterns
 public class EagerSingleton {
     private static EagerSingleton sInstance = new EagerSingleton();
 
-    private EagerSingleton() {}
+    private EagerSingleton() {
+        // 防止利用反射创建对象
+        if (INSTANCE != null) {
+            throw new UnsupportedOperationException("Already initialized.");
+        }
+    }
 
     public static EagerSingleton getInstance() {
         return sInstance;
@@ -57,7 +62,7 @@ public class EagerSingleton {
 
 缺点：
 
-* 在类加载的时候就进行了实例的初始化，有可能造成资源的浪费
+* 单例对象不是懒加载，有可能造成资源的浪费
 * 存在反序列化时对象重新生成的问题
 
 ## 懒汉式
@@ -68,7 +73,12 @@ public class EagerSingleton {
 public class LazySingleton {
     private static LazySingleton sInstance;
 
-    private LazySingleton() {}
+    private LazySingleton() {
+        // 防止利用反射创建对象
+        if (sInstance != null) {
+            throw new UnsupportedOperationException("Already initialized.");
+        }
+    }
 
     public static synchronized LazySingleton getInstance() {
         if (sInstance == null) {
@@ -81,12 +91,12 @@ public class LazySingleton {
 
 优点：
 
-* 单例类的实例在第一次使用时才被初始化，在一定程度上节约了资源
+* 单例对象懒加载
 * 线程安全
 
 缺点：
 
-* 单例类的实例在第一次使用时需要进行初始化，反应会稍慢
+* 单例对象懒加载，所以第一次调用时反应可能会稍慢
 * 每次获取实例时都会进行方法同步，造成不必要的同步开销
 * 存在反序列化时对象重新生成的问题
 
@@ -98,29 +108,38 @@ public class LazySingleton {
 public class DCLSingleton {
     private volatile static DCLSingleton sInstance;
 
-    private DCLSingleton() {}
+    private DCLSingleton() {
+        // 防止利用反射创建对象
+        if (sInstance != null) {
+            throw new UnsupportedOperationException("Already initialized.");
+        }
+    }
 
     public static DCLSingleton getInstance() {
-        if (sInstance == null) {
+        // 使用局部变量可以提高性能
+        DCLSingleton result = sInstance;
+        if (result == null) {
             synchronized (DCLSingleton.class) {
-                if (sInstance == null) {
-                    sInstance = new DCLSingleton();
+                // 在多线程环境下的每次调用，局部变量会被重新创建，重新赋值是为了防止在当前线程阻塞的时候其他线程完成了单例对象初始化
+                result = sInstance;
+                if (result == null) {
+                    sInstance = result = new DCLSingleton();
                 }
             }
         }
-        return sInstance;
+        return result;
     }
 }
 ```
 
 优点：
 
-* 单例类的实例在第一次使用时才被初始化，在一定程度上节约了资源
+* 单例对象懒加载
 * 线程安全
 
 缺点：
 
-* 单例类的实例在第一次使用时需要进行初始化，反应会稍慢
+* 单例对象懒加载，所以第一次调用时反应可能会稍慢
 * 存在反序列化时对象重新生成的问题
 * JDK1.5 之前可能会出现 DCL 失效问题
 
@@ -148,7 +167,12 @@ volatile 关键字主要有两个作用：
 
 ```java
 public class HolderSingleton {
-    private HolderSingleton() {}
+    private HolderSingleton() {
+        // 防止利用反射创建对象
+        if (SingletonHolder.INSTANCE != null) {
+            throw new UnsupportedOperationException("Already initialized.");
+        }
+    }
 
     public static HolderSingleton getInstance(){
         return SingletonHolder.INSTANCE;
@@ -162,12 +186,13 @@ public class HolderSingleton {
 
 优点：
 
-* 单例类的实例在第一次使用时才被初始化，在一定程度上节约了资源
-* 线程安全
+* 单例对象懒加载
+* 线程安全，对不同版本 JDK 兼容性好
 
 缺点：
 
-* 单例类的实例在第一次使用时需要进行初始化，反应会稍慢
+* 单例对象懒加载，所以第一次调用时反应可能会稍慢
+* 存在反序列化时对象重新生成的问题
 
 ## 枚举单例
 
@@ -184,6 +209,7 @@ public enum EnumSingleton {
 * 写法简单
 * 线程安全
 * 不存在反序列化时对象重新生成的问题
+* 不会被利用反射重新创建对象
 
 缺点：
 
@@ -219,9 +245,8 @@ public class SingletonContainer {
 
 缺点：
 
-* 实现单例的方式不够优雅，还需要记住对应对象的键值
+* 不算真正意义上的单例模式，而且还需要记住对应对象的键值
 * 会造成单例对象类型的丢失，需要强转
-* 容器类序列化时要求其管理的单例类型都可以实例化
 * 容器类本身不是单例的，其管理的类型也不是单例的，在反序列化时不能阻止重新创建对象，存在反序列化的问题
 
 # 反序列化
@@ -254,4 +279,5 @@ public class SingletonContainer {
 
 * [Singleton Pattern](http://www.oodesign.com/singleton-pattern.html)
 * [java-design-patterns-singleton](https://github.com/iluwatar/java-design-patterns/blob/master/singleton/README.md)
+* [Java Volatile Keyword](http://tutorials.jenkov.com/java-concurrency/volatile.html)
 * [Java并发编程：volatile关键字解析](http://www.cnblogs.com/dolphin0520/p/3920373.html)
