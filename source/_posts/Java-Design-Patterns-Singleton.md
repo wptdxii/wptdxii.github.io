@@ -253,4 +253,5 @@ public class SingletonContainer {
 # Ref
 
 * [Singleton Pattern](http://www.oodesign.com/singleton-pattern.html)
+* [java-design-patterns-singleton](https://github.com/iluwatar/java-design-patterns/blob/master/singleton/README.md)
 * [Java并发编程：volatile关键字解析](http://www.cnblogs.com/dolphin0520/p/3920373.html)
