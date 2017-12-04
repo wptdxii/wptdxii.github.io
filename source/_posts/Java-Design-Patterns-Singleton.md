@@ -5,7 +5,7 @@ tags: 创建型模式(Creational Patterns)
 categories: Java Design Patterns
 ---
 
-单例模式是创建型模式(Creational Pattern)
+单例模式(Singleton Pattern)是创建型模式(Creational Pattern)
 
 <!-- more -->
 
@@ -18,7 +18,7 @@ categories: Java Design Patterns
 
 # 意图
 
-单例模式可以确保一个类只有一个实例，并向全局提供该实例
+* 单例模式可以确保一个类只有一个实例，并向全局提供该实例
 
 # UML 类图
 
