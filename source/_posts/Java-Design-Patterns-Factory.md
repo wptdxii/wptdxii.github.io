@@ -5,7 +5,7 @@ tags: 创建型模式(Creational Patterns)
 categories: Java Design Patterns
 ---
 
-工厂模式(Factory Pattern)又叫做简单工厂模式或者静态工厂模式，是创建型模式(Creational Pattern)，可以看做是工厂方法模式(Factory Method Patter)的弱化版本。
+工厂模式(Factory Pattern)又叫做简单工厂模式或者静态工厂模式，是创建型模式(Creational Pattern)，可以看做是工厂方法模式(Factory Method Patter)的弱化版本。工厂模式不是一个标准的设计模式。
 
 <!-- more -->
 
@@ -22,8 +22,116 @@ categories: Java Design Patterns
 
 # UML 类图
 
+![Java-Design-Patterns-Factory.png](http://otg3f8t90.bkt.clouddn.com/2017/12/5/Java-Design-Patterns-Factory.png)
+
+从类图中可以看出：
+
+* 工厂、枚举类型和接口是暴露给外部的
+* 外部调用通过工厂获取接口实例而非自己创建，实现了面向接口编程
+* 使用枚举关联接口实例的类型，在工厂中通过枚举类型选择实现
+
 # 实现
+
+定义实例接口：
+
+```java
+public interface Shape {
+    void draw();
+}
+```
+
+实现接口：
+
+```java
+public class Circle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("draw:" + this);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+}
+
+```
+
+```java
+
+public class Rectangle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("draw:" + this);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+}
+```
+
+根据实现定义枚举：
+
+```java
+public enum ShapeType {
+    CIRCLE, RECTANGLE
+}
+```
+
+创建工厂：
+
+```java
+public final class ShapeFactory {
+    private ShapeFactory() {
+        throw new UnsupportedOperationException("Can't be initialized");
+    }
+
+    public static Shape createShape(ShapeType type) {
+        Shape shape;
+        switch (type) {
+            case CIRCLE:
+                shape = new Circle();
+                break;
+            case RECTANGLE:
+                shape = new Rectangle();
+                break;
+            default:
+                shape = null;
+        }
+        return shape;
+    }
+}
+```
+
+外部调用：
+
+```java
+public class Client {
+    public static void main(String[] args) {
+        Shape circle = ShapeFactory.createShape(ShapeType.CIRCLE);
+        circle.draw();
+
+        Shape rectangle = ShapeFactory.createShape(ShapeType.RECTANGLE);
+        rectangle.draw();
+    }
+}
+```
 
 # 总结
 
+工厂模式的本质是：选择实现。
+
+工厂模式优点：
+
+* 帮助外部调用和内部实现解耦，使外部调用实现面向接口编程
+
+工厂模式缺点：
+
+* 需要向外部调用暴露一定的内部实现细节，如外部调用需要知道工厂选择实现的条件的对应关系
+* 不符合开闭原则，当需要扩展接口实例时，需要同时修改工厂和关联类型的枚举
+
 # Ref
+
+* [Factory Pattern](http://www.oodesign.com/factory-pattern.html)
