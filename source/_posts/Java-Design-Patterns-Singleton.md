@@ -22,7 +22,7 @@ categories: Java Design Patterns
 
 # UML 类图
 
-单例模式的 UML 类图如下所示：
+单例模式的类图如下：
 
 ![Java-Design-Patterns-Singleton.png](http://otg3f8t90.bkt.clouddn.com/2017/11/28/Java-Design-Patterns-Singleton.png)
 

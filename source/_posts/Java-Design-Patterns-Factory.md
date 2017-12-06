@@ -5,7 +5,7 @@ tags: 创建型模式(Creational Patterns)
 categories: Java Design Patterns
 ---
 
-工厂模式(Factory Pattern)又叫做简单工厂模式或者静态工厂模式，是创建型模式(Creational Pattern)，可以看做是工厂方法模式(Factory Method Patter)的弱化版本。工厂模式不是一个标准的设计模式。
+工厂模式(Factory Pattern)又叫做简单工厂模式或者静态工厂模式，是创建型模式(Creational Pattern)，可以看做是工厂方法模式(Factory Method Pattern)的弱化版本。工厂模式不是一个标准的设计模式。
 
 <!-- more -->
 
@@ -22,9 +22,11 @@ categories: Java Design Patterns
 
 # UML 类图
 
+工厂模式的类图如下：
+
 ![Java-Design-Patterns-Factory.png](http://otg3f8t90.bkt.clouddn.com/2017/12/5/Java-Design-Patterns-Factory.png)
 
-从类图中可以看出：
+类图说明：
 
 * 工厂、枚举类型和接口是暴露给外部的
 * 外部调用通过工厂获取接口实例而非自己创建，实现了面向接口编程
@@ -32,7 +34,7 @@ categories: Java Design Patterns
 
 # 实现
 
-定义实例接口：
+定义 Shape 接口：
 
 ```java
 public interface Shape {
@@ -40,7 +42,7 @@ public interface Shape {
 }
 ```
 
-实现接口：
+实现 Shape 接口：
 
 ```java
 public class Circle implements Shape {
@@ -72,7 +74,7 @@ public class Rectangle implements Shape {
 }
 ```
 
-根据实现定义枚举：
+根据 Shape 接口的具体实现定义枚举：
 
 ```java
 public enum ShapeType {
@@ -105,7 +107,7 @@ public final class ShapeFactory {
 }
 ```
 
-外部调用：
+客户端调用：
 
 ```java
 public class Client {
