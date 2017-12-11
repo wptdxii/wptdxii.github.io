@@ -29,11 +29,11 @@ categories: Java Design Patterns
 
 类图说明：
 
-* Product：产品类，一般为具体类，不必要抽象，其由 PartA、PartB 组成。
-* Builder：建造者接口，定义创建一个 Product 对象所需的各个部件的接口和返回 Product 对象的接口
+* Product：被构建的对象，一般为具体类，不必要定义抽象接口，其由 PartA、PartB 组成。
+* Builder：建造者接口，定义创建一个 Product 对象所需的各个部件的接口和返回 Product 对象的接口。如果有需要，可以在这两个地方添加约束规则
 * ConcreteBuilder：Builder 接口的具体实现，负责 Product 对象所需的各个部件的创建和组装，同时提供一个获取组装完成的 Product 对象的方法。切换不同的实现，即可通过相同的构建过程构建不同的 Product 对象
-* Director：指导者，主要用来使用 Builder 接口，以统一的过程构建所需的 Product 对象。为不同的 Builder 实现提供相同的构建过程
-* Client：客户端，通过 Director 和具体的 Builder 实现来构建复杂的 Product 对象
+* Director：主要用来使用 Builder 接口，以统一的过程构建所需的 Product 对象，代表可重用的构建过程。在构建的过程中在需要创建和组装具体部件的时候，将这些功能通过委托，交给　Builder 去完成。Ｄirector 通过　Builder 方法的参数和返回值与　Builder 进行交互
+* Client：外部调用，通过 Director 和具体的 Builder 实现来构建复杂的 Product 对象
 
 # 实现
 
@@ -125,6 +125,7 @@ public interface Builder {
 
     void buildSize(Size size);
 
+    // 该方法在　Ｂuilder 接口中不是必须的
     Graph build();
 }
 ```
@@ -194,6 +195,95 @@ public class Client {
 
 ## 简化实现
 
+建造者模式更常用的是其简化形式，就是将　Client 和　Ｄirector 融合，同时将　Builder　内联到　Product　中去，通过链式调用构建　Product 对象。
+具体实现如下：
+
+```java
+public final class Graph {
+    private Shape shape;
+    private Color color;
+    private Size size;
+
+    private BuilderGraph(Builder builder) {
+        this.shape = builder.shape;
+        this.color = builder.color;
+        this.size = builder.size;
+    }
+
+    public Shape getShape() {
+        return shape;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public Size getSize() {
+        return size;
+    }
+
+    @Override
+    public String toString() {
+        return size + " " + color + " " + shape;
+    }
+
+    public static class Builder {
+        private Shape shape;
+        private Color color;
+        private final Size size;
+
+        public Builder(Size size) {
+            this.size = size;
+        }
+
+        // return this　实现链式调用
+        public Builder shape(Shape shape) {
+            this.shape = shape;
+            return this;
+        }
+
+        public Builder color(Color color) {
+            this.color = color;
+            return this;
+        }
+
+        // 可以在这里添加约束规则
+        public BuilderGraph build() {
+            return new BuilderGraph(this);
+        }
+    }
+}
+```
+
+客户端调用：
+
+```java
+public class Client {
+    public static void main(String[] args) {
+        Graph graph = new BuilderGraph.Builder(Size.LARGE)
+                .shape(Shape.RECTANGLE)
+                .color(Color.BLACK)
+                .build();
+        System.out.println(graph);
+    }
+}
+```
+
 # 总结
 
+建造者模式的主要功能是细化的、分步骤的构建复杂的对象，其本质在于分离构建算法和具体的构建实现，从而使构建算法可以复用，使具体的构造实现可以方便地扩展和切换。建造者模式强调的是对整体构建算法的固定和对具体构建实现的灵活切换。
+
+建造者模式的优点：
+
+* Director 可复用
+* Builder 易扩展，实现　Builder 接口即可
+* 良好的封装性，Product 内部组成的细节对 Client 透明
+
+建造者模式的缺点：
+
+* 会产生多余的　Director 对象和　Builder 对象，消耗内存
+
 # Ref
+
+* [Builder Pattern](http://www.oodesign.com/builder-pattern.html)
+* [java-design-patterns-builder](https://github.com/iluwatar/java-design-patterns/blob/master/builder/README.md)
