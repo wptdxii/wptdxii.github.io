@@ -5,7 +5,7 @@ tags: 创建型模式(Creational Patterns)
 categories: Java Design Patterns
 ---
 
-原型模式(Prototype Pattern)是创建型模式(Creational Pattern)
+原型模式(Prototype Pattern)属于创建型模式(Creational Pattern)
 
 <!-- more -->
 

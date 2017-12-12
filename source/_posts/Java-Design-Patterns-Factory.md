@@ -5,7 +5,7 @@ tags: 创建型模式(Creational Patterns)
 categories: Java Design Patterns
 ---
 
-工厂模式(Factory Pattern)又叫做简单工厂模式或者静态工厂模式，是创建型模式(Creational Pattern)，可以看做是工厂方法模式(Factory Method Pattern)的弱化版本。工厂模式不是一个标准的设计模式。
+工厂模式(Factory Pattern)又叫做简单工厂模式或者静态工厂模式，属于创建型模式(Creational Pattern)，可以看做是工厂方法模式(Factory Method Pattern)的弱化版本。工厂模式不是一个标准的设计模式，不属于　GoF 23 种设计模式之一
 
 <!-- more -->
 

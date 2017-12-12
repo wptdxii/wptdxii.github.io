@@ -5,7 +5,7 @@ tags: 创建型模式(Creational Patterns)
 categories: Java Design Patterns
 ---
 
-抽象工厂模式(Abstract Factory Pattern)是创建型模式(Creational Pattern)
+抽象工厂模式(Abstract Factory Pattern)属于创建型模式(Creational Pattern)
 
 <!-- more  -->
 
