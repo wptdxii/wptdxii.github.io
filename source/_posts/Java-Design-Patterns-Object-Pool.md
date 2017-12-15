@@ -1,11 +1,11 @@
 ---
 title: 对象池模式(Object Pool Pattern)
 date: 2017-11-29 15:06:00
-tags: 创建型模式(Creational Patterns) 
+tags: 创建型模式(Creational Pattern) 
 categories: Java Design Patterns
 ---
 
-对象池模式(Object Pool Pattern)属于创建型模式(Creational Pattern)，不是一个标准的设计模式，不属于　GoF 23 种设计模式之一
+对象池模式属于创建型模式，不是一个标准的设计模式，不属于　GoF 23 种设计模式之一
 
 <!-- more -->
 

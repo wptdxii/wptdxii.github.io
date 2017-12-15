@@ -1,11 +1,11 @@
 ---
 title: 单例模式(Singleton Pattern)
 date: 2017-08-07 23:45:03
-tags: 创建型模式(Creational Patterns) 
+tags: 创建型模式(Creational Pattern) 
 categories: Java Design Patterns
 ---
 
-单例模式(Singleton Pattern)属于创建型模式(Creational Pattern)
+单例模式属于创建型模式
 
 <!-- more -->
 

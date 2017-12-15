@@ -1,11 +1,11 @@
 ---
 title: 工厂方法模式(Factory Method Pattern)
 date: 2017-11-29 15:06:00
-tags: 创建型模式(Creational Patterns) 
+tags: 创建型模式(Creational Pattern) 
 categories: Java Design Patterns
 ---
 
-工厂方法模式(Factory Method Pattern)又叫做虚拟构造(Virtual Constructor)，属于创建型模式(Creational Pattern)
+工厂方法模式又叫做虚拟构造(Virtual Constructor)，属于创建型模式
 
 <!-- more -->
 

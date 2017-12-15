@@ -1,11 +1,11 @@
 ---
 title: 抽象工厂模式(Abstract Factory Pattern)
 date: 2017-11-29 15:06:00
-tags: 创建型模式(Creational Patterns) 
+tags: 创建型模式(Creational Pattern) 
 categories: Java Design Patterns
 ---
 
-抽象工厂模式(Abstract Factory Pattern)属于创建型模式(Creational Pattern)
+抽象工厂模式属于创建型模式
 
 <!-- more  -->
 
