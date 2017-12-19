@@ -26,7 +26,7 @@ categories: Java Design Patterns
 
 责任链模式类图如下：
 
-![Java-Design-Patterns-Chain-Of-Responsibility.png](http://otg3f8t90.bkt.clouddn.com/2017/12/16/Java-Design-Patterns-Chain-Of-Responsibility.png)
+![Java-Design-Patterns-Chain-Of-Responsibility.png](http://otg3f8t90.bkt.clouddn.com/2017/12/18/Java-Design-Patterns-Chain-Of-Responsibility.png)
 
 类图说明：
 
