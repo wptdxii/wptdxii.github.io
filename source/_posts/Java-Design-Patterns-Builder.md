@@ -39,11 +39,11 @@ categories: Java Design Patterns
 
 ## 标准实现
 
-定义 枚举 Shape、Color、Size，对应类图中的 PartA、PartB：
+定义 Profession、Weapon、Armor、HairColor、HairStyle，对应类图中的 Part：
 
 ```java
-public enum Shape {
-    CIRCLE, RECTANGLE;
+public enum Profession {
+    WARRIOR, THIEF, MAGE, PRIEST;
 
     @Override
     public String toString() {
@@ -53,8 +53,8 @@ public enum Shape {
 ```
 
 ```java
-public enum Color {
-    WHITE,BLACK;
+public enum Weapon {
+    DAGGER, SWORD, AXE, WARHAMMER, BOW;
 
     @Override
     public String toString() {
@@ -64,8 +64,8 @@ public enum Color {
 ```
 
 ```java
-public enum Size {
-    LARGE, SMALL;
+public enum Armor {
+    CLOTHES, LEATHER, CHAIN_MAIL, PLATE_MAIL;
 
     @Override
     public String toString() {
@@ -74,43 +74,119 @@ public enum Size {
 }
 ```
 
-定义 Graph，对应类图中的 Product：
+```java
+public enum HairColor {
+    WHITE, BLOND, RED, BROWN, BLACK;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
+}
+```
 
 ```java
-public final class Graph {
-    private Shape shape;
-    private Color color;
-    private Size size;
+public enum HairStyle {
+    BALD, SHORT, CURLY, LONG_STRAIGHT, LONG_CURLY;
 
-    // 防止在包外通过 new 创建，修饰符设置为 default
-    Shape getShape() {
-        return shape;
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
+}
+```
+
+定义 Hero，对应类图中的 Product：
+
+```java
+// 为了防止在包外创建对象，setter 方法修饰符都设为 default
+public final class Hero {
+    private String name;
+    private Profession profession;
+    private Weapon weapon;
+    private Armor armor;
+    private HairStyle hairStyle;
+    private HairColor hairColor;
+
+    public String getName() {
+        return name;
     }
 
-    public void setShape(Shape shape) {
-        this.shape = shape;
+    void setName(String name) {
+        this.name = name;
     }
 
-    public Color getColor() {
-        return color;
+    public Profession getProfession() {
+        return profession;
     }
 
-    // setter 同时设置为 default
-    void setColor(Color color) {
-        this.color = color;
+    void setProfession(Profession profession) {
+        this.profession = profession;
     }
 
-    public Size getSize() {
-        return size;
+    public Weapon getWeapon() {
+        return weapon;
     }
 
-    void setSize(Size size) {
-        this.size = size;
+    void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
+
+    public Armor getArmor() {
+        return armor;
+    }
+
+    void setArmor(Armor armor) {
+        this.armor = armor;
+    }
+
+    public HairStyle getHairStyle() {
+        return hairStyle;
+    }
+
+    void setHairStyle(HairStyle hairStyle) {
+        this.hairStyle = hairStyle;
+    }
+
+    public HairColor getHairColor() {
+        return hairColor;
+    }
+
+    void setHairColor(HairColor hairColor) {
+        this.hairColor = hairColor;
     }
 
     @Override
     public String toString() {
-        return size + " " + color + " " + shape;
+        StringBuilder sb = new StringBuilder();
+        sb.append("This is a ")
+                .append(profession)
+                .append(" named ")
+                .append(name);
+
+        if (hairStyle != null || hairColor != null) {
+            sb.append(" with ");
+
+            if (hairColor != null) {
+                sb.append(hairColor).append(" ");
+            }
+
+            if (hairStyle != null) {
+                sb.append(hairStyle).append(" ");
+            }
+
+            sb.append(hairStyle != HairStyle.BALD ? "hair" : "head");
+        }
+
+        if (armor != null) {
+            sb.append(" wearing ").append(armor);
+        }
+        if (weapon != null) {
+            sb.append(" and wielding a ").append(weapon);
+        }
+        sb.append('.');
+
+        return sb.toString();
     }
 }
 ```
@@ -119,42 +195,66 @@ public final class Graph {
 
 ```java
 public interface Builder {
-    void buildShape(Shape shape);
+    void buildProfession(Profession profession);
 
-    void buildColor(Color color);
+    void buildWeapon(Weapon weapon);
 
-    void buildSize(Size size);
+    void buildArmor(Armor armor);
 
-    // 该方法在　Ｂuilder 接口中不是必须的
-    Graph build();
+    void buildHairStyle(HairStyle hairStyle);
+
+    void buildHairColor(HairColor hairColor);
+
+    Hero build();
 }
 ```
 
-定义 Builder 的实现：
+实现 Builder 接口：
 
 ```java
 public class ConcreteBuilder implements Builder {
-    private Graph graph = new Graph();
+    private Hero hero;
 
-    @Override
-    public void buildShape(Shape shape) {
-        graph.setShape(shape);
+    // 用构造器约束必备参数
+    public ConcreteBuilder(String name, Profession profession) {
+        if (name == null || name.trim().isEmpty() || profession == null) {
+            throw new IllegalArgumentException("Hero name can't be null");
+        }
+
+        hero = new Hero();
+        hero.setName(name);
+        hero.setProfession(profession);
     }
 
     @Override
-    public void buildColor(Color color) {
-        graph.setColor(color);
+    public void buildProfession(Profession profession) {
+        hero.setProfession(profession);
     }
 
     @Override
-    public void buildSize(Size size) {
-        graph.setSize(size);
+    public void buildWeapon(Weapon weapon) {
+        hero.setWeapon(weapon);
     }
 
     @Override
-    public Graph build() {
+    public void buildArmor(Armor armor) {
+        hero.setArmor(armor);
+    }
+
+    @Override
+    public void buildHairStyle(HairStyle hairStyle) {
+        hero.setHairStyle(hairStyle);
+    }
+
+    @Override
+    public void buildHairColor(HairColor hairColor) {
+        hero.setHairColor(hairColor);
+    }
+
+    @Override
+    public Hero build() {
         // 可以在这里添加约束规则
-        return graph;
+        return hero;
     }
 }
 ```
@@ -162,18 +262,29 @@ public class ConcreteBuilder implements Builder {
 定义 Director：
 
 ```java
+// construct 方法中只是简单的顺序调用，实际应用中通常都是定义的比较复杂的构建算法
 public class Director {
     private Builder builder;
 
-    public Director(Builder builder) {
+    public void setBuilder(Builder builder) {
         this.builder = builder;
     }
 
-    // 这里只是简单的顺序调用，实际应用中通常都是定义的比较复杂的构建算法
-    public void construct(Shape shape, Color color, Size size) {
-        builder.buildShape(shape);
-        builder.buildColor(color);
-        builder.buildSize(size);
+    public void constructMage() {
+        builder.buildHairColor(HairColor.BLACK);
+        builder.buildWeapon(Weapon.DAGGER);
+    }
+
+    public void constructWarrior() {
+        builder.buildHairColor(HairColor.BLOND);
+        builder.buildHairStyle(HairStyle.LONG_CURLY);
+        builder.buildArmor(Armor.CHAIN_MAIL);
+        builder.buildWeapon(Weapon.SWORD);
+    }
+
+    public void constructThief() {
+        builder.buildHairStyle(HairStyle.BALD);
+        builder.buildWeapon(Weapon.BOW);
     }
 }
 ```
@@ -183,73 +294,159 @@ public class Director {
 ```java
 public class Client {
     public static void main(String[] args) {
-        // 可以结合简单工厂使用
-        Builder builder = new ConcreteBuilder();
-        Director director = new Director(builder);
-        director.construct(Shape.CIRCLE, Color.WHITE, Size.SMALL);
-        Graph graph = builder.build();
-        System.out.println(graph);
+        Director director = new Director();
+        constructMage(director);
+        constructWarrior(director);
+        constructThief(director);
+    }
+
+    private static void constructMage(Director director) {
+        Builder mageBuilder = new ConcreteBuilder("Mage", Profession.MAGE);
+        director.setBuilder(mageBuilder);
+        director.constructMage();
+        System.out.println(mageBuilder.build());
+    }
+
+    private static void constructWarrior(Director director) {
+        Builder warriorBuilder = new ConcreteBuilder("Warrior", Profession.WARRIOR);
+        director.setBuilder(warriorBuilder);
+        director.constructWarrior();
+        System.out.println(warriorBuilder.build());
+    }
+
+    private static void constructThief(Director director) {
+        Builder thiefBuilder = new ConcreteBuilder("Thief", Profession.THIEF);
+        director.setBuilder(thiefBuilder);
+        director.constructThief();
+        System.out.println(thiefBuilder.build());
     }
 }
 ```
 
 ## 简化实现
 
-建造者模式更常用的是其简化形式，就是将　Client 和　Ｄirector 融合，同时将　Builder　内联到　Product　中去，通过链式调用构建　Product 对象。
-具体实现如下：
+建造者模式更常用的是其简化形式，就是将　Client 和　Director 融合，同时将　Builder　内联到　Product　中去，通过链式调用构建　Product 对象。
+只需要定义一个具有内联 Builder 的 Product 类即可，具体实现如下：
 
 ```java
-public final class Graph {
-    private Shape shape;
-    private Color color;
-    private Size size;
+public final class Hero {
+    private final String name;
+    private final Profession profession;
+    private final Weapon weapon;
+    private final Armor armor;
+    private final HairStyle hairStyle;
+    private final HairColor hairColor;
 
-    private BuilderGraph(Builder builder) {
-        this.shape = builder.shape;
-        this.color = builder.color;
-        this.size = builder.size;
+    private Hero(Builder builder) {
+        this.name = builder.name;
+        this.profession = builder.profession;
+        this.weapon = builder.weapon;
+        this.armor = builder.armor;
+        this.hairStyle = builder.hairStyle;
+        this.hairColor = builder.hairColor;
     }
 
-    public Shape getShape() {
-        return shape;
+    public String getName() {
+        return name;
     }
 
-    public Color getColor() {
-        return color;
+    public Profession getProfession() {
+        return profession;
     }
 
-    public Size getSize() {
-        return size;
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+
+    public Armor getArmor() {
+        return armor;
+    }
+
+
+    public HairStyle getHairStyle() {
+        return hairStyle;
+    }
+
+
+    public HairColor getHairColor() {
+        return hairColor;
     }
 
     @Override
     public String toString() {
-        return size + " " + color + " " + shape;
+        StringBuilder sb = new StringBuilder();
+        sb.append("This is a ")
+                .append(profession)
+                .append(" named ")
+                .append(name);
+
+        if (hairStyle != null || hairColor != null) {
+            sb.append(" with ");
+
+            if (hairColor != null) {
+                sb.append(hairColor).append(" ");
+            }
+
+            if (hairStyle != null) {
+                sb.append(hairStyle).append(" ");
+            }
+
+            sb.append(hairStyle != HairStyle.BALD ? "hair" : "head");
+        }
+
+        if (armor != null) {
+            sb.append(" wearing ").append(armor);
+        }
+        if (weapon != null) {
+            sb.append(" and wielding a ").append(weapon);
+        }
+        sb.append('.');
+
+        return sb.toString();
     }
 
-    public static class Builder {
-        private Shape shape;
-        private Color color;
-        private final Size size;
+    public static final class Builder {
+        private final String name;
+        private final Profession profession;
+        private Weapon weapon;
+        private Armor armor;
+        private HairStyle hairStyle;
+        private HairColor hairColor;
 
-        public Builder(Size size) {
-            this.size = size;
+        // 用构造器约束必备参数
+        public Builder(String name, Profession profession) {
+            if (name == null || name.trim().isEmpty() || profession == null) {
+                throw new IllegalArgumentException("Hero name can't be null");
+            }
+            this.name = name;
+            this.profession = profession;
         }
 
-        // return this　实现链式调用
-        public Builder shape(Shape shape) {
-            this.shape = shape;
+        public Builder weapon(Weapon weapon) {
+            this.weapon = weapon;
             return this;
         }
 
-        public Builder color(Color color) {
-            this.color = color;
+        public Builder armor(Armor armor) {
+            this.armor = armor;
             return this;
         }
 
-        // 可以在这里添加约束规则
-        public BuilderGraph build() {
-            return new BuilderGraph(this);
+        public Builder hairStyle(HairStyle hairStyle) {
+            this.hairStyle = hairStyle;
+            return this;
+        }
+
+        public Builder hairColor(HairColor hairColor) {
+            this.hairColor = hairColor;
+            return this;
+        }
+
+        public Hero build() {
+            // 可以在这里添加校验规则
+            return new Hero(this);
         }
     }
 }
@@ -260,11 +457,22 @@ public final class Graph {
 ```java
 public class Client {
     public static void main(String[] args) {
-        Graph graph = new BuilderGraph.Builder(Size.LARGE)
-                .shape(Shape.RECTANGLE)
-                .color(Color.BLACK)
-                .build();
-        System.out.println(graph);
+        Hero mage = new Hero.Builder("Mage", Profession.MAGE)
+                .hairColor(HairColor.BLACK)
+                .weapon(Weapon.DAGGER).build();
+        System.out.println(mage);
+
+        Hero warrior = new Hero.Builder("Warrior", Profession.WARRIOR)
+                .hairColor(HairColor.BLOND)
+                .hairStyle(HairStyle.LONG_CURLY)
+                .weapon(Weapon.SWORD)
+                .armor(Armor.CHAIN_MAIL).build();
+        System.out.println(warrior);
+
+        Hero thief = new Hero.Builder("Thief", Profession.THIEF)
+                .hairStyle(HairStyle.BALD)
+                .weapon(Weapon.BOW).build();
+        System.out.println(thief);
     }
 }
 ```

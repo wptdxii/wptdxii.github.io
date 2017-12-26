@@ -36,122 +36,221 @@ categories: Java Design Patterns
 
 # 实现
 
-定义 Shape 接口， 对应类图中的 AbstractProductA：
+定义 Army、Castle、King 接口，对应类图中的 AbstractProduct：
 
 ```java
-public interface Shape {
-    void draw();
+public interface Army {
+    String getDescription();
 }
 ```
 
-定义 Shape 接口的实现：
+```java
+public interface Castle {
+    String getDescription();
+}
+```
 
 ```java
-public class CircleShape implements Shape {
+public interface King {
+    String getDescription();
+}
+```
+
+实现 Army、Castle、King 接口，对应类图中的 ConcreteProduct：
+
+```java
+public class ElfArmy implements Army{
     @Override
-    public void draw() {
-        System.out.println("draw:" + getClass().getSimpleName());
+    public String getDescription() {
+        return "This is the Elven army!";
     }
 }
 ```
 
 ```java
-public class RectangleShape implements Shape {
+public class ElfCastle implements Castle {
     @Override
-    public void draw() {
-        System.out.println("draw:" + getClass().getSimpleName());
-    }
-}
-```
-
-定义 Area 接口，对应类图中的 AbstractProductB：
-
-```java
-public interface Area {
-    void calculate();
-}
-```
-
-定义 Area 接口的实现：
-
-```java
-public class CircleArea implements Area {
-    private static final String AREA = "S = πr²";
-
-    @Override
-    public void calculate() {
-        System.out.println("Area:" + AREA);
+    public String getDescription() {
+        return "This is the Elven castle!";
     }
 }
 ```
 
 ```java
-public class RectangleArea implements Area {
-    private static final String AREA = "S = ab";
-
+public class ElfKing implements King {
     @Override
-    public void calculate() {
-        System.out.println("Area:" + AREA);
-    }
-}
-```
-
-定义抽象工厂，对应类图中的 AbstractFactory：
-
-```java
-public interface AbstractFactory {
-    Shape createShape();
-
-    Area createArea();
-}
-```
-
-定义抽象工厂的实现：
-
-```java
-public class CircleFactory implements AbstractFactory {
-    @Override
-    public Shape createShape() {
-        return new CircleShape();
-    }
-
-    @Override
-    public Area createArea() {
-        return new CircleArea();
+    public String getDescription() {
+        return "This is the Elven king!";
     }
 }
 ```
 
 ```java
-public class RectangleFactory implements AbstractFactory {
+public class OrcArmy implements Army {
     @Override
-    public Shape createShape() {
-        return new RectangleShape();
-    }
-
-    @Override
-    public Area createArea() {
-        return new RectangleArea();
+    public String getDescription() {
+        return "This is the Orc army!";
     }
 }
 ```
 
-定义客户端：
+```java
+public class OrcCastle implements Castle {
+    @Override
+    public String getDescription() {
+        return "This is the Orc castle!";
+    }
+}
+```
+
+```java
+public class OrcKing implements King {
+    @Override
+    public String getDescription() {
+        return "This is the Orc king!";
+    }
+}
+```
+
+定义 KingdomFactory，对应类图中的 AbstractFActory：
+
+```java
+public interface KingdomFactory {
+    Army createArmy();
+
+    Castle createCastle();
+
+    King createKing();
+}
+```
+
+实现 KingdomFactory 接口，对应类图中的 ConcreteFactory：
+
+```java
+public class ElfKingdomFactory implements KingdomFactory {
+    @Override
+    public Army createArmy() {
+        return new ElfArmy();
+    }
+
+    @Override
+    public Castle createCastle() {
+        return new ElfCastle();
+    }
+
+    @Override
+    public King createKing() {
+        return new ElfKing();
+    }
+}
+```
+
+```java
+public class OrcKingdomFactory implements KingdomFactory {
+    @Override
+    public Army createArmy() {
+        return new OrcArmy();
+    }
+
+    @Override
+    public Castle createCastle() {
+        return new OrcCastle();
+    }
+
+    @Override
+    public King createKing() {
+        return new OrcKing();
+    }
+}
+```
+
+定义 KingdomType 枚举，用于标识抽象工厂类型：
+
+```java
+public enum KingdomType {
+    ELF, ORC
+}
+```
+
+定义 FactoryMaker，用于选择对应的抽象工厂实现，这里用到了简单工厂模式：
+
+```java
+public final class FactoryMaker {
+
+    private FactoryMaker() {
+        throw new UnsupportedOperationException("Can't be instantiated");
+    }
+
+    public static KingdomFactory makeFactory(KingdomType type) {
+        switch (type) {
+            case ELF:
+                return new ElfKingdomFactory();
+            case ORC:
+                return new OrcKingdomFactory();
+            default:
+                throw new IllegalArgumentException("KingdomType not supported.");
+        }
+    }
+}
+```
+
+定义 Kingdom，用于封装产品对象：
+
+```java
+public final class Kingdom {
+    private Army army;
+    private Castle castle;
+    private King king;
+
+    public void createKingdom(KingdomFactory kingdomFactory) {
+        setArmy(kingdomFactory.createArmy());
+        setCastle(kingdomFactory.createCastle());
+        setKing(kingdomFactory.createKing());
+    }
+
+    public Army getArmy() {
+        return army;
+    }
+
+    public void setArmy(Army army) {
+        this.army = army;
+    }
+
+    public Castle getCastle() {
+        return castle;
+    }
+
+    public void setCastle(Castle castle) {
+        this.castle = castle;
+    }
+
+    public King getKing() {
+        return king;
+    }
+
+    public void setKing(King king) {
+        this.king = king;
+    }
+}
+```
+
+客户端调用:
 
 ```java
 public class Client {
     public static void main(String[] args) {
-        // 可以结合简单工厂
-        AbstractFactory circleFactory = new CircleFactory();
-        assemble(circleFactory.createShape(),circleFactory.createArea());
+        Kingdom kingdom = new Kingdom();
+        kingdom.createKingdom(FactoryMaker.makeFactory(KingdomType.ELF));
+        getDescription(kingdom);
 
-        AbstractFactory rectangleFactory = new RectangleFactory();
-        assemble(rectangleFactory.createShape(), rectangleFactory.createArea());
+        kingdom.createKingdom(FactoryMaker.makeFactory(KingdomType.ORC));
+        getDescription(kingdom);
     }
 
-    private static void assemble(Shape shape, Area area) {
-        shape.draw();
-        area.calculate();
+    private static void getDescription(Kingdom kingdom) {
+        System.out.println(kingdom.getArmy().getDescription());
+        System.out.println(kingdom.getCastle().getDescription());
+        System.out.println(kingdom.getKing().getDescription());
     }
 }
 ```
