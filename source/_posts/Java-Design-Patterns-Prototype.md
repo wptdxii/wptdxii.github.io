@@ -25,7 +25,7 @@ categories: Java Design Patterns
 
 原型模式的类图如下：
 
-![Prototype.png](http://otg3f8t90.bkt.clouddn.com/2017/12/12/Prototype.png)1
+![Prototype.png](http://otg3f8t90.bkt.clouddn.com/2017/12/12/Prototype.png)
 
 类图说明：
 
@@ -62,69 +62,84 @@ public interface Prototype<T> {
 }
 ```
 
-定义 Color 类，对应类图中的 ConcretePrototype：
+定义　WeaponType 用于标识　Weapon　类型：
 
 ```java
-public class Color implements Prototype<Color> {
-    private String color;
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    @Override
-    public Color clone() {
-        Color newColor = new Color();
-        newColor.setColor(color);
-        return newColor;
-    }
+public enum WeaponType {
+    SWORD, AXE, BOW
 }
 ```
 
-定义 Shape 类，也对应类图中的 ConcretePrototype，其依赖 Color 类：
+定义 Weapon，对应类图中的 ConcretePrototype：
 
 ```java
-public class Shape implements Prototype<Shape> {
-    private String shape;
-    private Color color;
+public class Weapon implements Prototype<Weapon> {
+    private WeaponType weaponType;
 
-    public Shape(Color color) {
-        this.color = color;
+    public Weapon(WeaponType weaponType) {
+        this.weaponType = weaponType;
     }
 
-    public String getShape() {
-        return shape;
+    public void setWeaponType(WeaponType weaponType) {
+        this.weaponType = weaponType;
     }
 
-    public void setShape(String shape) {
-        this.shape = shape;
-    }
-
-    public String getColor() {
-        return color.getColor();
-    }
-
-    public void setColor(String  color) {
-        this.color.setColor(color);
+    public WeaponType getWeaponType() {
+        return weaponType;
     }
 
     @Override
-    public Shape clone() {
-         // 深拷贝
-        Shape newShape = new Shape(color.clone());
-        // 浅拷贝
-        // Shape newShape = new Shape(color);
-        newShape.shape = shape;
-        return newShape;
+    public Weapon clone() {
+        return new Weapon(weaponType);
     }
 
     @Override
     public String toString() {
-        return color.getColor() + " " + shape;
+        return weaponType.name().toLowerCase();
+    }
+}
+```
+
+定义 Hero，也对应类图中的 ConcretePrototype：
+
+```java
+public class Hero implements Prototype<Hero> {
+    private String name;
+    private Weapon weapon;
+
+    public Hero(String name, Weapon weapon) {
+        this.name = name;
+        this.weapon = weapon;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public WeaponType getWeapon() {
+        return weapon.getWeaponType();
+    }
+
+    public void setWeapon(WeaponType weaponType) {
+        this.weapon.setWeaponType(weaponType);
+    }
+
+    @Override
+    public Hero clone() {
+        // 深拷贝
+        return new Hero(name, weapon.clone());
+
+        // 浅拷贝
+        // return new Hero(name, weapon);
+    }
+
+    @Override
+    public String toString() {
+        return "This is a hero named " + name + " with " + weapon;
     }
 }
 ```
@@ -133,20 +148,19 @@ public class Shape implements Prototype<Shape> {
 
 ```java
 public class Client {
-    public static void main(String[] args) throws CloneNotSupportedException {
-        Shape shape = new Shape(new Color());
-        shape.setShape("Circle");
-        shape.setColor("White");
+    public static void main(String[] args) {
+        Hero hero = new Hero("Thief", new Weapon(WeaponType.BOW));
+        System.out.println(hero);
 
-        Shape clonedShape = shape.clone();
-        System.out.println(clonedShape);
+        Hero newHero = hero.clone();
+        System.out.println(newHero);
 
-        // 浅拷贝 拷贝对象的属性改变会影响到原型对象，深拷贝则不会，两个对象完全独立
-        clonedShape.setShape("Rectangle");
-        clonedShape.setColor("Black");
-        System.out.println(clonedShape);
+        // 浅拷贝的拷贝对象的属性改变会影响到原型对象，深拷贝则不会，两个对象完全独立
+        newHero.setName("Warrior");
+        newHero.setWeapon(WeaponType.SWORD);
+        System.out.println(newHero);
 
-        System.out.println(shape);
+        System.out.println(hero);
     }
 }
 ```
@@ -157,93 +171,100 @@ public class Client {
 
 实现原型模式也可以利用 Java 的语言特性实现，不需要定义 Prototype 接口，直接使用 Cloneable 接口，该接口是个标识接口，没有需要实现的方法，使用的时候需要重写 Object 类中的 clone() 方法，调用 super.Clone() 实现拷贝，这种拷贝是在内存中的二进制流拷贝，所以比直接使用　new 创建对象的性能好很多，但这种拷贝方式不会调用原型类的构造方法，使用的时候需要注意。下面是实现方式:
 
-定义 Color 类，对应类图中的 ConcretePrototype：
+定义　Prototype：
 
 ```java
-// 实现 Cloneable 接口
-public class Color implements Cloneable{
-    private String color;
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
+public abstract class Prototype<T> implements Cloneable {
     @Override
-    protected Color clone() throws CloneNotSupportedException {
-        // 实现拷贝
-        return (Color) super.clone();
+    protected T clone() throws CloneNotSupportedException {
+        return (T) super.clone();
     }
 }
 ```
 
-定义 Shape 类，也对应类图中的 ConcretePrototype：
+> 利用　Java　语言特性实现原型模式时不必定义该接口，但为了清晰的演示原型模式，这里依旧定义了该抽象
+
+定义 Weapon，对应类图中的 ConcretePrototype：
 
 ```java
-// 实现 Cloneable 接口
-public class Shape implements Cloneable {
-    private String shape;
-    private Color color;
+public class Weapon extends Prototype<Weapon> {
+    private WeaponType weaponType;
 
-    public Shape(Color color) {
-        this.color = color;
+    public Weapon(WeaponType weaponType) {
+        this.weaponType = weaponType;
     }
 
-    public String getShape() {
-        return shape;
+    public void setWeaponType(WeaponType weaponType) {
+        this.weaponType = weaponType;
     }
 
-    public void setShape(String shape) {
-        this.shape = shape;
-    }
-
-    public String getColor() {
-        return color.getColor();
-    }
-
-    public void setColor(String color) {
-        this.color.setColor(color);
+    public WeaponType getWeaponType() {
+        return weaponType;
     }
 
     @Override
-    protected Shape clone() throws CloneNotSupportedException {
-        Shape newShape = (Shape) super.clone();
-        // 深拷贝，如果没有这行代码则是浅拷贝
-        newShape.color = color.clone();
-        return newShape;
+    protected Weapon clone() throws CloneNotSupportedException {
+        // 这里可以直接调用　super.clone() 而不必手动创建新对象
+        return super.clone();
     }
 
     @Override
     public String toString() {
-        return color.getColor() + " " + shape;
+        return weaponType.name().toLowerCase();
     }
 }
 ```
 
-客户端调用：
+> Weapon 中的　WeaponType 与上面自定义实现原型模式的示例中定义相同，这里不再重复定义
+
+定义 Hero，也对应类图中的 ConcretePrototype：
 
 ```java
-public class Client {
-    public static void main(String[] args) throws CloneNotSupportedException {
-        Shape shape = new Shape(new Color());
-        shape.setShape("Circle");
-        shape.setColor("White");
+public class Hero extends Prototype<Hero> {
+    private String name;
+    private Weapon weapon;
 
-        Shape clonedShape = shape.clone();
-        System.out.println(clonedShape);
+    public Hero(String name, Weapon weapon) {
+        this.name = name;
+        this.weapon = weapon;
+    }
 
-        // 浅拷贝 拷贝对象的属性改变会影响到原型对象，深拷贝则不会，两个对象完全独立
-        clonedShape.setShape("Rectangle");
-        clonedShape.setColor("Black");
-        System.out.println(clonedShape);
+    public String getName() {
+        return name;
+    }
 
-        System.out.println(shape);
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public WeaponType getWeapon() {
+        return weapon.getWeaponType();
+    }
+
+    public void setWeapon(WeaponType weaponType) {
+        this.weapon.setWeaponType(weaponType);
+    }
+
+    @Override
+    public Hero clone() throws CloneNotSupportedException {
+        // 深拷贝
+        Hero hero = super.clone();
+        hero.name = name;
+        hero.weapon = weapon.clone();
+        return hero;
+
+        // 浅拷贝
+        // return super.clone();
+    }
+
+    @Override
+    public String toString() {
+        return "This is a hero named " + name + " with " + weapon;
     }
 }
 ```
+
+然后就是客户端调用，代码也与上面的相同，不再重复定义
 
 # 总结
 

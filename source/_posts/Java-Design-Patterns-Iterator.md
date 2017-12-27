@@ -75,7 +75,13 @@ public class Treasure {
 }
 ```
 
-定义 Iterator：
+定义 TreasureChest　和　Iterator，其中　TreasureChest 对应类图中的 Aggregate：
+
+```java
+public interface TreasureChest {
+    Iterator iterator(TreasureType treasureType);
+}
+```
 
 ```java
 // 为了保证类型不丢失，加上泛型
@@ -83,14 +89,6 @@ public interface Iterator<T> {
     boolean hasNext();
 
     T next();
-}
-```
-
-定义 TreasureChest，对应类图中的 Aggregate：
-
-```java
-public interface TreasureChest {
-    Iterator iterator(TreasureType treasureType);
 }
 ```
 
@@ -116,7 +114,7 @@ public class ListTreasureChest implements TreasureChest {
 
     @Override
     public Iterator iterator(TreasureType treasureType) {
-        // ListTreasureChestIterator 的实现见下面
+        // 创建对应的　Iterator，ListTreasureChestIterator 的实现见下面
         return new ListTreasureChestIterator(this, treasureType);
     }
 
@@ -146,7 +144,7 @@ public class ArrayTreasureChest implements TreasureChest {
 
     @Override
     public Iterator iterator(TreasureType treasureType) {
-        // ArrayTreasureChestIterator 的实现见下面
+        // 创建对应的　Iterator，ArrayTreasureChestIterator 的实现见下面
         return new ArrayTreasureChestIterator(this, treasureType);
     }
 
@@ -191,6 +189,7 @@ public class ListTreasureChestIterator implements Iterator<Treasure> {
                 break;
             }
 
+            // 过滤
             if (TreasureType.ANY.equals(treasureType) || treasureType.equals(treasures.get(index).getTreasureType())) {
                 break;
             }
@@ -235,6 +234,7 @@ public class ArrayTreasureChestIterator implements Iterator<Treasure> {
                 break;
             }
 
+            // 过滤
             if (TreasureType.ANY.equals(treasureType) || treasureType.equals(treasures[index].getTreasureType())) {
                 break;
             }
@@ -244,30 +244,63 @@ public class ArrayTreasureChestIterator implements Iterator<Treasure> {
 }
 ```
 
+上面的　ListTreasureChest 和　ArrayTreasureChest 对应类图中的　ConcreteAggregate，ListTreasureChestIterator 和　ArrayTreasureChestIterator 对应类图中的　ConcreteIterator
+
+定义　TreasureChestType，用于标识　TreasureChest 的实现：
+
+```java
+public enum TreasureChestType {
+    LIST, ARRAY
+}
+```
+
+定义　TreasureChestFactory，用于选择　TreasureChest 的实现，这里使用了简单工厂模式：
+
+```java
+public class TreasureChestFactory {
+    private TreasureChestFactory() {
+        throw new UnsupportedOperationException("Cant't be instantiated");
+    }
+
+    public static TreasureChest create(TreasureChestType treasureChestType) {
+        switch (treasureChestType) {
+            case LIST:
+                return new ListTreasureChest();
+            case ARRAY:
+                return new ArrayTreasureChest();
+            default:
+                throw new IllegalArgumentException("TreasureChestType not supported");
+        }
+    }
+}
+```
+
 客户端调用：
 
 ```java
 public class Client {
+
     public static void main(String[] args) {
-        ArrayAggregate arrayAggregate = new ArrayAggregate(ShapeType.ALL);
-        iterate(arrayAggregate.iterator());
+        filter(TreasureChestFactory.create(TreasureChestType.LIST));
 
-        // 设置过滤器
-        arrayAggregate.setFilter(ShapeType.CIRCLE);
-        iterate(arrayAggregate.iterator());
+        filter(TreasureChestFactory.create(TreasureChestType.ARRAY));
+    }
 
-        ListAggregate listAggregate = new ListAggregate(ShapeType.ALL);
-        iterate(listAggregate.iterator());
-
-        listAggregate.setFilter(ShapeType.RECTANGLE);
-        iterate(listAggregate.iterator());
+    // 过滤
+    private static void filter(TreasureChest treasureChest) {
+        iterate(treasureChest, TreasureType.ANY);
+        iterate(treasureChest, TreasureType.POTION);
+        iterate(treasureChest, TreasureType.RING);
+        iterate(treasureChest, TreasureType.WEAPON);
     }
 
     // 遍历
-    private static void iterate(Iterator iterator) {
+    private static void iterate(TreasureChest treasureChest, TreasureType treasureType) {
+        Iterator iterator = treasureChest.iterator(treasureType);
         while (iterator.hasNext()) {
             System.out.println(iterator.next());
         }
+        System.out.println("-------------------------");
     }
 }
 ```

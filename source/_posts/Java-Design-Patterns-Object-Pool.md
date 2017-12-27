@@ -35,7 +35,7 @@ categories: Java Design Patterns
 
 多线程环境下使用对象池模式需要注意同步的问题，主要是下边三个地方需要同步：
 
-* 获取对象池实例的方法，即也就是对象池要实现为线程安全的单例模式
+* 获取对象池实例的方法，也就是对象池要实现为线程安全的单例模式
 * 获取缓存对象的方法
 
 # 实现
@@ -145,7 +145,7 @@ public class Client {
         Reusable reusable3 = objectPool.require();
         System.out.println(reusable3);
 
-        // 没有课用缓存，比较慢
+        // 没有使用缓存，比较慢
         Reusable reusable4 = objectPool.require();
         System.out.println(reusable4);
         objectPool.relesase(reusable3);
