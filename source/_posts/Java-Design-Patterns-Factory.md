@@ -24,85 +24,72 @@ categories: Java Design Patterns
 
 工厂模式的类图如下：
 
-![Java-Design-Patterns-Factory.png](http://otg3f8t90.bkt.clouddn.com/2017/12/5/Java-Design-Patterns-Factory.png)
+![Java-Design-Patterns-Factory.png](http://otg3f8t90.bkt.clouddn.com/2017/12/27/Java-Design-Patterns-Factory.png)
 
 类图说明：
 
-* 工厂、枚举类型和接口是暴露给外部的
-* 外部调用通过工厂获取接口实例而非自己创建，实现了面向接口编程
-* 使用枚举关联接口实例的类型，在工厂中通过枚举类型选择实现
+* Product：抽象的产品类
+* ConcreteProduct：具体的产品实现
+* Type：具体产品的标识，工厂类通过该标识创建具体的产品对象
+* Factory：工厂，根据条件选择合适的产品实现
+* Client：客户端
+* 类图中 Type、Product、Factory 是暴露给客户端的，而 ConcreteProduct 对客户端是透明的，但是客户端需要根据 Type 来选择实现，所以 ConcreteProduct 对客户端还是有一定程度的暴露
 
 # 实现
 
-定义 Shape 接口：
+定义 Warcraft，对应类图中的 Product：
 
 ```java
-public interface Shape {
-    void draw();
+public interface Warcraft {
+    void fight();
 }
 ```
 
-实现 Shape 接口：
+定义 Warcraft 的实现，对应类图中的 ConcreteProduct：
 
 ```java
-public class Circle implements Shape {
+public class Thief implements Warcraft {
     @Override
-    public void draw() {
-        System.out.println("draw:" + this);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
-}
-
-```
-
-```java
-
-public class Rectangle implements Shape {
-    @Override
-    public void draw() {
-        System.out.println("draw:" + this);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
+    public void fight() {
+        System.out.println("Thief fight");
     }
 }
 ```
 
-根据 Shape 接口的具体实现定义枚举：
-
 ```java
-public enum ShapeType {
-    CIRCLE, RECTANGLE
+public class Warrior implements Warcraft {
+    @Override
+    public void fight() {
+        System.out.println("Warrior fight");
+    }
 }
 ```
 
-创建工厂：
+定义 WarcraftType，对应类图中的 Type：
 
 ```java
-public final class ShapeFactory {
-    private ShapeFactory() {
-        throw new UnsupportedOperationException("Can't be initialized");
+public enum WarcraftType {
+    THIEF, WARRIOR
+}
+```
+
+定义 WarcraftFactory，对应类图中的 Factory：
+
+```java
+public class WarcraftFactory {
+    private WarcraftFactory() {
+        throw new UnsupportedOperationException("Can't be instantiated");
     }
 
-    public static Shape createShape(ShapeType type) {
-        Shape shape;
+    public static Warcraft createWarcraft(WarcraftType type) {
         switch (type) {
-            case CIRCLE:
-                shape = new Circle();
-                break;
-            case RECTANGLE:
-                shape = new Rectangle();
-                break;
+            case THIEF:
+                return new Thief();
+            case WARRIOR:
+                return new Warrior();
             default:
-                shape = null;
+                throw new IllegalArgumentException("WarcraftType not supported.");
         }
-        return shape;
     }
 }
 ```
@@ -111,12 +98,13 @@ public final class ShapeFactory {
 
 ```java
 public class Client {
-    public static void main(String[] args) {
-        Shape circle = ShapeFactory.createShape(ShapeType.CIRCLE);
-        circle.draw();
 
-        Shape rectangle = ShapeFactory.createShape(ShapeType.RECTANGLE);
-        rectangle.draw();
+    public static void main(String[] args) {
+        Warcraft warrior = WarcraftFactory.createWarcraft(WarcraftType.WARRIOR);
+        warrior.fight();
+
+        Warcraft thief = WarcraftFactory.createWarcraft(WarcraftType.THIEF);
+        thief.fight();
     }
 }
 ```

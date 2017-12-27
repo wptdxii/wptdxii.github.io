@@ -39,35 +39,38 @@ categories: Java Design Patterns
 
 # 实现
 
-定义类型标识：
+定义 TreasureType，用于标识聚合对象元素类型：
 
 ```java
 // 用于在迭代器中过滤
-public enum ShapeType {
-    CIRCLE, RECTANGLE, ALL
+public enum TreasureType {
+    ANY, WEAPON, RING, POTION
 }
 ```
 
-定义实体类，其为聚合对象的组成元素:
+定义 Treasure，其为聚合对象的组成元素:
 
 ```java
-public class Shape {
-    private static int id = 0;
-    private ShapeType shapeType;
-    private int shapeId;
+public class Treasure {
+    private TreasureType type;
+    private String treasure;
 
-    public Shape(ShapeType shapeType) {
-        this.shapeType = shapeType;
-        this.shapeId = id++;
+    public Treasure(TreasureType type, String treasure) {
+        this.type = type;
+        this.treasure = treasure;
     }
 
-    public ShapeType getShapeType() {
-        return shapeType;
+    public TreasureType getTreasureType() {
+        return type;
+    }
+
+    public String getTreasure() {
+        return treasure;
     }
 
     @Override
     public String toString() {
-        return "Shape:" + shapeType.name().toLowerCase() + " id:" + shapeId;
+        return treasure;
     }
 }
 ```
@@ -83,18 +86,85 @@ public interface Iterator<T> {
 }
 ```
 
-实现 Iterator：
+定义 TreasureChest，对应类图中的 Aggregate：
 
 ```java
-public class ArrayIterator implements Iterator<Shape> {
-    // 该类是聚合对象的具体实现，其代码在后面
-    private ArrayAggregate aggregate;
-    private ShapeType type;
+public interface TreasureChest {
+    Iterator iterator(TreasureType treasureType);
+}
+```
+
+实现 TreasureChest 和 Iterator：
+
+```java
+public class ListTreasureChest implements TreasureChest {
+    private List<Treasure> treasures;
+
+    public ListTreasureChest() {
+        treasures = new ArrayList<>();
+        treasures.add(new Treasure(TreasureType.POTION, "Potion of courage"));
+        treasures.add(new Treasure(TreasureType.RING, "Ring of shadows"));
+        treasures.add(new Treasure(TreasureType.POTION, "Potion of wisdom"));
+        treasures.add(new Treasure(TreasureType.POTION, "Potion of blood"));
+        treasures.add(new Treasure(TreasureType.WEAPON, "Sword of silver +1"));
+        treasures.add(new Treasure(TreasureType.POTION, "Potion of rust"));
+        treasures.add(new Treasure(TreasureType.RING, "Ring of armor"));
+        treasures.add(new Treasure(TreasureType.WEAPON, "Steel halberd"));
+        treasures.add(new Treasure(TreasureType.WEAPON, "Dagger of poison"));
+        treasures.add(new Treasure(TreasureType.POTION, "Potion of healing"));
+    }
+
+    @Override
+    public Iterator iterator(TreasureType treasureType) {
+        // ListTreasureChestIterator 的实现见下面
+        return new ListTreasureChestIterator(this, treasureType);
+    }
+
+    public List<Treasure> getTreasures() {
+        return treasures;
+    }
+}
+```
+
+```java
+public class ArrayTreasureChest implements TreasureChest {
+    private Treasure[] treasures;
+
+    public ArrayTreasureChest() {
+        treasures = new Treasure[10];
+        treasures[0] = new Treasure(TreasureType.POTION, "Potion of courage");
+        treasures[1] = new Treasure(TreasureType.RING, "Ring of shadows");
+        treasures[2] = new Treasure(TreasureType.POTION, "Potion of wisdom");
+        treasures[3] = new Treasure(TreasureType.POTION, "Potion of blood");
+        treasures[4] = new Treasure(TreasureType.WEAPON, "Sword of silver +1");
+        treasures[5] = new Treasure(TreasureType.POTION, "Potion of rust");
+        treasures[6] = new Treasure(TreasureType.RING, "Ring of armor");
+        treasures[7] = new Treasure(TreasureType.WEAPON, "Steel halberd");
+        treasures[8] = new Treasure(TreasureType.WEAPON, "Dagger of poison");
+        treasures[9] = new Treasure(TreasureType.POTION, "Potion of healing");
+    }
+
+    @Override
+    public Iterator iterator(TreasureType treasureType) {
+        // ArrayTreasureChestIterator 的实现见下面
+        return new ArrayTreasureChestIterator(this, treasureType);
+    }
+
+    public Treasure[] getTreasures() {
+        return treasures;
+    }
+}
+```
+
+```java
+public class ListTreasureChestIterator implements Iterator<Treasure> {
+    private ListTreasureChest treasureChest;
+    private TreasureType treasureType;
     private int cursor = -1;
 
-    public ArrayIterator(ArrayAggregate aggregate, ShapeType type) {
-        this.aggregate = aggregate;
-        this.type = type;
+    public ListTreasureChestIterator(ListTreasureChest treasureChest, TreasureType treasureType) {
+        this.treasureChest = treasureChest;
+        this.treasureType = treasureType;
     }
 
     @Override
@@ -103,26 +173,25 @@ public class ArrayIterator implements Iterator<Shape> {
     }
 
     @Override
-    public Shape next() {
+    public Treasure next() {
         cursor = findNextIndex();
         if (cursor != -1) {
-            return aggregate.getArray()[cursor];
+            return treasureChest.getTreasures().get(cursor);
         }
         return null;
     }
 
     private int findNextIndex() {
-        Shape[] shapes = aggregate.getArray();
+        List<Treasure> treasures = treasureChest.getTreasures();
         int index = cursor;
         while (true) {
             index++;
-            if (index >= shapes.length) {
+            if (index >= treasures.size()) {
                 index = -1;
                 break;
             }
 
-            // 用于过滤
-            if (ShapeType.ALL.equals(type) || type.equals(shapes[index].getShapeType())) {
+            if (TreasureType.ANY.equals(treasureType) || treasureType.equals(treasures.get(index).getTreasureType())) {
                 break;
             }
         }
@@ -132,15 +201,14 @@ public class ArrayIterator implements Iterator<Shape> {
 ```
 
 ```java
-public class ListIterator implements Iterator<Shape> {
-    // 聚合对象，在后面定义
-    private ListAggregate aggregate;
-    private ShapeType type;
+public class ArrayTreasureChestIterator implements Iterator<Treasure> {
+    private ArrayTreasureChest treasureChest;
+    private TreasureType treasureType;
     private int cursor = -1;
 
-    public ListIterator(ListAggregate aggregate, ShapeType type) {
-        this.aggregate = aggregate;
-        this.type = type;
+    public ArrayTreasureChestIterator(ArrayTreasureChest treasureChest, TreasureType treasureType) {
+        this.treasureChest = treasureChest;
+        this.treasureType = treasureType;
     }
 
     @Override
@@ -149,104 +217,29 @@ public class ListIterator implements Iterator<Shape> {
     }
 
     @Override
-    public Shape next() {
+    public Treasure next() {
         cursor = findNextIndex();
         if (cursor != -1) {
-            return aggregate.getList().get(cursor);
+            return treasureChest.getTreasures()[cursor];
         }
         return null;
     }
 
     private int findNextIndex() {
-        List<Shape> list = aggregate.getList();
+        Treasure[] treasures = treasureChest.getTreasures();
         int index = cursor;
         while (true) {
             index++;
-            if (index >= list.size()) {
+            if (index >= treasures.length) {
                 index = -1;
                 break;
             }
 
-            // 用于过滤
-            if (ShapeType.ALL.equals(type) || type.equals(list.get(index).getShapeType())) {
+            if (TreasureType.ANY.equals(treasureType) || treasureType.equals(treasures[index].getTreasureType())) {
                 break;
             }
         }
         return index;
-    }
-}
-```
-
-定义 Aggregate：
-
-```java
-public interface Aggregate {
-    Iterator iterator();
-}
-```
-
-实现 Aggregate：
-
-```java
-public class ArrayAggregate implements Aggregate {
-    private ShapeType filter;
-    private Shape[] shapeArray = new Shape[6];
-
-    public ArrayAggregate(ShapeType filter) {
-        this.filter = filter;
-        shapeArray[0] = new Shape(ShapeType.CIRCLE);
-        shapeArray[1] = new Shape(ShapeType.RECTANGLE);
-        shapeArray[2] = new Shape(ShapeType.CIRCLE);
-        shapeArray[3] = new Shape(ShapeType.RECTANGLE);
-        shapeArray[4] = new Shape(ShapeType.CIRCLE);
-        shapeArray[5] = new Shape(ShapeType.RECTANGLE);
-    }
-
-    public Shape[] getArray() {
-        return shapeArray;
-    }
-
-    public void setFilter(ShapeType filter) {
-        this.filter = filter;
-    }
-
-    @Override
-    public Iterator iterator() {
-        // 创建对应的迭代器
-        return new ArrayIterator(this, filter);
-    }
-}
-```
-
-```java
-public class ListAggregate implements Aggregate {
-    private ShapeType filter;
-    private List<Shape> list = new ArrayList<>();
-
-    public ListAggregate(ShapeType filter) {
-        this.filter = filter;
-        list.add(new Shape(ShapeType.CIRCLE));
-        list.add(new Shape(ShapeType.RECTANGLE));
-        list.add(new Shape(ShapeType.CIRCLE));
-        list.add(new Shape(ShapeType.RECTANGLE));
-        list.add(new Shape(ShapeType.CIRCLE));
-        list.add(new Shape(ShapeType.RECTANGLE));
-        list.add(new Shape(ShapeType.CIRCLE));
-        list.add(new Shape(ShapeType.RECTANGLE));
-    }
-
-    public List<Shape> getList() {
-        return list;
-    }
-
-    public void setFilter(ShapeType filter) {
-        this.filter = filter;
-    }
-
-    @Override
-    public Iterator iterator() {
-        // 创建对应的迭代器
-        return new ListIterator(this, filter);
     }
 }
 ```

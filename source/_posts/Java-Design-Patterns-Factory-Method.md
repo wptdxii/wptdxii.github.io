@@ -36,75 +36,94 @@ categories: Java Design Patterns
 
 # 实现
 
-定义 Shape 接口，对应类图中的 Product：
+定义 Weapon，对应类图中的 Product：
 
 ```java
-public interface Shape {
-    void draw();
+public interface Weapon {
+    void attack();
 }
 ```
 
-定义 Shape 接口的实现：
+定义 Weapon 的实现，对应类图中的 ConcreteProduct：
 
 ```java
-public class Circle implements Shape {
+public class Bow implements Weapon {
     @Override
-    public void draw() {
-        System.out.println("draw:" + this);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
+    public void attack() {
+        System.out.println("Attack with bow");
     }
 }
 ```
 
 ```java
-public class Rectangle implements Shape {
+public class Sword implements Weapon {
     @Override
-    public void draw() {
-        System.out.println("draw:" + this);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
+    public void attack() {
+        System.out.println("Attack with sword");
     }
 }
 ```
 
-定义 Drawer，对应类图中的 Creator：
+定义 Warcraft，其中定义了工厂方法，对应类图中的 Creator：
 
 ```java
-public abstract class Drawer {
-    // 定义工厂方法
-    protected abstract Shape factoryMethod();
+public abstract class Warcraft {
+    // 工厂方法
+    protected abstract Weapon manufacture();
 
-    public void draw() {
+    public void fight() {
         // 调用工厂方法
-        Shape shape = factoryMethod();
-        shape.draw();
+        Weapon weapon = manufacture();
+        weapon.attack();
     }
 }
 ```
 
-定义 Drawer 的子类实现：
+定义 Warcraft 的实现，对应类图中的 ConcreteCreator：
 
 ```java
-public class CircleDrawer extends Drawer {
+public class Thief extends Warcraft {
     @Override
-    protected Shape factoryMethod() {
-        return new Circle();
+    protected Weapon manufacture() {
+        return new Bow();
     }
 }
 ```
 
 ```java
-public class RectangleDrawer extends Drawer {
+public class Warrior extends Warcraft{
     @Override
-    protected Shape factoryMethod() {
-        return new Rectangle();
+    protected Weapon manufacture() {
+        return new Sword();
+    }
+}
+```
+
+定义 WarcraftType，用于标识不同的 ConcreteCreator：
+
+```java
+public enum WarcraftType {
+    WARRIOR, THIEF
+}
+```
+
+定义 WarcraftFactory，这里用到了简单工厂模式：
+
+```java
+public final class WarcraftFactory {
+    private WarcraftFactory() {
+        throw new UnsupportedOperationException("Can't be instantiated");
+    }
+
+    public static Warcraft createWarcraft(WarcraftType type) {
+        switch (type) {
+            case THIEF:
+                return new Thief();
+            case WARRIOR:
+                return new Warrior();
+            default:
+                throw new IllegalArgumentException("WarcraftType not supported.");
+        }
     }
 }
 ```
@@ -114,12 +133,11 @@ public class RectangleDrawer extends Drawer {
 ```java
 public class Client {
     public static void main(String[] args) {
-        // 这里可以结合工厂模式使用
-        Drawer circleDrawer = new CircleDrawer();
-        circleDrawer.draw();
+        Warcraft warrior = WarcraftFactory.createWarcraft(WarcraftType.WARRIOR);
+        warrior.fight();
 
-        Drawer rectangleDrawer = new RectangleDrawer();
-        rectangleDrawer.draw();
+        Warcraft thief = WarcraftFactory.createWarcraft(WarcraftType.THIEF);
+        thief.fight();
     }
 }
 ```
