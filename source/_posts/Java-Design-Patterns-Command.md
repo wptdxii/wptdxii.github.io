@@ -41,13 +41,12 @@ categories: Java Design Patterns
 
 # 实现
 
-命令模式有其标准实现，比较简单，下面代码演示了利用命令模式实现撤销、恢复操作
+命令模式有其标准实现，比较简单，下面代码演示了利用命令模式实现撤销、恢复操作。可撤销操作的实现方式又分为两种，一种是补偿式的，又称反操作式的，一种是存储恢复式的，下面的示例代码使用了第一张方式，而第二种方式可以结合备忘录模式使用。
 
-
-定义 Receiver：
+定义 Operation，对应类图中的 Receiver：
 
 ```java
-public class Receiver {
+public class Operation {
     private int result;
 
     public int getResult() {
@@ -78,66 +77,70 @@ public interface Command {
 }
 ```
 
-定义命令对象：
+定义 Command 的实现：
 
 ```java
 public class AddCommand implements Command {
-    private Receiver receiver;
+    private Operation operation;
     private int num;
 
-    public AddCommand(Receiver receiver) {
-        this.receiver = receiver;
+    public AddCommand(Operation operation) {
+        this.operation = operation;
     }
 
     @Override
     public void execute(int num) {
         this.num = num;
-        receiver.add(num);
+        operation.add(num);
     }
 
     @Override
     public void undo() {
-        receiver.subtract(num);
+        // 反操作
+        operation.subtract(num);
     }
 
     @Override
     public void redo() {
-        receiver.add(num);
+        // 反操作
+        operation.add(num);
     }
 }
 ```
 
 ```java
 public class SubtractCommand implements Command {
-    private Receiver receiver;
+    private Operation operation;
     private int num;
 
-    public SubtractCommand(Receiver receiver) {
-        this.receiver = receiver;
+    public SubtractCommand(Operation operation) {
+        this.operation = operation;
     }
 
     @Override
     public void execute(int num) {
         this.num = num;
-        receiver.subtract(num);
+        operation.subtract(num);
     }
 
     @Override
     public void undo() {
-        this.receiver.add(num);
+        // 反操作
+        this.operation.add(num);
     }
 
     @Override
     public void redo() {
-        this.receiver.subtract(num);
+        // 反操作
+        this.operation.subtract(num);
     }
 }
 ```
 
-定义 Invoker：
+定义 Calculator，对应类图中的 Invoker：
 
 ```java
-public class Invoker {
+public class Calculator {
     // 利用两个队列实现撤销和恢复的功能
     private Deque<Command> undoCommands = new LinkedList<>();
     private Deque<Command> redoCommands = new LinkedList<>();
@@ -170,21 +173,21 @@ public class Invoker {
 ```java
 public class Client {
     public static void main(String[] args) {
-        Receiver receiver = new Receiver();
-        System.out.println(receiver.getResult());
+        Operation operation = new Operation();
+        System.out.println(operation.getResult());
 
-        Invoker invoker = new Invoker();
-        invoker.calculate(new AddCommand(receiver), 5);
-        System.out.println(receiver.getResult());
+        Calculator calculator = new Calculator();
+        calculator.calculate(new AddCommand(operation), 5);
+        System.out.println(operation.getResult());
 
-        invoker.calculate(new SubtractCommand(receiver), 3);
-        System.out.println(receiver.getResult());
+        calculator.calculate(new SubtractCommand(operation), 3);
+        System.out.println(operation.getResult());
 
-        invoker.undo();
-        System.out.println(receiver.getResult());
+        calculator.undo();
+        System.out.println(operation.getResult());
 
-        invoker.redo();
-        System.out.println(receiver.getResult());
+        calculator.redo();
+        System.out.println(operation.getResult());
     }
 }
 ```
