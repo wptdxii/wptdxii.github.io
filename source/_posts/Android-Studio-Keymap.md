@@ -9,5 +9,19 @@ Android Studio 快捷键
 
 <!-- more -->
 
-|Action|Mac|Win/Linux|
+# Common
+
+|Description|Mac|Win/Linux|
+|:-|:-|:-|
+|Basic code completion||(Ctrl + Space)->(Alt + \\)|
+|Class name completion||Ctrl + Alt + Space|
+|Show intention actions and quict-fixes||Alt + Enter|
+|Generate code||Alt + Ins|
+|Recent files||Ctrl + E|
+|Rename||Shift + F6|
+|Search everywhere||Double Shift|
+
+# General
+
+|Description|Mac|Win/Linux|
 |:-|:-|:-|
