@@ -31,6 +31,9 @@ categories: Java Design Patterns
 * State：状态接口，定义上下文状态对应的行为
 * ConcreteState：具体的状态实现类，每个类实现一个与上下文状态对应的具体行为，需要的外部数据可以通过上下文环境传递
 * Context：上下文环境，用于维护当前状态，定义客户端感兴趣的接口，同时也可以用来封装状态实现类需要的数据
+* 状态模式类图结构与策略模式相同，但它们的功能和侧重点完全不一样
+  * 状态模式是根据状态的变化来选择相应的行为，这些实现状态对应功能的类之间是平行的，不能相互替换。而策略模式则是根据需要或者客户端的要求来选择相应的实现类，各个实现类之间是平等的，是可以相互替换的
+  * 策略模式一般是客户端来选择策略算法，而状态模式一般由上下文或者状态实现类来维护状态
 
 # 实现
 
@@ -81,10 +84,10 @@ public class LogoutState implements UserState{
 }
 ```
 
-定义 UserManager，对应类图中的 Context：
+定义 UserContext，对应类图中的 Context：
 
 ```java
-public class UserManager {
+public class UserContext {
     private UserState state;
     private User user;
 
@@ -137,7 +140,7 @@ public class Client {
         User user = new User();
         user.setName("Someone");
 
-        UserManager context = new UserManager();
+        UserContext context = new UserContext();
         context.setUser(user);
         context.comment();
 
@@ -151,5 +154,18 @@ public class Client {
 ```
 
 # 总结
+
+状态模式的本质是根据状态来分离和选择行为。
+
+状态模式优点：
+
+* 使用单独的类来封装一个状态的处理，简化了逻辑控制
+* 分离状态和行为，提供程序的可维护性
+* 具有良好的扩展性，可以方便地扩展状态
+* 上下文中只维护了一个状态对象，不会发生内部状态不一致的情况，可以显式地进行状态转换
+
+状态模式缺点：
+
+* 一个状态对应一个状态处理类，容易造成类数量的膨胀
 
 # Ref
