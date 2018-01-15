@@ -1,7 +1,7 @@
 ---
 title: 策略模式(Strategy Pattern)
 date: 2017-11-29 15:06:00
-tags: 行为型模式(Behavioral Pattern) 
+tags: [Behavioral Pattern, GoF]
 categories: Java Design Patterns
 ---
 

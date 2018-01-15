@@ -1,7 +1,7 @@
 ---
-title: Android-Toolbar-Tutorial
+title: Android-Widget-Toolbar
 date: 2017-08-21 16:47:06
-tags: Material Design
+tags: [Android Widget, Material Design]
 categories: Android
 ---
 Material Design 是 Google 推出的一套视觉设计语言，主要面向 UI 设计人员，详细资料可以参看：

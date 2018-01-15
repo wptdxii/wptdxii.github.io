@@ -1,7 +1,7 @@
 ---
 title: Android-RecyclerView-Tutorial
 date: 2017-06-30 10:37:09
-tags: Android UI
+tags: Android Widget
 categories: Android
 ---
 

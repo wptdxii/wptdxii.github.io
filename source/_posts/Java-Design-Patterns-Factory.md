@@ -1,7 +1,7 @@
 ---
 title: 工厂模式(Factory Pattern)
-date: 2017-11-29 15:06:00
-tags: 创建型模式(Creational Pattern) 
+date: 2017-11-29 15:06:0
+tags: Creational Pattern
 categories: Java Design Patterns
 ---
 

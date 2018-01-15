@@ -1,7 +1,7 @@
 ---
 title: 抽象工厂模式(Abstract Factory Pattern)
 date: 2017-11-29 15:06:00
-tags: 创建型模式(Creational Pattern) 
+tags: [Creational Pattern, GoF]
 categories: Java Design Patterns
 ---
 
