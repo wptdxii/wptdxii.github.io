@@ -334,3 +334,5 @@ Toolbar.setOverflowIcon();
 * [Using Custom Views As Menu Items](https://stablekernel.com/using-custom-views-as-menu-items/#top)
 * [ActionProvider](https://developer.android.com/reference/android/support/v4/view/ActionProvider.html)
 * [Support v7 ActionBarActivity, OnCreateOptionsMenu() called after each call to SupportInvalidateOptionsMenu()](https://stackoverflow.com/questions/28803908/support-v7-actionbaractivity-oncreateoptionsmenu-called-after-each-call-to-su)
+* [How to set Toolbar text and back arrow color](https://stackoverflow.com/questions/26969424/how-to-set-toolbar-text-and-back-arrow-color)
+* [How to implement DrawerArrowToggle from Android appcompat v7 21 library](https://stackoverflow.com/questions/26434504/how-to-implement-drawerarrowtoggle-from-android-appcompat-v7-21-library)
