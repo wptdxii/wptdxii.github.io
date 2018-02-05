@@ -1,7 +1,7 @@
 ---
 title: 适配器模式(Adapter Pattern)
 date: 2017-11-29 15:06:00
-tags: Structural Pattern
+tags: [Structural Pattern, GoF]
 categories: Java Design Patterns
 ---
 

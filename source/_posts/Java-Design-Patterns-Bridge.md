@@ -1,7 +1,7 @@
 ---
 title: 桥接模式(Bridge Pattern)
 date: 2017-11-29 15:06:00
-tags: Structural Pattern
+tags: [Structural Pattern, GoF]
 categories: Java Design Patterns
 ---
 
