@@ -153,6 +153,15 @@ public class WizardTowerProxy implements InvocationHandler {
 
 代理模式的本质是控制对象访问。通过代理具体的主题对象，把代理对象插入到客户端和主题对象之间，从而为客户端和主题对象引入一定的间接性，给代理对象提供了操作空间，在转调具体的主题对象前后，可以附加很多操作。
 
+代理模式优点：
+
+* 控制对原始对象的访问
+* 实现原始对象数据的懒加载
+
+代理模式缺点：
+
+* 需要额外增加并维护代理对象
+
 # Ref
 
 * [Proxy Pattern](http://www.oodesign.com/proxy-pattern.html)
