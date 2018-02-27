@@ -1,6 +1,6 @@
 ---
 title: 工厂方法模式(Factory Method Pattern)
-date: 2017-11-29 15:06:00
+date: 2016-11-29 15:06:00
 tags: [Creational Pattern, GoF]
 categories: Java Design Patterns
 ---

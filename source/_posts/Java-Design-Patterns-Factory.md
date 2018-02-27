@@ -1,6 +1,6 @@
 ---
 title: 工厂模式(Factory Pattern)
-date: 2017-11-29 15:06:0
+date: 2016-11-29 15:06:0
 tags: Creational Pattern
 categories: Java Design Patterns
 ---

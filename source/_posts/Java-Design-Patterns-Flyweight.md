@@ -1,6 +1,6 @@
 ---
 title: 享元模式(Flyweight Pattern)
-date: 2018-02-08 16:20:34
+date: 2017-02-08 16:20:34
 tags: [Structural Pattern, GoF]
 categories: Java Design Patterns
 ---

@@ -1,6 +1,6 @@
 ---
 title: 代理模式(Proxy Pattern)
-date: 2018-02-09 10:07:49
+date: 2017-02-09 10:07:49
 tags: [Structural Pattern, GoF]
 categories: Java Design Patterns
 ---

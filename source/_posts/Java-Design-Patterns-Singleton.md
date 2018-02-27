@@ -1,6 +1,6 @@
 ---
 title: 单例模式(Singleton Pattern)
-date: 2017-08-07 23:45:03
+date: 2016-11-07 23:45:03
 tags: [Creational Pattern, GoF]
 categories: Java Design Patterns
 ---

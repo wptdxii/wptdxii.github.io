@@ -1,6 +1,6 @@
 ---
 title: 备忘录模式(Memento Pattern)
-date: 2017-11-29 15:06:00
+date: 2016-11-29 15:06:00
 tags: [Behavioral Pattern, GoF]
 categories: Java Design Patterns
 ---

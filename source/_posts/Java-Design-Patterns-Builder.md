@@ -1,6 +1,6 @@
 ---
 title: 建造者模式(Builder Pattern)
-date: 2017-11-29 15:06:00
+date: 2017-01-19 15:06:00
 tags: [Creational Pattern, GoF]
 categories: Java Design Patterns
 ---

@@ -1,8 +1,8 @@
 ---
-title: Design Patterns Principles
-date: 2017-08-07 23:45:03
+title: 面向对象六大原则
+date: 2016-08-07 23:45:03
 tags: Design Pattern Principles 
-categories: Java Design Patterns
+categories: Design Patterns
 ---
 
 面向对象需要遵循六大原则
