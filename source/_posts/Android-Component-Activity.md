@@ -1,7 +1,7 @@
 ---
-title: Android Component Activity
+title: Activity
 date: 2016-11-29 22:44:41
-tags: Activity
+tags: [Activities, Activity, Lifecycle, LaunchMode, Intent Flag]
 categories: Android
 ---
 
@@ -67,8 +67,6 @@ android:configChanges="orientation|keyboardHidden|screenSize|locale"
 当配置了上面的参数后，相应的配置发生变动时 Activity 不会异常重启，即生命周期方法不会被调用，onSaveInstanceState() 和 onRestoreInstanceState() 也不会被回调，取而代之的是 onConfigurationChanged() 会被回调，
 可以在这个方法中做相应的处理
 
-## 应用生命周期
-
 ## 常见回调过程
 
 Activity 在操作过程中有如下常见的生命周期过程:
@@ -102,15 +100,6 @@ Activity 在操作过程中有如下常见的生命周期过程:
 * 启动使用栈内复用模式且处于非栈顶的 Activity：
 
     onNewIntent -> onRestart() -> onStart() -> onResume()
-
-# Tips & Tricks
-
-* 可以使用下列命令查看 Activity 任务栈：
-
-```cmd
-adb shell dumpsys activity
-```
-
 
 # 启动模式
 

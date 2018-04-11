@@ -7,6 +7,14 @@ catetories: Android
 
 <!-- more  -->
 
+# Activity
+
+* 可以使用下列命令查看 Activity 任务栈：
+
+```cmd
+adb shell dumpsys activity
+```
+
 # View
 
 # Ref
