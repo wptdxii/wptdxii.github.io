@@ -123,6 +123,7 @@ Android Studio 快捷键
 |Extract constant||Ctrl + Alt + C|
 |Extract parameter||Ctrl + Alt + P|
 |Inline||Ctrl + Alt + N|
+|Convert Java File to Kotlin File||Ctrl + Alt + Shift + K|
 
 # Debugging
 
