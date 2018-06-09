@@ -6,3 +6,7 @@ categories: Android
 ---
 
 <!-- Android 常见面试题收集 -->
+
+# Ref
+
+* [android-interview](https://github.com/guoxiaoxing/android-interview)

@@ -22,13 +22,26 @@ Vim 常用快捷键
 |Move to the start/end of the line|0 / $|
 |Join lines|[count] + J|
 |Jump to line|[count] + G|
-|Jump to next/previous word||w/b|
+|Jump to next/previous word|w/b|
+|Yank the current line|yy/Y|
+|Yank to the end of the current line|y$|
+|Yank the current word (excluding surrounding whitespace)|yiw|
+|Yank the current word (including surrounding whitespace)|yaw|
+|Yank from the current cursor position up to and before the character (til x)|yt[x]|
+|Yank from the current cursor position up to and including the character (find x)|yf[x]|
+|Paste after/before the cursor|p/P|
+|Yank  to system register|"+{motion}|
+|Paste from system register|"+p|
+
+> To copy into a register, one can use "{register} immediately before one of the above commands to copy into the register {register}.
 
 # Insert Mode
 
 |Description|Keymap|
 |:-|:-|
 |Insert normal mode|[Ctrl + o|
+|Pasting in insert mode from default register| Ctrl + r , "|
+|Pasting in insert mode from system register| Ctrl + r , +|
 
 # Visual Mode
 
