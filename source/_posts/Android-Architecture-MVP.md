@@ -21,3 +21,5 @@ categories: Android Architecture
 * [nucleus](https://github.com/konmik/nucleus)
 * [不容错过，最全的安卓架构合集【从零开始搭建android框架系列（2）】](https://www.jianshu.com/p/1f21e1d375aa)
 * [Avoid repetitive checks via isViewAttached() using null object pattern](https://github.com/sockeqwe/mosby/issues/56)
+* [mosby](https://github.com/sockeqwe/mosby)
+* [一个小例子彻底搞懂 MVP](https://mp.weixin.qq.com/s?__biz=MzIwMTAzMTMxMg==&mid=2649492837&idx=1&sn=631988689fe5bd6f9aadb6bf123051ed&chksm=8eec869ab99b0f8c55be7f28f92f51e22f38b9d7bd15969ff1bbee2bc2a434082c7938135d2c&mpshare=1&scene=1&srcid=0628XhvjclNsBogMc6D6e4VJ#rd)
