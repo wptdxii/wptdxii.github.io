@@ -415,3 +415,5 @@ public @interface ActivityContext {}
 - [Dagger 2 for Android Beginners — Introduction](https://medium.com/@harivigneshjayapalan/dagger-2-for-android-beginners-introduction-be6580cb3edb)
 - [Dependency Injection with Dagger 2 (Devoxx 2014)](https://speakerdeck.com/jakewharton/dependency-injection-with-dagger-2-devoxx-2014)
 - [Dependency Injection with Dagger 2](https://github.com/codepath/android_guides/wiki/Dependency-Injection-with-Dagger-2)
+- [New Android Injector with Dagger 2 — part 1](https://medium.com/@iammert/new-android-injector-with-dagger-2-part-1-8baa60152abe)
+- [[HOW-TO] Android Dagger (2.11–2.16) Butterknife (8.7-8.8) MVP (Part 1)](https://proandroiddev.com/how-to-android-dagger-2-10-2-11-butterknife-mvp-part-1-eb0f6b970fd)
