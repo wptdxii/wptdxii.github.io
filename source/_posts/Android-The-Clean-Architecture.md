@@ -20,3 +20,4 @@ categories: Android
 * [Refactor project structure to one single module #103](https://github.com/android10/Android-CleanArchitecture/pull/103)
 * [Easy Clean architecture on Android](http://www.jianshu.com/p/3edcf85539a6?utm_campaign=maleskine&utm_content=note&utm_medium=reader_share&utm_source=weibo)
 * [clean-android-architecture](https://speakerdeck.com/richk/clean-android-architecture)
+* [Easy Clean architecture on Android](https://www.jianshu.com/p/3edcf85539a6)
