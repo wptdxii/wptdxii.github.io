@@ -23,3 +23,4 @@ Android 组件化总结
 * [ModularizationArchitecture](https://github.com/SpinyTech/ModularizationArchitecture)
 * [Android彻底组件化方案实践](https://www.jianshu.com/p/1b1d77f58e84)
 * [App组件化与业务拆分那些事](https://www.jianshu.com/p/60c1b9ddd8ab)
+* [AndroidModulePattern](https://github.com/guiying712/AndroidModulePattern)
