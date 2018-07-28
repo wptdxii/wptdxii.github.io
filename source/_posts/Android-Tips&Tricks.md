@@ -19,4 +19,11 @@ adb shell dumpsys activity
 
 # Ref
 
+# Dev
+
+## 设备唯一标识
+
+* [Identifying App Installations](https://android-developers.googleblog.com/2011/03/identifying-app-installations.html)
+* [Is there a unique Android device ID?](https://stackoverflow.com/questions/2785485/is-there-a-unique-android-device-id)
+
 * [Building Android Apps — 30 things that experience made me learn the hard way](https://medium.com/@cesarmcferreira/building-android-apps-30-things-that-experience-made-me-learn-the-hard-way-313680430bf9)
