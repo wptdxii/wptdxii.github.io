@@ -24,3 +24,4 @@ Android 组件化总结
 * [Android彻底组件化方案实践](https://www.jianshu.com/p/1b1d77f58e84)
 * [App组件化与业务拆分那些事](https://www.jianshu.com/p/60c1b9ddd8ab)
 * [AndroidModulePattern](https://github.com/guiying712/AndroidModulePattern)
+* [Android 组件化最佳实践](https://mp.weixin.qq.com/s/ubihF5bDbofZfKTT-Ou2gw)
