@@ -417,3 +417,4 @@ public @interface ActivityContext {}
 - [Dependency Injection with Dagger 2](https://github.com/codepath/android_guides/wiki/Dependency-Injection-with-Dagger-2)
 - [New Android Injector with Dagger 2 — part 1](https://medium.com/@iammert/new-android-injector-with-dagger-2-part-1-8baa60152abe)
 - [[HOW-TO] Android Dagger (2.11–2.16) Butterknife (8.7-8.8) MVP (Part 1)](https://proandroiddev.com/how-to-android-dagger-2-10-2-11-butterknife-mvp-part-1-eb0f6b970fd)
+- [【安卓】rxjava2的disposable](https://blog.csdn.net/c_j33/article/details/78774546)

@@ -51,3 +51,9 @@ CollapsingToolbarLayout 用于包裹 Toolbar 以实现折叠标题栏的效果�
 **Ref**:
 
 * [CollapsingToolbarLayout](https://developer.android.com/reference/android/support/design/widget/CollapsingToolbarLayout.html)
+
+# Resolution Adaptation
+
+* [Android 屏幕适配从未如斯简单（8月10日最终更新版）](https://juejin.im/post/5b6250bee51d451918537021)
+* [Android屏幕适配很麻烦吗？不！太简单了。。。(持续更新)](https://juejin.im/post/5b3094fc6fb9a00e52398ae4)
+* [一种极低成本的Android屏幕适配方式](https://mp.weixin.qq.com/s/d9QCoBP6kV9VSWvVldVVwA)

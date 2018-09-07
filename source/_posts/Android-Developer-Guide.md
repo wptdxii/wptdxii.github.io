@@ -49,7 +49,6 @@ Internal file storage 有如下特点：
 #### Write a file
 
 ```java
-// 
 File file = new File(context.getFilesDir(), filename);
 ```
 

@@ -15,6 +15,10 @@ catetories: Android
 adb shell dumpsys activity
 ```
 
+# Fragment
+
+* [Fragment不为人知的细节](https://juejin.im/entry/5b15f3b05188257d571f1c40)
+
 # View
 
 # Ref
