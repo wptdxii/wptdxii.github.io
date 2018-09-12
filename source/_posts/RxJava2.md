@@ -1,7 +1,7 @@
 ---
-title: RxJava总结
+title: RxJava2
 date: 2016-08-21 23:40:36
-tags:
+tags: 
 ---
 ## 1.RxJava简介
 RxJava项目地址：[RxJava](https://github.com/ReactiveX/RxJava)

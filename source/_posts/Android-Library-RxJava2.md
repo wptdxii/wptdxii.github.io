@@ -21,3 +21,4 @@ RxJava 使用总结
 - [RxJava简洁封装之道](https://www.jianshu.com/p/f3f0eccbcd6f)
 - [Retrofit+RxJava网络请求异常处理](https://www.jianshu.com/p/9c3f0af1180d)
 - [Rxjava +Retrofit 你需要掌握的几个技巧，Retrofit缓存，统一对有无网络处理, 异常处理，返回结果问题](https://www.jianshu.com/p/b1979c25634f)
+- [RxJava 沉思录（一）：你认为 RxJava 真的好用吗？](https://juejin.im/post/5b8f536c5188255c352d3528)
