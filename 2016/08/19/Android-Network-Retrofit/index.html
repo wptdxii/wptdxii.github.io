@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="retrofit," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="这篇博客介绍和记录了一些Retrofit的操作">
+<meta name="keywords" content="retrofit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Retrofit使用总结">
+<meta property="og:url" content="http://yoursite.com/2016/08/19/Android-Network-Retrofit/index.html">
+<meta property="og:site_name" content="wptdxii`s blog">
+<meta property="og:description" content="这篇博客介绍和记录了一些Retrofit的操作">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-09T09:35:24.576Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Retrofit使用总结">
+<meta name="twitter:description" content="这篇博客介绍和记录了一些Retrofit的操作">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/19/Android-Network-Retrofit/"/>
+
+
+
+
+
+  <title>Retrofit使用总结 | wptdxii`s blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wptdxii`s blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">hello world</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/19/Android-Network-Retrofit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wptdxii">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://otg3f8t90.bkt.clouddn.com/2017/7/21/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wptdxii`s blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Retrofit使用总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-19T22:30:51+08:00">
+                2016-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇博客介绍和记录了一些Retrofit的操作<br><a id="more"></a></p>
+<h2 id="Retrofit简介"><a href="#Retrofit简介" class="headerlink" title="Retrofit简介"></a>Retrofit简介</h2><p>Retrofit非常适合于Restful url格式的请求，使用注解的方式提供功能。<br>Retrofit官方地址：<a href="https://github.com/square/retrofit/" target="_blank" rel="noopener">https://github.com/square/retrofit/</a><br>Retrofit文档地址：<a href="http://square.github.io/retrofit/" target="_blank" rel="noopener">http://square.github.io/retrofit/</a><br>转换器依赖： <a href="https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson" target="_blank" rel="noopener">converter-gson</a><br>RxJava适配器依赖：<a href="https://mvnrepository.com/artifact/com.squareup.retrofit2/adapter-rxjava" target="_blank" rel="noopener">adapter-rxjava</a><br>OkHttp日志拦截器依赖：<a href="https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor" target="_blank" rel="noopener">OkHttp Logging Interceptor</a><br>RxJava地址：<a href="https://github.com/ReactiveX/RxJava" target="_blank" rel="noopener">RxGithub</a><br>RxJava依赖地址：<a href="http://search.maven.org/#search%7Cga%7C1%7Cio.reactivex.rxjava" target="_blank" rel="noopener">RxJava依赖</a><br>RxAndroid地址：<a href="https://github.com/ReactiveX/RxAndroid" target="_blank" rel="noopener">RxAndroidGithub</a><br>RxAndroid依赖地址：<a href="http://search.maven.org/#search%7Cga%7C1%7Crxandroid" target="_blank" rel="noopener">RxAndroid依赖</a></p>
+<h2 id="Retrofit使用"><a href="#Retrofit使用" class="headerlink" title="Retrofit使用"></a>Retrofit使用</h2><h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><p>由于需要进行联网，所以需要在 AndroidManifest.xml文件中 添加网络权限：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.INTERNET"</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>在官方地址中查看最新的版本，最新版本依赖于 OKHttp,而且这部分不再支持替换。所以不需要显式的导入OkHttp,在 Retrofit 中已经导入 OkKhttp3<br>添加retrofit依赖<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="string">'com.squareup.retrofit2:retrofit:2.1.0'</span></span><br></pre></td></tr></table></figure></p>
+<p>添加转换器依赖<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="string">'com.squareup.retrofit2:converter-gson:2.0.2'</span><span class="comment">//添加转换器</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="封装数据"><a href="#封装数据" class="headerlink" title="封装数据"></a>封装数据</h3><p>例如返回的数据格式如下<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"error"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">"results"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"_id"</span>: <span class="string">"579ab0a8421aa90d36e960b4"</span>,</span><br><span class="line">      <span class="attr">"createdAt"</span>: <span class="string">"2016-07-29T09:26:00.838Z"</span>,</span><br><span class="line">      <span class="attr">"desc"</span>: <span class="string">"7.29"</span>,</span><br><span class="line">      <span class="attr">"publishedAt"</span>: <span class="string">"2016-07-29T09:37:39.219Z"</span>,</span><br><span class="line">      <span class="attr">"source"</span>: <span class="string">"chrome"</span>,</span><br><span class="line">      <span class="attr">"type"</span>: <span class="string">"福利"</span>,</span><br><span class="line">      <span class="attr">"url"</span>: <span class="string">"http://ww3.sinaimg.cn/large/610dc034jw1f6aipo68yvj20qo0qoaee.jpg"</span>,</span><br><span class="line">      <span class="attr">"used"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">"who"</span>: <span class="string">"代码家"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>根据返回的数据格式抽取基类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//泛型代指results字段</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseModel</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> error;</span><br><span class="line">    <span class="keyword">public</span> T results;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后封装Bean类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Benefit</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> String _id;</span><br><span class="line">  <span class="keyword">public</span> String createdAt;</span><br><span class="line">  <span class="keyword">public</span> String desc;</span><br><span class="line">  <span class="keyword">public</span> String publishedAt;</span><br><span class="line">  <span class="keyword">public</span> String source;</span><br><span class="line">  <span class="keyword">public</span> String type;</span><br><span class="line">  <span class="keyword">public</span> String url;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">boolean</span> used;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-使用"><a href="#3-使用" class="headerlink" title="3.使用"></a>3.使用</h3><h4 id="1-URL定义"><a href="#1-URL定义" class="headerlink" title="1. URL定义"></a>1. URL定义</h4><p>使用Retofit时URL地址由两部分拼接而成，由baseUrl 和接口中 “/“位置的不同具有不同的含义，通常baseUrl要以”/“ 结尾，而在Api接口中不以 “/“开头和结尾，才能得到正确的地址。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">    .baseUrl(<span class="string">"https://api.github.com/v3/"</span>)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">GitHubService</span> </span>&#123;</span><br><span class="line">  <span class="meta">@GET</span>(<span class="string">"/repos/&#123;owner&#125;/&#123;repo&#125;/contributors"</span>)</span><br><span class="line">  Call&lt;List&lt;Contributor&gt;&gt; repoContributors(</span><br><span class="line">      <span class="meta">@Path</span>(<span class="string">"owner"</span>) String owner,</span><br><span class="line">      <span class="meta">@Path</span>(<span class="string">"repo"</span>) String repo);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//解析的URL</span></span><br><span class="line"><span class="comment">//https://api.github.com/repos/square/retrofit/contributors</span></span><br></pre></td></tr></table></figure></p>
+<p>因为在接口中定义的路径以”/“开头，表示绝对地址的后缀路径，所有最终拼接出来的主机地址中没有v3。<br>如果有前缀”/“就代表着是一个绝对路径。删除了那个前缀的”/“， 将会得到正确的、包含了 v3 路径的全 URL<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">    .baseUrl(<span class="string">"https://api.github.com/v3/"</span>)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">GitHubService</span> </span>&#123;</span><br><span class="line">  <span class="meta">@GET</span>(<span class="string">"repos/&#123;owner&#125;/&#123;repo&#125;/contributors"</span>)</span><br><span class="line">  Call&lt;List&lt;Contributor&gt;&gt; repoContributors(</span><br><span class="line">      <span class="meta">@Path</span>(<span class="string">"owner"</span>) String owner,</span><br><span class="line">      <span class="meta">@Path</span>(<span class="string">"repo"</span>) String repo);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://api.github.com/v3/repos/square/retrofit/contributors</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="定义接口"><a href="#定义接口" class="headerlink" title="定义接口"></a>定义接口</h4><p>@Path表示动态Url<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GET</span>(<span class="string">"api/data/福利/&#123;number&#125;/&#123;page&#125;"</span>)</span><br><span class="line">    Call&lt;BaseModel&lt;ArrayList&lt;Benefit&gt;&gt;&gt; defaultBenefits(</span><br><span class="line">            <span class="meta">@Path</span>(<span class="string">"number"</span>) <span class="keyword">int</span> number,</span><br><span class="line">            <span class="meta">@Path</span>(<span class="string">"page"</span>) <span class="keyword">int</span> page</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="实现请求"><a href="#实现请求" class="headerlink" title="实现请求"></a>实现请求</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">                .baseUrl(<span class="string">"http://gank.io/"</span>)</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                .build();</span><br><span class="line">Api api = retrofit.create(Api.class);</span><br><span class="line">Call&lt;BaseModel&lt;ArrayList&lt;Benefit&gt;&gt;&gt; call = api.defaultBenefits(<span class="number">20</span>, <span class="number">1</span>);</span><br><span class="line"><span class="comment">//call.execute()同步</span></span><br><span class="line"><span class="comment">//call.enqueue()异步</span></span><br><span class="line">call.enqueue(<span class="keyword">new</span> Callback&lt;BaseModel&lt;ArrayList&lt;Benefit&gt;&gt;&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;BaseModel&lt;ArrayList&lt;Benefit&gt;&gt;&gt; call, Response&lt;BaseModel&lt;ArrayList&lt;Benefit&gt;&gt;&gt; response)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// TODO</span></span><br><span class="line">            BaseModel&lt;ArrayList&lt;Benefit&gt;&gt;&gt; dataList = response.body().reuslts;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call&lt;BaseModel&lt;ArrayList&lt;Benefit&gt;&gt;&gt; call, Throwable t)</span> </span>&#123;</span><br><span class="line">                <span class="comment">// TODO</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<p>无论同步操作还是异步操作，每个Call对象实例之能被执行一次，多次执行会抛出 IllegalStateException:Alredy executed，异常，如果需要多次执行同一个Call对象实例，可以使用Clone()方法克隆一个对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Api api = retrofit.create(Api.class);</span><br><span class="line"><span class="comment">//只能被执行一次</span></span><br><span class="line">Call&lt;BaseModel&lt;ArrayList&lt;Benefit&gt;&gt;&gt; call = api.defaultBenefits(<span class="number">20</span>, <span class="number">1</span>);</span><br><span class="line">Call&lt;BaseModel&lt;ArrayList&lt;Benefit&gt;&gt;&gt; cloneCall = call.clone();</span><br><span class="line"><span class="comment">//cloneCall.execute() 同步</span></span><br><span class="line"><span class="comment">//cloneCall.enqueue() 异步</span></span><br></pre></td></tr></table></figure></p>
+<p>除了以上动态Url请求外，还有其他注解表示不同的请求</p>
+<h4 id="设置查询参数"><a href="#设置查询参数" class="headerlink" title="设置查询参数"></a>设置查询参数</h4><p>@Query设置查询参数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//http://baseurl/users?sortby=username</span></span><br><span class="line"><span class="comment">//查询参数只能使用注解@Query，而不能使用注解@Path改写为</span></span><br><span class="line"><span class="comment">//@GET("users?sortby=&#123;username&#125;")</span></span><br><span class="line"><span class="comment">//Call&lt;BaseModel&lt;Arraylist&lt;User&gt;&gt;&gt; queryUser(@Path("username") String userName);</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GET</span>(<span class="string">"users"</span>)</span><br><span class="line">    Call&lt;BaseModel&lt;ArrayList&lt;User&gt;&gt;&gt; queryUser(</span><br><span class="line">            <span class="meta">@Query</span>(<span class="string">"sortby"</span>) String username</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="设置请求头"><a href="#设置请求头" class="headerlink" title="设置请求头"></a>设置请求头</h4><p><strong>静态添加</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span></span>&#123;</span><br><span class="line">    <span class="meta">@Headers</span>(&#123;</span><br><span class="line">        <span class="string">"Accept: application/vnd.github.v3.full+json"</span>,</span><br><span class="line">        <span class="string">"User-Agent: RetrofitBean-Sample-App"</span>,</span><br><span class="line">        <span class="string">"name:"</span>wptdxii<span class="string">"</span></span><br><span class="line"><span class="string">    &#125;)</span></span><br><span class="line"><span class="string">    @GET("</span>users/&#123;name&#125;)</span><br><span class="line">    Call&lt;BaseModel&lt;User&gt;&gt; getUser(<span class="meta">@Path</span>(<span class="string">"name"</span>) String name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>动态添加</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GET</span>(<span class="string">"users/&#123;name&#125;)</span></span><br><span class="line"><span class="string">    Call&lt;BaseModel&lt;User&gt;&gt; getUser(</span></span><br><span class="line"><span class="string">        @Header("</span>Accept<span class="string">") String accept,</span></span><br><span class="line"><span class="string">        @Header("</span>User-Agent<span class="string">") String agent,</span></span><br><span class="line"><span class="string">        @Header("</span>name<span class="string">") String name,</span></span><br><span class="line"><span class="string">        @Path("</span><span class="string">"name) String name</span></span><br><span class="line"><span class="string">    );</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>可以使用@Header注解来动态更新请求头。并且必须向@Header提供相应的参数。如果参数值为空, 则该请求头将会被忽略。如果参数值不为空, 则会调用该值的toString并使用其结果。使用静态或者动态添加请求头不会相互覆盖，所有同名的请求头都会包含在请求中</p>
+<p><strong>统一请求头</strong><br>当需要使用同一请求头时需要为Okhtpp设置拦截器<br>创建请求头拦截器<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeaderInterceptor</span> <span class="keyword">implements</span> <span class="title">Interceptor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Response <span class="title">intercept</span><span class="params">(Interceptor.Chain chain)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Request original = chain.request();</span><br><span class="line"></span><br><span class="line">        Request request = original.newBuilder()</span><br><span class="line">                <span class="comment">//使用header会重写请求头</span></span><br><span class="line">               <span class="comment">// .header("Token", "token1")</span></span><br><span class="line">               <span class="comment">// .header("Token", "token2")</span></span><br><span class="line">               <span class="comment">//使用addHeader不会重写请求头</span></span><br><span class="line">               <span class="comment">// .addHeader("Token", "token1")</span></span><br><span class="line">               <span class="comment">// .addHeader("Token", "token2")</span></span><br><span class="line">                .addHeader(<span class="string">"Accept"</span>, <span class="string">"application/vnd.github.v3.full+json"</span>)</span><br><span class="line">                .addHeader(<span class="string">"User-Agent"</span>, <span class="string">"C-RetrofitBean-Sample-App"</span>)</span><br><span class="line">                .addHeader(<span class="string">"name"</span>, <span class="string">"wptdxii"</span>) <span class="comment">//缩放比 1/2/3</span></span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> chain.proceed(request);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后将拦截器设置给OkHttp</p>
+<h4 id="直接请求URL"><a href="#直接请求URL" class="headerlink" title="直接请求URL"></a>直接请求URL</h4><p>当URl不满足RESTFUL类型或者baseUrl不同时，可以传入完整URL<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span></span>&#123;</span><br><span class="line">    <span class="meta">@GET</span></span><br><span class="line">    Call&lt;BaseMode&lt;User&gt;&gt; get(<span class="meta">@Url</span> String url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="实现POST请求"><a href="#实现POST请求" class="headerlink" title="实现POST请求"></a>实现POST请求</h4><p>向服务器上传json字符串数据<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这里直接传入对象，内部通过converter自动转换为字符串</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span></span>&#123;</span><br><span class="line">    <span class="meta">@POST</span>(<span class="string">"add"</span>)</span><br><span class="line">    Call&lt;BaseModel&lt;ArrayList&lt;User&gt;&gt;&gt; addUser(<span class="meta">@Body</span> User user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="实现表单上传"><a href="#实现表单上传" class="headerlink" title="实现表单上传"></a>实现表单上传</h4><p>@FormUrlEncoded注解表示上传键值对，用来发送表单数据<br>@Field注解和参数来指定每个表单项的Key，value为参数的值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span></span>&#123;</span><br><span class="line">    <span class="meta">@FormUrlEncoded</span></span><br><span class="line">    <span class="meta">@POST</span>(<span class="string">"user/edit"</span>)</span><br><span class="line">    Call&lt;BaseModel&lt;User&gt;&gt; update(<span class="meta">@Field</span>(<span class="string">"first_name"</span>) String firstName, <span class="meta">@Field</span>(<span class="string">"last_name"</span>) String lastName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当有很多个表单参数时<br>@FieldMap注解和Map对象参数来指定每个表单项的Key，value的值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span></span>&#123;</span><br><span class="line">    <span class="meta">@FormUrlEncoded</span></span><br><span class="line">    <span class="meta">@POST</span>(<span class="string">"user/edit"</span>)</span><br><span class="line">    Call&lt;BaseModel&lt;Uer&gt;&gt; update(<span class="meta">@FieldMap</span> Map&lt;String,String&gt; fieldMap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="实现单文件上传"><a href="#实现单文件上传" class="headerlink" title="实现单文件上传"></a>实现单文件上传</h4><p>@Multipart表示允许使用多个@Part<br>@MultipartBody.Part表示要上传的文件<br>@Part表示键值对<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Multipart</span></span><br><span class="line">    <span class="meta">@POST</span>(<span class="string">"register"</span>)</span><br><span class="line">    <span class="function">Call&lt;User&gt; <span class="title">registUser</span><span class="params">(@Part MultipartBody.Part photo, @Part(<span class="string">"username"</span>)</span> RequestBody username, @<span class="title">Part</span><span class="params">(<span class="string">"password"</span>)</span> RequestBody password)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用方式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory,<span class="string">"icon.png"</span>);</span><br><span class="line">RequestBody photoRequestBody = RequestBody.create(MediaType.parse(<span class="string">"image/png"</span>),file);</span><br><span class="line"><span class="comment">//第一个参数表示服务器对应的key，第二个参数表示服务器对应的文件名，第三个参数表示文件</span></span><br><span class="line">MultipartBody.Part photo =</span><br><span class="line"><span class="comment">//可以动态设置文件名</span></span><br><span class="line">MultipartBody.Part.createFromeData(<span class="string">"phtots"</span>,<span class="string">"icon.png"</span>, photoRequestBody);</span><br><span class="line"></span><br><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">                .baseUrl(<span class="string">"http://gank.io/"</span>)</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                .build();</span><br><span class="line">Api api = retrofit.create(Api.class);</span><br><span class="line">Call&lt;User&gt; call = api.registUser(photo, RequestBody.create(<span class="keyword">null</span>, <span class="string">"admin"</span>), RequestBody.create(<span class="keyword">null</span>, <span class="string">"123"</span>));</span><br><span class="line"><span class="comment">//TODO</span></span><br></pre></td></tr></table></figure></p>
+<p>@MultipartBody.Part表示上传的文件，如果要使用@Part RequestBody的方式表示上传的文件，则需要改写为<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span></span>&#123;</span><br><span class="line">    <span class="meta">@Multipart</span></span><br><span class="line">    <span class="meta">@Post</span>(<span class="string">"api/Accounts/editcount"</span>)</span><br><span class="line">    <span class="comment">//文件名采用了硬编码，不能动态指定</span></span><br><span class="line">    Call&lt;BaseModel&lt;User&gt;&gt; login(<span class="meta">@Part</span>(<span class="string">"file\":filename=\"icon.png"</span>) RequestBody file,<span class="meta">@Part</span>(<span class="string">"name"</span>) RequestBody name, <span class="meta">@Part</span>(<span class="string">"id"</span>) RequestBody id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种方式上传的文件名采用了硬编码，不能动态指定<br>使用方式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory,<span class="string">"icon.png"</span>);</span><br><span class="line">RequestBody photo = RequestBody.create(MediaType.parse(<span class="string">"image/png"</span>),file);</span><br><span class="line"></span><br><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">                .baseUrl(<span class="string">"http://gank.io/"</span>)</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                .build();</span><br><span class="line">Api api = retrofit.create(Api.class);</span><br><span class="line">Call&lt;User&gt; call = api.registUser(photo, RequestBody.create(<span class="keyword">null</span>, <span class="string">"admin"</span>), RequestBody.create(<span class="keyword">null</span>, <span class="string">"123"</span>));</span><br><span class="line"><span class="comment">//TODO</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="实现多文件上传"><a href="#实现多文件上传" class="headerlink" title="实现多文件上传"></a>实现多文件上传</h4><p>@PartMap用于标识Map，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span></span>&#123;</span><br><span class="line">    <span class="meta">@Mulipart</span></span><br><span class="line">    <span class="meta">@Post</span>(<span class="string">"register"</span>)</span><br><span class="line">    Call&lt;BaseModel&lt;User&gt;&gt; regist(<span class="meta">@PartMap</span> Map&lt;String, RequestBody&gt; params, <span class="meta">@Part</span>(<span class="string">"password"</span>) ReqeustBody password);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用方式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(), <span class="string">"message.png"</span>);</span><br><span class="line">        RequestBody photo = RequestBody.create(MediaType.parse(<span class="string">"image/png"</span>, file);</span><br><span class="line">Map&lt;String,RequestBody&gt; photos = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">photos.put(<span class="string">"photos\"; filename=\"icon.png"</span>, photo);</span><br><span class="line">photos.put(<span class="string">"username"</span>,  RequestBody.create(<span class="keyword">null</span>, <span class="string">"admin"</span>));</span><br><span class="line"></span><br><span class="line">Call&lt;User&gt; call = userBiz.registerUser(photos, RequestBody.create(<span class="keyword">null</span>, <span class="string">"123"</span>));</span><br><span class="line"><span class="comment">//TODO</span></span><br></pre></td></tr></table></figure></p>
+<p>Map可以存放一个或者多个文件，也可以存放简单的键值对，当然在上边示例中，也可以将用户名键值对单独使用@Part，仅将将上传的文件放入Map中，上传文件的键值为(“photos\”;filename=\”icon.png”),其中photos表示服务器对应的key，filename表示上传到服务器的文件名，支持动态设置，如将本地message.png重命名为icon.png</p>
+<h4 id="实现下载"><a href="#实现下载" class="headerlink" title="实现下载"></a>实现下载</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span></span>&#123;</span><br><span class="line">    <span class="meta">@GET</span>(<span class="string">"download"</span>)</span><br><span class="line">    <span class="function">Call&lt;ResponseBody&gt; <span class="title">download</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">call.enqueue(<span class="keyword">new</span> Callback&lt;ResponseBody&gt;()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;ResponseBody&gt; call, Response&lt;ResponseBody&gt; response)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        InputStream is = response.body().byteStream();</span><br><span class="line">        <span class="comment">//TODO save file</span></span><br><span class="line">        <span class="comment">//切换到子线程进行io操作</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call&lt;ResponseBody&gt; call, Throwable t)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//TODO</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>onReponse回调虽然在UI线程，但是还是要处理io操作，在这里还要另外开线程操作，所有直接并不适合进行下载，可以使用OKHttp下载或者可以考虑同步的方式下载</p>
+<h2 id="Retrofit配置"><a href="#Retrofit配置" class="headerlink" title="Retrofit配置"></a>Retrofit配置</h2><h3 id="1-配置OkHttpClient"><a href="#1-配置OkHttpClient" class="headerlink" title="1.配置OkHttpClient"></a>1.配置OkHttpClient</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> OkHttpClient okHttpClient = <span class="keyword">new</span> OkHttpClient.Builder().addInterceptor(<span class="keyword">new</span> Interceptor() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> okhttp3.<span class="function">Response <span class="title">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        </span><br><span class="line">Retrofit retrofit = <span class="keyword">new</span> RetrofitBuilder()</span><br><span class="line">                .callFactory(okHttpClient)</span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure>
+<h3 id="添加Converter"><a href="#添加Converter" class="headerlink" title="添加Converter"></a>添加Converter</h3><p><strong>添加Gson Converter</strong><br>Retrofit现在已经不提供默认的 converter 了，如果不显性的声明一个可用的 Converter 的话，Retrofit 是会报错<br>使用官方提供的Converter<br>添加依赖<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用Gson</span></span><br><span class="line"><span class="keyword">compile</span> <span class="string">'com.squareup.retrofit2:converter-gson:2.1.0'</span></span><br><span class="line"><span class="comment">//使用JackSon</span></span><br><span class="line"><span class="keyword">compile</span> <span class="string">'com.squareup.retrofit2:converter-jackson:2.1.0'</span></span><br></pre></td></tr></table></figure></p>
+<p>在Retrofit2中可以绑定多个Converter对象，服务器返回不同格式的数据可以使用不同的Converter进行反序列化。并且Converter是按照被添加的顺序顺次调用的，当前Converter不能解析该类型的数据时，会调用下一个Converter。对于Proto格式的数据，Protobuff 都是从一个名叫 Message 或者 MessageLite 的类继承而来。所以，通过判断这个类是否继承自 Message，继而选择对应的Converter对象进行反序列化。但通常JSON格式的数据没有明确的判断条件，所有JSON Converter对象会处理任何的数据，所以一定要将JSON Converter对象放在最后<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加 converter 的顺序很重要</span></span><br><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">    .baseUrl(<span class="string">"https://api.github.com"</span>)</span><br><span class="line">    .addConverterFactory(ProtoConverterFactory.create())</span><br><span class="line">    .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure></p>
+<p><strong>自定义Gson</strong><br>当使用官方提供的 Gson Converter时，如果需要调整一些格式，例如时间格式，可以自定义Gson<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Gson gson = <span class="keyword">new</span> Gson.Builder()</span><br><span class="line">        .setDateFormat(<span class="string">"yyyy-MM-dd'T'HH:mm:ssZ"</span>)</span><br><span class="line">        .create();</span><br><span class="line">        </span><br><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">        .baseUrl(<span class="string">"https://api.github.com"</span>)</span><br><span class="line">        .addConverterFactory(GsonConverterFactory.create(gson))</span><br><span class="line">        .build();</span><br></pre></td></tr></table></figure></p>
+<p>如果希望自定义Converter，需要分别创建抽象类Converter.Factory的子类，接口Converter&lt;T, RequestBody&gt;的实现，和接口Converter&lt;ResponseBody, T&gt;的实现，例如当希望使用FastJson解析数据时<br>定义FastJsonConverterFactory<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">FastJsonConverterFactory</span> <span class="keyword">extends</span> <span class="title">Converter</span>.<span class="title">Factory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> FastJsonConverterFactory <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> create(<span class="keyword">new</span> FastJsonConfig());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> FastJsonConverterFactory <span class="title">create</span><span class="params">(FastJsonConfig fastJsonConfig)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FastJsonConverterFactory(fastJsonConfig);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> FastJsonConfig fastJsonConfig;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">FastJsonConverterFactory</span><span class="params">(FastJsonConfig fastJsonConfig)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(fastJsonConfig == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"fastJsonConfig == null"</span>);</span><br><span class="line">        <span class="keyword">this</span>.fastJsonConfig = fastJsonConfig;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Converter&lt;ResponseBody, ?&gt; responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FastJsonResponseBodyConverter&lt;&gt;(fastJsonConfig,type);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Converter&lt;?, RequestBody&gt; requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FastJsonRequestBodyConverter&lt;&gt;(fastJsonConfig);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实现FastJsonRequestBodyConverter<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">FastJsonRequestBodyConverter</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Converter</span>&lt;<span class="title">T</span>, <span class="title">RequestBody</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> MediaType MEDIA_TYPE = MediaType.parse(<span class="string">"application/json; charset=UTF-8"</span>);</span><br><span class="line">    <span class="keyword">private</span> FastJsonConfig fastJsonConfig;</span><br><span class="line">   </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FastJsonRequestBodyConverter</span><span class="params">(FastJsonConfig fastJsonConfig)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.fastJsonConfig = fastJsonConfig;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RequestBody <span class="title">convert</span><span class="params">(T value)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        SerializeConfig serializeConfig = fastJsonConfig.getSerializeConfig();</span><br><span class="line">        SerializerFeature[] serializerFeatures = fastJsonConfig.getSerializerFeatures();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">byte</span>[] content;</span><br><span class="line">        <span class="keyword">if</span> (serializeConfig != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (serializerFeatures != <span class="keyword">null</span>) &#123;</span><br><span class="line">                content = JSON.toJSONBytes(value, serializeConfig, serializerFeatures);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                content = JSON.toJSONBytes(value, serializeConfig);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (serializerFeatures != <span class="keyword">null</span>) &#123;</span><br><span class="line">                content = JSON.toJSONBytes(value, serializerFeatures);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                content = JSON.toJSONBytes(value);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> RequestBody.create(MEDIA_TYPE, content);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实现FastJsonResponseBodyConverter<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">FastJsonResponseBodyConverter</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Converter</span>&lt;<span class="title">ResponseBody</span>, <span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Type type;</span><br><span class="line">    <span class="keyword">private</span> FastJsonConfig fastJsonConfig;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FastJsonResponseBodyConverter</span><span class="params">(FastJsonConfig fastJsonConfig, Type type)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.fastJsonConfig = fastJsonConfig;</span><br><span class="line">        <span class="keyword">this</span>.type = type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">convert</span><span class="params">(ResponseBody value)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ParserConfig config = fastJsonConfig.getParserConfig();</span><br><span class="line">        <span class="keyword">int</span> featureValues = fastJsonConfig.getFeatureValues();</span><br><span class="line">        Feature[] features = fastJsonConfig.getFeatures();</span><br><span class="line">        <span class="comment">//使用Okio提供效率</span></span><br><span class="line">        BufferedSource bufferedSource = Okio.buffer(value.source());</span><br><span class="line">        String tempStr = bufferedSource.readUtf8();</span><br><span class="line">        bufferedSource.close();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> JSON.parseObject(tempStr,type, config, featureValues,</span><br><span class="line">                features != <span class="keyword">null</span> ? features : FastJsonConfig.EMPTY_SERIALIZER_FEATURES);</span><br><span class="line">        <span class="comment">//另外一种写法</span></span><br><span class="line"><span class="comment">//        try &#123;</span></span><br><span class="line"><span class="comment">//            return JSON.parseObject(value.string(), type, config, featureValues,</span></span><br><span class="line"><span class="comment">//                    features != null ? features : FastJsonConfig.EMPTY_SERIALIZER_FEATURES);</span></span><br><span class="line"><span class="comment">//        &#125; finally &#123;</span></span><br><span class="line"><span class="comment">//            value.close();</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实现FastJson，为FastJson提供配置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FastJsonConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Feature[] EMPTY_SERIALIZER_FEATURES = <span class="keyword">new</span> Feature[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ParserConfig parserConfig;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> featureValues;</span><br><span class="line">    <span class="keyword">private</span> Feature[] features;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> SerializeConfig serializeConfig;</span><br><span class="line">    <span class="keyword">private</span> SerializerFeature[] serializerFeatures;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FastJsonConfig</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//使用默认反序列化配置</span></span><br><span class="line">        <span class="keyword">this</span>.parserConfig = ParserConfig.getGlobalInstance();</span><br><span class="line">        <span class="keyword">this</span>.featureValues = JSON.DEFAULT_PARSER_FEATURE;</span><br><span class="line">        </span><br><span class="line">         <span class="comment">//使用默认序列化配置</span></span><br><span class="line"><span class="comment">//        this.serializeConfig = SerializeConfig.globalInstance;</span></span><br><span class="line">        <span class="comment">//使用默认序列化配置</span></span><br><span class="line"><span class="comment">//        this.serializerFeatures = SerializerFeature.values();</span></span><br><span class="line">        <span class="comment">//使用自定义序列化配置</span></span><br><span class="line"><span class="comment">//        this.serializerFeatures = new SerializerFeature[] &#123;</span></span><br><span class="line"><span class="comment">//                SerializerFeature.WriteNullBooleanAsFalse,//boolean为null时输出false</span></span><br><span class="line"><span class="comment">//                SerializerFeature.WriteMapNullValue, //输出空置的字段</span></span><br><span class="line"><span class="comment">//                SerializerFeature.WriteNonStringKeyAsString,//如果key不为String 则转换为String 比如Map的key为Integer</span></span><br><span class="line"><span class="comment">//                SerializerFeature.WriteNullListAsEmpty,//list为null时输出[]</span></span><br><span class="line"><span class="comment">//                SerializerFeature.WriteNullNumberAsZero,//number为null时输出0</span></span><br><span class="line"><span class="comment">//                SerializerFeature.WriteNullStringAsEmpty//String为null时输出""      </span></span><br><span class="line"><span class="comment">//        &#125;;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ParserConfig <span class="title">getParserConfig</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> parserConfig;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFeatureValues</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> featureValues;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> Feature[] getFeatures() &#123;</span><br><span class="line">        <span class="keyword">return</span> features;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> SerializeConfig <span class="title">getSerializeConfig</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> serializeConfig;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> SerializerFeature[] getSerializerFeatures() &#123;</span><br><span class="line">        <span class="keyword">return</span> serializerFeatures;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="增加日志信息"><a href="#增加日志信息" class="headerlink" title="增加日志信息"></a>增加日志信息</h3><p>在retrofit2.0中是没有日志功能的。但是retrofit2.0中依赖OkHttp，所以也就能够通过OkHttp中的interceptor来实现实际的底层的请求和响应日志，为其自定自定义的OkHttpClient。<br>添加依赖：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="string">'com.squareup.okhttp3:logging-interceptor:3.1.2'</span></span><br></pre></td></tr></table></figure></p>
+<p>创建Interceptor：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">HttpLoggingInterceptor loggingInterceptor = <span class="keyword">new</span> HttpLoggingInterceptor();</span><br><span class="line">            loggingInterceptor.setLevel(BuildConfig.DEBUG?</span><br><span class="line">                    HttpLoggingInterceptor.Level.BODY: HttpLoggingInterceptor.Level.NONE);</span><br><span class="line">                    </span><br><span class="line">OkHttpClient okHttpClient = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">                .addInterceptor(interceptor)</span><br><span class="line">                .build();</span><br><span class="line">                </span><br><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">                .baseUrl(BASE_URL)</span><br><span class="line">                .client(okHttpClient)</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure></p>
+<h3 id="Retrofit设置缓存"><a href="#Retrofit设置缓存" class="headerlink" title="Retrofit设置缓存"></a>Retrofit设置缓存</h3><p>当需要设置缓存时，需要对底层依赖的的OkHttp进行设置</p>
+<p><strong>开启OkHttp缓存</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//设置缓存目录</span></span><br><span class="line">File httpCacheDirectory = <span class="keyword">new</span> File(App.getInstance().getCacheDir(), <span class="string">"responses"</span>);</span><br><span class="line"><span class="keyword">int</span> cacheSize = <span class="number">10</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line">Cache cache = <span class="keyword">new</span> Cache(httpCacheDirectory, cacheSize);</span><br><span class="line"></span><br><span class="line">mOkHttpClient = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">                   .cache(cache)</span><br><span class="line">                   .build();</span><br></pre></td></tr></table></figure></p>
+<p><strong>设置拦截器</strong><br>根据不同的缓存策略，可以创建不同的拦截器</p>
+<p>缓存第一种类型<br>配置单个请求的@Headers，设置此请求的缓存策略,不影响其他请求的缓存策略,不设置则没有缓存。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Api</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Headers</span>(<span class="string">"Cache-Control:max-age=640000)</span></span><br><span class="line"><span class="string">    Call&lt;BaseModel&lt;User&gt;&gt; getUser();</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>缓存第二种类型<br>有网和没网都先读缓存，统一缓存策略<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ForceCacheInterceptor</span>  <span class="keyword">implements</span> <span class="title">Interceptor</span> </span>&#123;</span><br><span class="line">    <span class="comment">//缓存超时时间</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_AGE = <span class="number">60</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Response <span class="title">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Request request = chain.request();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//读取请求头中配置的Cache-Control</span></span><br><span class="line">        String cacheControl = request.cacheControl().toString();</span><br><span class="line">        <span class="keyword">if</span> (TextUtils.isEmpty(cacheControl)) &#123;</span><br><span class="line">            cacheControl = <span class="string">"public, max-age="</span> + MAX_AGE;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Response response = chain.proceed(request);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将缓存设置到响应中</span></span><br><span class="line">        <span class="keyword">return</span> response.newBuilder()</span><br><span class="line">                .header(<span class="string">"Cache-Control"</span>, cacheControl)</span><br><span class="line">                .removeHeader(<span class="string">"Pragma"</span>) <span class="comment">//移除干扰信息</span></span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>缓存第三种类型<br>结合前两种，离线读取本地缓存，在线获取最新数据(读取单个请求的请求头，亦可统一设置)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OfflineCacheInterceptor</span> <span class="keyword">implements</span> <span class="title">Interceptor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Response <span class="title">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    </span><br><span class="line">        Request request = chain.request();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!NetUtils.isConnected(App.getInstance())) &#123;</span><br><span class="line">            request = request.newBuilder()</span><br><span class="line">                    .cacheControl(CacheControl.FORCE_CACHE)</span><br><span class="line">                    .build();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Response response = chain.proceed(request);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (NetUtils.isConnected(App.getInstance())) &#123;</span><br><span class="line">            <span class="keyword">int</span> maxAge = <span class="number">0</span>; <span class="comment">// read from cache</span></span><br><span class="line">            response = response.newBuilder()</span><br><span class="line">                    .removeHeader(<span class="string">"Pragma"</span>)<span class="comment">// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效</span></span><br><span class="line">                    .header(<span class="string">"Cache-Control"</span>, <span class="string">"public ,max-age="</span> + maxAge)</span><br><span class="line">                    .build();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> maxStale = <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">28</span>; <span class="comment">// tolerate 4-weeks stale</span></span><br><span class="line">            response = response.newBuilder()</span><br><span class="line">                    .removeHeader(<span class="string">"Pragma"</span>)</span><br><span class="line">                    .header(<span class="string">"Cache-Control"</span>, <span class="string">"public, only-if-cached, max-stale="</span> + maxStale)</span><br><span class="line">                    .build();</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> response;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><h3 id="网络状态监听"><a href="#网络状态监听" class="headerlink" title="网络状态监听"></a>网络状态监听</h3><h3 id="设置公共参数"><a href="#设置公共参数" class="headerlink" title="设置公共参数"></a>设置公共参数</h3><h2 id="Retrofit封装"><a href="#Retrofit封装" class="headerlink" title="Retrofit封装"></a>Retrofit封装</h2><h2 id="Retrofit源码解析"><a href="#Retrofit源码解析" class="headerlink" title="Retrofit源码解析"></a>Retrofit源码解析</h2>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/retrofit/" rel="tag"># retrofit</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/15/启动界面Splash的最佳实践/" rel="next" title="启动界面Splash的最佳实践">
+                <i class="fa fa-chevron-left"></i> 启动界面Splash的最佳实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/20/Android逆向总结/" rel="prev" title="Android逆向总结">
+                Android逆向总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://otg3f8t90.bkt.clouddn.com/2017/7/21/avatar.jpg"
+               alt="wptdxii" />
+          <p class="site-author-name" itemprop="name">wptdxii</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">46</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wptdxii" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005055245629016/home" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit简介"><span class="nav-number">1.</span> <span class="nav-text">Retrofit简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit使用"><span class="nav-number">2.</span> <span class="nav-text">Retrofit使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加依赖"><span class="nav-number">2.1.</span> <span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#封装数据"><span class="nav-number">2.2.</span> <span class="nav-text">封装数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-使用"><span class="nav-number">2.3.</span> <span class="nav-text">3.使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-URL定义"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. URL定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义接口"><span class="nav-number">2.3.2.</span> <span class="nav-text">定义接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现请求"><span class="nav-number">2.3.3.</span> <span class="nav-text">实现请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置查询参数"><span class="nav-number">2.3.4.</span> <span class="nav-text">设置查询参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置请求头"><span class="nav-number">2.3.5.</span> <span class="nav-text">设置请求头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接请求URL"><span class="nav-number">2.3.6.</span> <span class="nav-text">直接请求URL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现POST请求"><span class="nav-number">2.3.7.</span> <span class="nav-text">实现POST请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现表单上传"><span class="nav-number">2.3.8.</span> <span class="nav-text">实现表单上传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现单文件上传"><span class="nav-number">2.3.9.</span> <span class="nav-text">实现单文件上传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现多文件上传"><span class="nav-number">2.3.10.</span> <span class="nav-text">实现多文件上传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现下载"><span class="nav-number">2.3.11.</span> <span class="nav-text">实现下载</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit配置"><span class="nav-number">3.</span> <span class="nav-text">Retrofit配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-配置OkHttpClient"><span class="nav-number">3.1.</span> <span class="nav-text">1.配置OkHttpClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加Converter"><span class="nav-number">3.2.</span> <span class="nav-text">添加Converter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#增加日志信息"><span class="nav-number">3.3.</span> <span class="nav-text">增加日志信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Retrofit设置缓存"><span class="nav-number">3.4.</span> <span class="nav-text">Retrofit设置缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常处理"><span class="nav-number">3.5.</span> <span class="nav-text">异常处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络状态监听"><span class="nav-number">3.6.</span> <span class="nav-text">网络状态监听</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置公共参数"><span class="nav-number">3.7.</span> <span class="nav-text">设置公共参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit封装"><span class="nav-number">4.</span> <span class="nav-text">Retrofit封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit源码解析"><span class="nav-number">5.</span> <span class="nav-text">Retrofit源码解析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wptdxii</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
