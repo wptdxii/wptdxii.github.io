@@ -7,9 +7,7 @@
 <meta name="author"
     content="wptdxii ">
 <meta name="description"
-    content="生命周期 Activity 正常生命周期 正常情况下，Activity 有如下生命周期方法：
-生命周期方法的说明：
- onCreate()：该回调必须实现，用于进行初始化(成员变量也要在该回调中进行初始化)，初始化 Activity 生命周期中只发生一次的操作。此时 Activity 不可见 onRestart()：Activity 从不可见状态回到可见状态时会回调该方法如切换到桌面再返回，或者打开新的非透明主题的 Activity 再返回。此时 Activity 不可见 onStart()：Activity 进入启动状态时会回调该方法，此时 Activity 处于可见状态，但还未出现在前台，未获取焦点，无法与用户交互。这个回调可以用来初始化在 Activity 整个生命周期可能发生多次的操作， 初始化在 onStop() 中释放的资源。例如注册用于监听 UI 状态变化的 BroadcastReceiver onResume()：Activity 已可见，且处于前台，可以与用户进行交互。这个回调可以用来初始化在 Activity 获取焦点时才会使用的组件，初始化会在 onPause() 中释放的资源，例如启动动画、播放视频等 onPause()：Activity 可见，但失去焦点，不能与用户进行交互。这个回调中可以用来释放在失去焦点时不需要的资源，如暂停动画、视频播放，注销 BroadcastReceiver、传感器等，也可以用来做一些轻量级的数据存储， 但是注意不能太耗时，例如保存用户数据、进项网络请求、开启数据库事务等，因为这会影响到新的 Activity 的显示，Parent Activity 的 onPause() 必须先执行完， Child Activity 才会启动 onStop()：Activity 进入不可见状态，该方法中可以做稍微重量级的回收工作，释放在不可见状态下不需要的资源，或者会造成内存泄漏的资源(因为有些情况下系统杀死应用进程时不会回调 onDestory()) onDestory()：Activity 生命周期的最后一个回调，所有未释放的资源可以在这里释放，在调用 finish() 或者内存不足系统临时杀死应用进程时会回调该方法(有些情况下系统杀死应用进程不会回调该方法， 所以 onDestory() 不是一定会被调用)，可以使用 isFinishing() 来区分这两种场景。   在 onPause() 和 onStop() 中可以通过 isFinishing() 来判断应用是暂处这两种状态还是会回调 onDestory()" />
+    content="生命周期 Activity 正常生命周期 正常情况下，Activity 有如下生命周期方法： 生命周期方法的说明： onCreate()：该回调必须实现，用于进行初始" />
 <meta name="keywords" content="homepage, blog, informatics, development, programming, projects, software" />
 <meta name="robots" content="noodp" />
 <link rel="canonical" href="https://wptdxii.github.io/posts/android-components/" />
@@ -39,23 +37,19 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <meta name="theme-color" content="#252627">
 <meta itemprop="name" content="Android 四大组件总结">
-<meta itemprop="description" content="生命周期 Activity 正常生命周期 正常情况下，Activity 有如下生命周期方法：
-生命周期方法的说明：
- onCreate()：该回调必须实现，用于进行初始化(成员变量也要在该回调中进行初始化)，初始化 Activity 生命周期中只发生一次的操作。此时 Activity 不可见 onRestart()：Activity 从不可见状态回到可见状态时会回调该方法如切换到桌面再返回，或者打开新的非透明主题的 Activity 再返回。此时 Activity 不可见 onStart()：Activity 进入启动状态时会回调该方法，此时 Activity 处于可见状态，但还未出现在前台，未获取焦点，无法与用户交互。这个回调可以用来初始化在 Activity 整个生命周期可能发生多次的操作， 初始化在 onStop() 中释放的资源。例如注册用于监听 UI 状态变化的 BroadcastReceiver onResume()：Activity 已可见，且处于前台，可以与用户进行交互。这个回调可以用来初始化在 Activity 获取焦点时才会使用的组件，初始化会在 onPause() 中释放的资源，例如启动动画、播放视频等 onPause()：Activity 可见，但失去焦点，不能与用户进行交互。这个回调中可以用来释放在失去焦点时不需要的资源，如暂停动画、视频播放，注销 BroadcastReceiver、传感器等，也可以用来做一些轻量级的数据存储， 但是注意不能太耗时，例如保存用户数据、进项网络请求、开启数据库事务等，因为这会影响到新的 Activity 的显示，Parent Activity 的 onPause() 必须先执行完， Child Activity 才会启动 onStop()：Activity 进入不可见状态，该方法中可以做稍微重量级的回收工作，释放在不可见状态下不需要的资源，或者会造成内存泄漏的资源(因为有些情况下系统杀死应用进程时不会回调 onDestory()) onDestory()：Activity 生命周期的最后一个回调，所有未释放的资源可以在这里释放，在调用 finish() 或者内存不足系统临时杀死应用进程时会回调该方法(有些情况下系统杀死应用进程不会回调该方法， 所以 onDestory() 不是一定会被调用)，可以使用 isFinishing() 来区分这两种场景。   在 onPause() 和 onStop() 中可以通过 isFinishing() 来判断应用是暂处这两种状态还是会回调 onDestory()">
+<meta itemprop="description" content="生命周期 Activity 正常生命周期 正常情况下，Activity 有如下生命周期方法： 生命周期方法的说明： onCreate()：该回调必须实现，用于进行初始">
 
 
 <meta itemprop="datePublished" content="2019-04-05T23:49:16&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-07T21:42:14&#43;08:00" />
-<meta itemprop="wordCount" content="766">
+<meta itemprop="wordCount" content="5606">
 
 
 
 <meta itemprop="keywords" content="四大组件," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Android 四大组件总结"/>
-<meta name="twitter:description" content="生命周期 Activity 正常生命周期 正常情况下，Activity 有如下生命周期方法：
-生命周期方法的说明：
- onCreate()：该回调必须实现，用于进行初始化(成员变量也要在该回调中进行初始化)，初始化 Activity 生命周期中只发生一次的操作。此时 Activity 不可见 onRestart()：Activity 从不可见状态回到可见状态时会回调该方法如切换到桌面再返回，或者打开新的非透明主题的 Activity 再返回。此时 Activity 不可见 onStart()：Activity 进入启动状态时会回调该方法，此时 Activity 处于可见状态，但还未出现在前台，未获取焦点，无法与用户交互。这个回调可以用来初始化在 Activity 整个生命周期可能发生多次的操作， 初始化在 onStop() 中释放的资源。例如注册用于监听 UI 状态变化的 BroadcastReceiver onResume()：Activity 已可见，且处于前台，可以与用户进行交互。这个回调可以用来初始化在 Activity 获取焦点时才会使用的组件，初始化会在 onPause() 中释放的资源，例如启动动画、播放视频等 onPause()：Activity 可见，但失去焦点，不能与用户进行交互。这个回调中可以用来释放在失去焦点时不需要的资源，如暂停动画、视频播放，注销 BroadcastReceiver、传感器等，也可以用来做一些轻量级的数据存储， 但是注意不能太耗时，例如保存用户数据、进项网络请求、开启数据库事务等，因为这会影响到新的 Activity 的显示，Parent Activity 的 onPause() 必须先执行完， Child Activity 才会启动 onStop()：Activity 进入不可见状态，该方法中可以做稍微重量级的回收工作，释放在不可见状态下不需要的资源，或者会造成内存泄漏的资源(因为有些情况下系统杀死应用进程时不会回调 onDestory()) onDestory()：Activity 生命周期的最后一个回调，所有未释放的资源可以在这里释放，在调用 finish() 或者内存不足系统临时杀死应用进程时会回调该方法(有些情况下系统杀死应用进程不会回调该方法， 所以 onDestory() 不是一定会被调用)，可以使用 isFinishing() 来区分这两种场景。   在 onPause() 和 onStop() 中可以通过 isFinishing() 来判断应用是暂处这两种状态还是会回调 onDestory()"/>
+<meta name="twitter:description" content="生命周期 Activity 正常生命周期 正常情况下，Activity 有如下生命周期方法： 生命周期方法的说明： onCreate()：该回调必须实现，用于进行初始"/>
 
 
 
@@ -118,7 +112,7 @@
     <main class="post">
 
         <div class="post-info">
-            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>4 minutes
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>12 minutes
 
             
 
@@ -425,7 +419,7 @@ FLAG_ACTIVITY_CLEAR_TOP Flag，第二种无法为 Activity 指定 singleInstance
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://wptdxii.github.io/tags/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6">四大组件</a></span>
                 </p>
 
-            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>766 Words</p>
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>5606 Words</p>
 
             <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-05 23:49 &#43;0800</p>
                 <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-git-commit"><circle cx="12" cy="12" r="4"></circle><line x1="1.05" y1="12" x2="7" y2="12"></line><line x1="17.01" y1="12" x2="22.96" y2="12"></line></svg><a href="https://github.com/wptdxii/blog-hugo/commit/d69797e41494c8d02782d3470a0bd3f921103131" target="_blank" rel="noopener">d69797e</a> @ 2019-04-07</p>
