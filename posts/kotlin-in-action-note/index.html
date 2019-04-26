@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author"
+    content="wptdxii ">
+<meta name="description"
+    content="Kotlin 是一种基于 JVM 的静态编程语言，简洁、高效、实用且安全，与 Java 的互操作性是其基石之一，支持构建高级抽象和领域特定语言。 相关资源见： kotlin 论坛 Kotlin 在线编" />
+<meta name="keywords" content="homepage, blog, informatics, development, programming, projects, software" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://wptdxii.github.io/posts/kotlin-in-action-note/" />
+
+
+<title>
+    
+    Kotlin-in-Action 笔记 :: Wptdxii&#39;s Blog 
+    
+</title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+<link rel="stylesheet" href="https://wptdxii.github.io/scss/main.min.099699ab246bf26f50616f7c9f00c79d46110459d1bd727b2d07d6fc09ece082.css">
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#252627">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="theme-color" content="#252627">
+<meta itemprop="name" content="Kotlin-in-Action 笔记">
+<meta itemprop="description" content="Kotlin 是一种基于 JVM 的静态编程语言，简洁、高效、实用且安全，与 Java 的互操作性是其基石之一，支持构建高级抽象和领域特定语言。 相关资源见： kotlin 论坛 Kotlin 在线编">
+
+
+<meta itemprop="datePublished" content="2019-04-17T20:11:36&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-24T11:52:48&#43;08:00" />
+<meta itemprop="wordCount" content="5501">
+
+
+
+<meta itemprop="keywords" content="Note,Kotlin," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kotlin-in-Action 笔记"/>
+<meta name="twitter:description" content="Kotlin 是一种基于 JVM 的静态编程语言，简洁、高效、实用且安全，与 Java 的互操作性是其基石之一，支持构建高级抽象和领域特定语言。 相关资源见： kotlin 论坛 Kotlin 在线编"/>
+
+
+
+<meta property="article:section" content="Kotlin" />
+
+<meta property="article:published_time" content="2019-04-17 20:11:36 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">$ cd /home/</span>
+            <span class="logo__cursor"></span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://wptdxii.github.io/posts/">Posts</a></li><li><a href="https://wptdxii.github.io/categories/">Categories</a></li><li><a href="https://wptdxii.github.io/tags/">Tags</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+    <main class="post">
+
+        <div class="post-info">
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>11 minutes
+
+            
+
+            </p>
+        </div>
+
+        <article>
+            <h1 class="post-title"><a href="https://wptdxii.github.io/posts/kotlin-in-action-note/">Kotlin-in-Action 笔记</a></h1>
+                <hr />
+                <aside id="toc">
+                <div class="toc-title">Table of Contents</div>
+                    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-kotlin-定义和目的">1 Kotlin：定义和目的</a>
+<ul>
+<li><a href="#kotlin-初体验">Kotlin 初体验</a></li>
+<li><a href="#kotlin-的主要特征">Kotlin 的主要特征</a></li>
+</ul></li>
+<li><a href="#2-kotlin-基础">2 Kotlin 基础</a>
+<ul>
+<li><a href="#函数">函数</a></li>
+<li><a href="#变量">变量</a></li>
+<li><a href="#类">类</a></li>
+<li><a href="#包结构">包结构</a></li>
+<li><a href="#枚举">枚举</a></li>
+<li><a href="#when">when</a></li>
+<li><a href="#智能转换">智能转换</a></li>
+<li><a href="#循环">循环</a></li>
+<li><a href="#异常处理">异常处理</a></li>
+</ul></li>
+<li><a href="#3-函数的定义与调用">3 函数的定义与调用</a>
+<ul>
+<li><a href="#创建集合">创建集合</a></li>
+<li><a href="#函数声明">函数声明</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+                </aside>
+                <hr />
+
+            
+
+            <div class="post-content">
+                
+
+<p><a href="https://kotlinlang.org" target="_blank">Kotlin</a> 是一种基于 JVM 的静态编程语言，简洁、高效、实用且安全，与 Java 的互操作性是其基石之一，支持构建高级抽象和领域特定语言。</p>
+
+<p>相关资源见：</p>
+
+<ul>
+<li><a href="https://discuss.kotlinlang.org" target="_blank">kotlin 论坛</a></li>
+<li><a href="https://try.kotlinlang.org" target="_blank">Kotlin 在线编辑器</a></li>
+<li><a href="https://www.reddit.com/r/Kotlin" target="_blank">Reddit Kotlin 讨论区</a></li>
+<li><a href="https://github.com/Kotlin/kotlin-in-action" target="_blank">Kotlin in action 源码</a></li>
+<li><a href="https://github.com/Kotlin/anko" target="_blank">Anko</a></li>
+</ul>
+
+<h2 id="1-kotlin-定义和目的">1 Kotlin：定义和目的</h2>
+
+<h3 id="kotlin-初体验">Kotlin 初体验</h3>
+
+<p>下面的 kotlin 示例代码用于从集合中查找年龄最大的人并打印结果：</p>
+
+<pre><code class="language-kotlin">// 数据类，会自动生成 toString() 方法
+// Int? 表示可空类型
+// null 表示实参的默认值
+data class Person(val name: String, val age: Int? = null)
+
+// 关键字 fun 用来声明函数
+// 函数可以定义在文件的最外层，不需要放到类中
+// 数组就是类
+// 每行代码结尾不需要分号
+// 从 Kotlin 1.3 开始，main() 方法可以省略参数
+fun main(args: Array&lt;String&gt;) {
+    val persons = listOf(
+        Person(&quot;Alice&quot;, 22),
+        Person(&quot;Bob&quot;)
+    )
+    // maxBy() 函数接受一个 lambda 表达式，其中 it 是该 lambda 表达式参数的默认名称
+    // ?: 表示 Elvis 运算符，当运算符之前的值为 null 时，返回其后边的值
+    val oldest = persons.maxBy { it.age ?: 0 }
+    // 字符串模版，可以在字符串字面值中引用变量
+    println(&quot;The oldest is : $oldest&quot;)
+}
+</code></pre>
+
+<h3 id="kotlin-的主要特征">Kotlin 的主要特征</h3>
+
+<p>Kotlin 是一种静态类型的编程语言，但无需显式地在源代码中声明变量的类型，很多情况下，编译器可以根据上下文作类型推导。静态类型有以下好处：</p>
+
+<ul>
+<li>性能——方法调用速度快，因为不需要在运行时判断调用的方法</li>
+<li>可靠性——编译器验证了程序的正确性，Crash 概率更低</li>
+<li>可维护性——可直接看到代码中用到的对象的类型</li>
+<li>工具支持——静态类型使 IDE 能提供可靠的重构、精准的代码补全以及其他特性</li>
+</ul>
+
+<p>Kotlin 支持面向对象和函数式两种编程风格，通过头等函数使更高级别的抽象成为可能，通过支持不可变值简化了测试和多线程开发。</p>
+
+<p>函数式编程核心概念如下：</p>
+
+<ul>
+<li>头等函数——把函数(一小段行为)当作值使用，可以用变量保存，可以当作参数传递，或者当作其他函数的返回值</li>
+<li>不可变性——使用不可变对象，这保证了它们的状态在其创建之后不能仔变化</li>
+<li>无副作用——使用的纯函数。此类函数在输入相同时会产生相同的结果，并且不会修改其他对象的状态，也不会和外界交互</li>
+</ul>
+
+<p>函数式编程的优点：</p>
+
+<ul>
+<li>简洁——可将函数当作值传递，有更强大的抽象能力，当函数作为参数传递时，可以使用简洁的语法表示这些匿名函数，即 lambda 表达式</li>
+<li>线程安全——使用不可变的数据结构和纯函数，直接避免了不安全的修改发生，不需要设计复杂的同步方案</li>
+<li>便于测试——没有副作用的纯函数可以独立地进行测试，不需要写大量代码来构造其依赖的整个环境</li>
+</ul>
+
+<p>Kotlin 团队打造的 <a href="https://github.com/Kotlin/anko" target="_blank">Anko</a> 为 Android 标准的 API 添加了适配器，可以提升 Android 开发体验。在 Kotlin 中使用 lambda 时，它们会被许多 Kotlin 标准库函数内联，lambda 的内联确保不会创建新的对象，因此程序不会忍受额外的 GC 暂停</p>
+
+<p>Kotlin 是一门务实、简洁、安全和与 Java 具有互操作性的语言，其安全性体现在内存安全、类型安全、可空类型和类型转换安全上，其互操作性体现在项目中可以混合使用 Kotlin 和 Java，不用语言的代码可以单步调试，Java 代码重构时，Kotlin 代码中的调用也会同步更新</p>
+
+<p>用 Kotlin 编译器编译的代码依赖 Kotlin 运行时库，它包含了 Kotlin 自己的标准库类的定义，以及 Kotlin 对标准 Java API 的扩展，运行时库需要和应用一起分发</p>
+
+<h2 id="2-kotlin-基础">2 Kotlin 基础</h2>
+
+<h3 id="函数">函数</h3>
+
+<p>fun 关键字用于定义函数，下面是 max() 函数的示例代码：</p>
+
+<pre><code class="language-kotlin">// 参数列表后的 Int 表示返回值类型
+fun max(a: Int, b: Int):Int {
+    // if 是有结果的表达式，与 Java 中的三元运算符相似
+    // 代码块体中，return 不能省略
+    // 函数返回值类型也不能省略
+    return if (a &gt; b) a else b
+}
+
+// Kotlin 1.3 之后 main() 方法参数可以省略
+fun main() {
+    println(max(1,2))
+}
+
+// 结果
+&gt;&gt;&gt; 2
+</code></pre>
+
+<p>上面示例中，if 是表达式而不是语句，在 Kotlin 中，语句和表达式的区别在于：表达式有值，并且能作为另一个表达式的一部分使用；而语句是包围它的代码块中的顶层元素，并且没有自己的值。在 Java 中，所有的控制结构都是语句，而在 Kotlin 中，除了循环(for、do和do/while)以外大多数控制结构都是表达式。另一方面，Java 中的赋值操作是表达式，在 Kotlin 中反而成了语句，Kotlin 中之所以要这样定义，是为了避免比较和赋值之间的混淆。</p>
+
+<p>当函数的函数体由单个的表达式组成，可以用这个表达式作为完整的函数体，并可以去掉花括号和 return 语句：</p>
+
+<pre><code class="language-kotlin">// 与上面的 max() 函数一致
+// 省略了花括号和 return，
+// 由于有类型推导，表达式函数体返回值类型也可以省略(只有表达式函数体的返回值类型可以省略)
+fun max(a: Int, b: Int) = if (a &gt; b) a else b
+</code></pre>
+
+<p>如果函数写在代码块中，我们称这个函数有代码块体(block body)，如果直接返回了一个表达式，称这个函数有表达式体(expression body)</p>
+
+<p>对于只有一行的函数，可以使用表达式体(即使函数体不是表达式)：</p>
+
+<pre><code class="language-kotlin">// max() 函数同上
+fun main() {
+    println(max(1,2))
+}
+
+// 可以简写为：
+fun main() = prinln(max(1,2))
+</code></pre>
+
+<h3 id="变量">变量</h3>
+
+<p>Kotlin 中变量的声明以关键字开始，然后是变量名称，最后可以加上变量类型(不加也可以)，关键字有两个：</p>
+
+<ul>
+<li>val(value)——不可变引用，在初始化之后不能再次赋值，对应的是 Java 中的 final 变量。虽然 val 引用自身是不可变的，即引用的对象地址是不可变的，但其指向的对象可以是可变的(可变与否取决与对象内部的具体定义是否可变)</li>
+<li>var(variable)——可变引用，这种变量的值可以被改变，对应的是 Java 中的非 final 变量，但其类型不能改变。</li>
+</ul>
+
+<p>默认情况下，应该尽可能地使用 val 关键字声明所有的 Kotlin 变量，仅在必要的时候使用 var，使用不可变引用，不可变对象以及无副作用函数可以使代码更加接近函数式编程风格。</p>
+
+<p>示例代码：</p>
+
+<pre><code class="language-kotlin">// 初始化的变量可以省略类型声明，因为编译器可以作类型推导
+val question = &quot;Hello World!&quot;
+
+// 未初始化的变量需要显式地声明类型
+val answer: Int
+answer = 1
+
+// 可变引用
+var name = &quot;Alice&quot;
+name = &quot;Bob&quot;
+</code></pre>
+
+<p>字符串模版使在字符串字面值中可以引用变量值，在变量前添加 $ 即可：</p>
+
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) {
+    val name = if (args.size &gt; 0) args[0] else &quot;Kotlin&quot;
+    // 直接引用变量
+    println(&quot;Hello $name!&quot;)
+
+    if (args.size &gt; 0) {
+        // 引用表达式时需要使用花括号
+        println(&quot;Hello ${args[0]}!&quot;)
+    }
+
+    // 表达式内也可以使用双引号
+    println(&quot;Hello ${if (args.size &gt; 0) args[0] else &quot;Kotlin&quot;}!&quot;)
+
+    // 字面值 $ 需要转义
+    print(&quot;Hello \$&quot;)
+}
+</code></pre>
+
+<p>字符串模板会编译为 StringBuilder，与 Java 中的字符串拼接性能一致</p>
+
+<h3 id="类">类</h3>
+
+<p>在 Java 中，字段和其访问器被叫做属性，在 Kotlin 中，属性是头等的语言特性，完全代替了字段和访问器方法。当声明的属性后，就声明了对应的访问器，访问器是暴露给 Java 中使用的，在 Kotlin 中可直接访问属性。声明值对象(只有数据没有逻辑的对象)：</p>
+
+<pre><code class="language-kotlin">// public 是默认修饰符
+class Person(
+    // 不可变属性，只会生成一个字段和 getter()
+    val name: String,
+    // 可变属性，生成一个字段和对应的 setter()、getter()
+    // is 开头的属性，生成的访问器分别为：setMarried()、isMarried()
+    var isMarried: Boolean)
+
+fun main() {
+    val person = Person(&quot;Bob&quot;, true)
+    println(&quot;${person.name} has been married? ${if (person.isMarried) &quot;Yes&quot; else &quot;No&quot;}&quot;)
+
+    person.isMarried = false
+    println(&quot;${person.name} has been married? ${if (person.isMarried) &quot;Yes&quot; else &quot;No&quot;}&quot;)
+}
+</code></pre>
+
+<p>Java 定义的类中，只有 getter() 的字段可以被当成 val 属性在 Kotlin 中访问，一对 setter()、getter() 字段可以被当成 var 属性访问。</p>
+
+<p>大多数情况下，属性有一个对应的支持字段来保存属性的值，但如果该属性是通过实时计算获取的，则可以用自定义的 getter() 表示：</p>
+
+<pre><code class="language-kotlin">class Rectangle(val width: Int, val height: Int) {
+    val isSquare: Boolean
+        // 代码块函数体
+        get() {
+            return width == height
+        }
+        // 表达式函数体，可以简写为
+        // get() = widht == height
+}
+
+fun main() {
+    val rectangle = Rectangle(21, 22)
+    println(rectangle.isSquare)
+}
+</code></pre>
+
+<p>自定义访问器的属性不需要额外的支持字段来保存值，值会在每次访问属性时计算出来。对于声明一个没有参数的函数和自定义访问器，实现和性能没有差别，唯一的区别是可读性，通常来说，如果描述的是类的特性，应该把它声明成属性</p>
+
+<h3 id="包结构">包结构</h3>
+
+<p>Kotlin 源码的包声明要放到源文件的第一行，import 放到其之后，Kotlin 可以导入任何的种类声明，包括类和函数。与 Java 不用的是，Kotlin 的包层级结构不需要遵循目录层级结构。</p>
+
+<h3 id="枚举">枚举</h3>
+
+<p>简单的枚举类声明：</p>
+
+<pre><code class="language-kotlin">// 使用 enum class 声明枚举类
+// enum 是软关键字，只有放到 class 之前才有特殊含义，其他地方可以当作普通名称使用
+enum class Color {
+    RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET
+}
+</code></pre>
+
+<p>带有属性和方法的枚举类声明：</p>
+
+<pre><code class="language-kotlin">enum class Colors(val r: Int, val g: Int, val b: Int) {
+    RED(255, 0, 0), ORANGE(255, 165, 0),
+    YELLOW(255, 255, 0), GREEN(0, 255, 0), BLUE(0, 0, 255),
+    INDIGO(75, 0, 130), VIOLET(238, 130, 238);// 如果枚举类有定义方法，需要使用分号将枚举常量列表和方法定义分开。这是 kotlin 中唯一必须使用分号的地方
+
+    fun rgb() = (r * 256 + g) * 256 + b
+}
+
+fun main() {
+    println(Colors.RED.rgb())
+}
+
+</code></pre>
+
+<h3 id="when">when</h3>
+
+<p>Kotlin 中的 when 结构类似于 Java 中的 switch 语句，用于条件选择，但 when 是一个有返回值的表达式，因此可以直接写一个返回 when 表达式的表达式体函数。when 支持多种分支类型：</p>
+
+<ul>
+<li>when 不带参数时，条件分支需要是布尔表达式</li>
+<li>when 带参数时，分支可以是值等式，也可以是类型检查(即 is 操作符)，也可以是区间检测(in)</li>
+</ul>
+
+<p>下面的示例展示了多行表达式体函数：</p>
+
+<pre><code class="language-kotlin">enum class Colors {
+    RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET
+}
+
+fun getMnemonic(color: Colors) = when (color) {
+    Colors.RED -&gt; &quot;Richard&quot;
+    Colors.ORANGE -&gt; &quot;Of&quot;
+    Colors.YELLOW -&gt; &quot;York&quot;
+    Colors.GREEN -&gt; &quot;Gave&quot;
+    Colors.BLUE -&gt; &quot;Battle&quot;
+    Colors.INDIGO -&gt; &quot;In&quot;
+    Colors.VIOLET -&gt; &quot;Vain&quot;
+}
+
+fun main() {
+    println(getMnemonic(Colors.VIOLET))
+}
+</code></pre>
+
+<p>合并多个值到用一个分支；</p>
+
+<pre><code class="language-kotlin">// Colors 定义同上，下同
+fun getWarmth(color: Colors) = when (color) {
+    // 合并分支
+    Colors.RED, Colors.ORANGE, Colors.YELLOW -&gt; &quot;warm&quot;
+    Colors.GREEN -&gt; &quot;neutral&quot;
+    Colors.BLUE, Colors.INDIGO, Colors.VIOLET -&gt; &quot;cold&quot;
+}
+</code></pre>
+
+<p>可以通过导入枚举常量值简化代码：</p>
+
+<pre><code class="language-kotln">// 导入 Colors 枚举类
+import com.example.Colors.*
+
+fun getWarmth(color: Colors) = when (color) {
+    // 简化调用枚举常量值
+    RED, ORANGE, YELLOW -&gt; &quot;warm&quot;
+    GREEN -&gt; &quot;neutral&quot;
+    BLUE, INDIGO, VIOLET -&gt; &quot;cold&quot;
+}
+</code></pre>
+
+<p>Java 中 switch 语句条件分支要求使用常量(枚举、字符串和基本数据类型)，但 Kotlin 中的 when 表达式的条件分支语句可以使用任何对象：</p>
+
+<pre><code class="language-kotlin">fun mix(c1: Colors, c2: Colors) = when (setOf(c1, c2)) {
+    // setOf() 可以创建 Set 集合
+    setOf(RED, YELLOW) -&gt; ORANGE
+    setOf(YELLOW, BLUE) -&gt; GREEN
+    setOf(BLUE, VIOLET) -&gt; INDIGO
+    else -&gt; throw Exception(&quot;Dirty color&quot;)
+}
+</code></pre>
+
+<p>when 表达式还可以不带参数，这时要全条件分支是布尔表达式：</p>
+
+<pre><code class="language-kotlin">// when 表达式没有参数
+// 这种写法相较前一种写法，因为没有使用 setOf() 创建额外的垃圾对象，效率更高，缺点是可读性差一些
+fun mixOptimized(c1: Colors, c2: Colors) = when {
+    // 条件分支是布尔表达式
+    (c1 == RED &amp;&amp; c2 == YELLOW) ||
+            (c1 == YELLOW &amp;&amp; c2 == RED) -&gt; ORANGE
+    (c1 == YELLOW &amp;&amp; c2 == BLUE) ||
+            (c1 == BLUE &amp;&amp; c2 == YELLOW) -&gt; GREEN
+    (c1 == BLUE &amp;&amp; c2 == VIOLET) ||
+            (c1 == VIOLET &amp;&amp; c2 == BLUE) -&gt; INDIGO
+    else -&gt; throw Exception(&quot;Dirty color&quot;)
+}
+</code></pre>
+
+<h3 id="智能转换">智能转换</h3>
+
+<p>Kotlin 中使用 is 检查来判断一个变量是否是某种类型，对应 Java 中的 instanceOf，与 instanceOf 不同的是，类型转换由 Kotlin 的编译器完成，不再需要手动强制转换类型，这在 Kotlin 中被成为智能转换。智能转换只在变量经过 is 检查之后并且不再发生变化的情况下有效。当对一个类的属性智能转换时，这个属性必须是 val 类型，且不能自定义访问器，否则，每次对属性的访问是否能返回同样的值将无从验证。</p>
+
+<p>下面的示例代码实现了加法运算：</p>
+
+<pre><code class="language-kotlin">// 声明空接口
+interface Expr
+
+// 使用冒号实现接口
+class Num(val value: Int) : Expr
+class Sum(val left: Expr, val right: Expr) : Expr
+
+// 该函数体是代码块函数体，返回值类型不能省略，且返回值必须有 return
+fun eval(e: Expr): Int {
+    if (e is Num) {
+        // 使用 as 显式类型转换，在 is 操作符以后是多余的，可以省略
+        val n = e as Num
+        return n.value
+    }
+
+    if (e is Sum) {
+        // 智能转换
+        return eval(e.left) + eval(e.right)
+    }
+    throw IllegalArgumentException(&quot;Unknown Expression&quot;)
+}
+
+fun main() {
+    println(eval(Sum(Sum(Num(1), Num(2)), Num(4))))
+}
+</code></pre>
+
+<p>将上面代码使用表达式体函数重构：</p>
+
+<pre><code class="language-kotlin">// 使用表达式体，返回值类型可以省略
+fun eval(e: Expr) =
+    if (e is Num)
+        // 如果分支代码块只有一行，可以省略花括号
+        // 表达式函数体分支代码块中，最后一个表达式会被作为结果返回，不需要 return
+        e.value
+    else if (e is Sum)
+        eval(e.left) + eval(e.right)
+    else
+        throw IllegalArgumentException(&quot;Unknown Expression&quot;)
+
+</code></pre>
+
+<p>将上述代码使用 when 重构：</p>
+
+<pre><code class="language-kotlin">// 第二个分支使用了递归调用，类型推导无法推断返回值类型，所以函数的返回值类型不能省略
+fun eval(e: Expr): Int =
+    when (e) {
+        is Num -&gt;
+            e.value
+        is Sum -&gt;
+            eval(e.left) + eval(e.right)
+        else -&gt;
+            throw IllegalArgumentException(&quot;Unknown Expression&quot;)
+    }
+
+</code></pre>
+
+<p>表达式函数体中分支体可能是代码块，这时分支的花括号不能省略，代码块中的最后一个表达式是返回结果：</p>
+
+<pre><code class="language-kotlin">fun eval(e: Expr): Int =
+    when (e) {
+        // 花括号不能省略
+        is Num -&gt; {
+            println(&quot;num: ${e.value}&quot;)
+            // 最后一个表达式作为结果返回
+            e.value
+        }
+        is Sum -&gt; {
+            val left = eval(e.left)
+            val right = eval(e.right)
+            println(&quot;sum: $left + $right&quot;)
+            left + right
+        }
+        else -&gt;
+            throw IllegalArgumentException(&quot;Unknown Expression&quot;)
+    }
+</code></pre>
+
+<h3 id="循环">循环</h3>
+
+<p>Kotlin 的循环包含 while、do-while  和 for 循环三种，其中前两种和 Java 中的使用方式一致，而 for 循环只有一种形式，与 Java 中的 for-each 循环一致(写法不同)</p>
+
+<p>Kotlin 循环的使用中有区间的概念，区间本质上就是两个值之间的间隔，通常是数字：一个起始值，一个结束值。使用 .. 运算符来表示区间，Kotlin 中区间是闭合的，即第一个值和最后一个值都在区间内。
+如果能迭代区间中的所有值，这样的区间被称作数列。区间不仅限于字符和数字，所有支持实例比较操作的类(实现 java.lang.Comparable 接口)，都能创建该类的对象的区间。区间和数列允许 Kotlin 在 for 循环中使用统一的语法和同一套抽象机制，并且还可以使用 in 运算符和 !in 运算符来检查值是否属于某个区间</p>
+
+<p>示例代码：</p>
+
+<pre><code class="language-kotlin">fun fizzBuzz(i: Int) =
+    // 不带参数的 when
+    when {
+        // 分支是布尔表达式
+        i % 15 == 0 -&gt; &quot;FizzBuzz&quot;
+        i % 3 == 0 -&gt; &quot;Fizz&quot;
+        i % 5 == 0 -&gt; &quot;Buzz&quot;
+        else -&gt; &quot;$i &quot;
+    }
+
+fun main() {
+    // 1..100 表示区间，也是数列
+    // 包含 1 和 100
+    // 区间可以用变量保存
+    // val interval = 1..100
+    // 区间最后一个值需要大于第一个值，否则循环不执行
+    for (i in 1..100) {
+        println(fizzBuzz(i))
+    }
+}
+</code></pre>
+
+<p>倒序遍历：</p>
+
+<pre><code class="language-kotlin">fun main() {
+    // 倒序使用 downTo
+    // 第二个值需小于第一个值，否则循环不执行
+    // step 指定步长，必须为正数
+    for (i in 100 downTo 1 step 2) {
+        println(fizzBuzz(i))
+    }
+}
+</code></pre>
+
+<p>开区间；</p>
+
+<pre><code class="language-kotlin">fun main() {
+    // until 表示开区间，包含 1，不包含 100
+    // 顺序，第二个值需要大于第一个值，否则循环不执行
+    // 可以使用 step
+    for (i in 1 until 100) {
+        println(fizzBuzz(i))
+    }
+}
+</code></pre>
+
+<p>迭代 map：</p>
+
+<pre><code class="language-kotlin">fun main() {
+    val binaryReps = TreeMap&lt;Char, String&gt;()
+
+    // 字符区间
+    for (c in 'A'..'F') {
+        val binary = Integer.toBinaryString(c.toInt())
+        // 根据键赋值
+        binaryReps[c] = binary
+    }
+
+    // 迭代 map，可以把健值对赋值给一对变量，叫做解构声明
+    for ((letter, binary) in binaryReps) {
+        println(&quot;$letter = $binary&quot;)
+    }
+}
+</code></pre>
+
+<p>迭代 list：</p>
+
+<pre><code class="language-kotlin">fun main() {
+    val list = listOf(&quot;10&quot;, &quot;11&quot;, &quot;01&quot;, &quot;00&quot;)
+    // 迭代 list，可以把索引和对应的值赋值给一对变量
+    for ((index, element) in list.withIndex()) {
+        println(&quot;$index : $element&quot;)
+    }
+}
+</code></pre>
+
+<p>区间检测：</p>
+
+<pre><code class="language-kotlin">fun main() {
+    // in 判断是否在区间内
+    fun isChar(c: Char) = c in 'a'..'z' || c in 'A'..'F'
+
+    // !n 判断是否在区间外
+    fun isNotDigit(c: Char) = c !in '0'..'9'
+
+    println(isChar('a'))
+    println(isNotDigital('0'))
+}
+</code></pre>
+
+<p>区间检查作为 when 条件分支：</p>
+
+<pre><code class="language-kotlin">fun recognize(c: Char) =
+    when (c) {
+        in '0'..'9' -&gt; &quot;It's a digit&quot;
+        // 合并条件分支
+        in 'a'..'z', in 'A'..'Z' -&gt; &quot;It's a letter&quot;
+        else -&gt; &quot;I don't know...&quot;
+    }
+
+fun main() {
+    println(recognize('@'))
+}
+</code></pre>
+
+<p>实现 Comparable 接口的任意类对象区间检查：</p>
+
+<pre><code class="language-kotlin">fun main() {
+    // String 实现了 java.lang.Comparable 接口
+    // 结果与 &quot;Kotlin&quot; &gt;= &quot;Java&quot; &amp;&amp; &quot;Kotlin&quot; &lt;= &quot;Scala&quot; 一致，按照字母表顺序比较
+    // 不能迭代所有值，不是数列
+    println(&quot;Kotlin&quot; in &quot;Java&quot;..&quot;Scala&quot;)
+}
+</code></pre>
+
+<p>检查集合：</p>
+
+<pre><code class="language-kotlin">fun main() {
+    println(&quot;Kotlin&quot; in setOf(&quot;Java&quot;, &quot;Scala&quot;))
+}
+</code></pre>
+
+<h3 id="异常处理">异常处理</h3>
+
+<p>Kotlin 的异常处理与 Java 类似，一个函数可以正常结束，也可以在出现错误的情况下抛出异常。方法的调用者可以捕获这个异常并处理，也可以沿着调用栈再次抛出。与 Java 不用的是，Kotlin 不区分受检异常和非受检异常，对于 Java 中的受检异常，调用者未处理时，不需要在函数后显式地使用 throws 抛出异常。</p>
+
+<p>Kotlin 中 throw 结构是一个表达式，能作为另一个表达式的一部分使用：</p>
+
+<pre><code class="language-kotlin">fun isPercentage(number: Int) =
+    if (number in 1..100) {
+        number
+    } else {
+        // throw 是表达式，左右作为 if 表达式的返回值
+        throw IllegalArgumentException(&quot;A percentage value must be between 0 and 100: $number&quot;)
+    }
+
+fun main() {
+    println(isPercentage(101))
+}
+
+</code></pre>
+
+<p>try-catch-finally 示例代码：</p>
+
+<pre><code class="language-kotlin">fun readNumber(reader: BufferedReader) =
+    // 不同于 Java，try 在 Kotlin 中是表达式
+    // 不同于 if，就算函数体只有一行，try 表达式也不能省略花括号
+    // catch 或 finally 至少有一个
+    try {
+        val line = reader.readLine()
+        // 最后一个表达式作为结果返回
+        Integer.parseInt(line)
+    } catch (e: NumberFormatException) {
+        // catch 中也是最后一个表达式作为结果返回
+        null
+    } finally {
+        // 会抛出 Java 中的受检异常 IOException，未处理的情况下，Kotlin 不需要在函数声明最后显式使用 throws 抛出
+        reader.close()
+    }
+
+fun main() {
+    val reader = BufferedReader(StringReader(&quot;not a number&quot;))
+    println(readNumber(reader))
+}
+</code></pre>
+
+<p>Kotlin 没有 Java7 对应的 tray-with-resources 的特殊语法，它被实现为一个库函数。</p>
+
+<h2 id="3-函数的定义与调用">3 函数的定义与调用</h2>
+
+<h3 id="创建集合">创建集合</h3>
+
+<h3 id="函数声明">函数声明</h3>
+
+            </div>
+        </article>
+
+        <hr />
+
+        <div class="post-info">
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://wptdxii.github.io/tags/note">Note</a></span><span class="tag"><a href="https://wptdxii.github.io/tags/kotlin">Kotlin</a></span>
+                </p>
+
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>5501 Words</p>
+
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-17 20:11 &#43;0800</p>
+                <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-git-commit"><circle cx="12" cy="12" r="4"></circle><line x1="1.05" y1="12" x2="7" y2="12"></line><line x1="17.01" y1="12" x2="22.96" y2="12"></line></svg><a href="https://github.com/wptdxii/blog-hugo/commit/7b2a64077b72d8285091cf6c8b61396340423538" target="_blank" rel="noopener">7b2a640</a> @ 2019-04-24</p>
+        </div>
+
+        
+            <div class="pagination">
+                <div class="pagination__title">
+                    <span class="pagination__title-h"></span>
+                    <hr />
+                </div>
+
+                <div class="pagination__buttons">
+                    
+
+                    
+                        <span class="button next">
+                            <a href="https://wptdxii.github.io/posts/android-components/">
+                                <span class="button__text">Android 四大组件总结</span>
+                                <span class="button__icon">→</span>
+                            </a>
+                        </span>
+                    
+                </div>
+            </div>
+        
+
+        
+    </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2019</span>
+            
+                <span><a href="https://wptdxii.github.io/">wptdxii</a></span>
+            
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/rhazdon">rhazdon</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+
+<script type="text/javascript" src="https://wptdxii.github.io/js/bundle.min.cf7871ed49474a80ed457154d24e61f7881adbe0f9384951a74ac46b688a39a4dbfa68bc6d37baeb058186de354ead3487d4ee7f083ea4cba860c48600b694f3.js" integrity="sha512-z3hx7UlHSoDtRXFU0k5h94ga2&#43;D5OElRp0rEa2iKOaTb&#43;mi8bTe66wWBht41Tq00h9Tufwg&#43;pMuoYMSGALaU8w=="></script>
+
+
+
+    </body>
+</html>
