@@ -41,8 +41,8 @@
 
 
 <meta itemprop="datePublished" content="2019-04-17T20:11:36&#43;08:00" />
-<meta itemprop="dateModified" content="2019-04-24T11:52:48&#43;08:00" />
-<meta itemprop="wordCount" content="5501">
+<meta itemprop="dateModified" content="2019-04-26T17:33:34&#43;08:00" />
+<meta itemprop="wordCount" content="8740">
 
 
 
@@ -112,7 +112,7 @@
     <main class="post">
 
         <div class="post-info">
-            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>11 minutes
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>18 minutes
 
             
 
@@ -149,6 +149,17 @@
 <ul>
 <li><a href="#创建集合">创建集合</a></li>
 <li><a href="#函数声明">函数声明</a></li>
+<li><a href="#扩展函数">扩展函数</a></li>
+<li><a href="#扩展属性">扩展属性</a></li>
+<li><a href="#可变参数">可变参数</a></li>
+<li><a href="#中缀调用">中缀调用</a></li>
+<li><a href="#解构声明">解构声明</a></li>
+<li><a href="#三重引号字符串">三重引号字符串</a></li>
+<li><a href="#局部函数">局部函数</a></li>
+</ul></li>
+<li><a href="#4-类-对象和接口">4 类、对象和接口</a>
+<ul>
+<li><a href="#继承">继承</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -750,7 +761,369 @@ fun main() {
 
 <h3 id="创建集合">创建集合</h3>
 
+<p>Kotlin 采用的是标准的 Java 集合类，方便与 Java 代码交互。</p>
+
+<pre><code class="language-kotlin">val set = hashSetOf(1, 7, 53)
+val list = arrayListOf(1, 7, 53)
+// to 是中缀调用
+val map = hashMapOf(1 to &quot;one&quot;, 7 to &quot;seven&quot;, 53 to &quot;fifty-three&quot;)
+val last = listOf(&quot;first&quot;, &quot;second&quot;, &quot;fourteenth&quot;).last()
+val max = setOf(1, 14, 2).max()
+
+fun main() {
+    println(set.javaClass)
+    println(list.javaClass)
+    print(map.javaClass)
+    println(last)
+    println(max)
+}
+</code></pre>
+
 <h3 id="函数声明">函数声明</h3>
+
+<p>Kotlin 支持命名参数，在调用一个 Kotlin 定义的函数时，可以显式地标明一些参数的名称。如果在调用一个函数时指明了一个函数的名称，为了避免混淆，那它之后所有的参数都要标明名称。但需要注意的是，如果调用的方法是 Java 定义的，不能使用命名参数，因为把参数名称存到 .class 文件是 Java8 及其更高版本之后的可选功能，而 Kotlin 需要保持和 Java6 的兼容性，编译器不能识别出调用函数的参数名称并把这些参数名对应到函数定义的方法。调用函数时使用命名参数不要求参数的顺序与声明的顺序一致，但命名参数的名称必须与函数声明时的参数名称一致。</p>
+
+<p>Kotlin 还支持默认参数，在声明函数时可以指定参数的默认值，这样可以避免创建重载函数。在调用时如果使用常规语法而没有使用命名参数语法时，必须按照函数声明中定义的参数顺序给定参数，可以省略的只有排在末尾的参数。参数的默认值是被编码到被调用的函数中而不是被调用的地方，如果改变了参数的默认值并重新编译这个函数，没有给参数重新赋值的调用者将会使用新的默认值。Java 没有默认参数的概念，当从 Java 中调用具有默认参数的 Kotlin 函数时，必须显式地指定所有的参数值。当希望更简洁地从 Java 中调用 Kotlin 函数时，可以用 @JvmOverloads 注解 Kotlin 函数，这样编译器可以生成多个重载方法，从最后一个开始省略每个参数。</p>
+
+<p>Kotlin 不需要无意义的静态工具类，直接将函数代码的顶层即可，不用从属于任何类。顶层函数会编译成 Java 的静态方法，包含 Kotlin 函数的文件名对应 Java 的类名。包含 Kotlin 函数和生成的 Java 类名有如下的映射关系：</p>
+
+<ul>
+<li>标准的驼峰命名会在结尾加上 Kt：Kotlin.kt -&gt; KotlinKt</li>
+<li>以数字开头会在类名前加上 _： 1Kotlin.kt -&gt; _1KotlinKt</li>
+<li>英文句号会变为_：1.1_Kotlin.kt -&gt; _1_1_KotlinKt</li>
+</ul>
+
+<p>以上是默认的映射规则，如果需要指定 Kotlin 顶层函数生成的类名，需要在顶层函数所在文件开头添加 @file:JvmName(&ldquo;name&rdquo;) 注解</p>
+
+<p>与顶层函数一样，Kotlin 也有顶层属性的概念。顶层属性不属于任何类，被编译后，该值会被存储到一个静态的字段中。通过顶层函数也可以声明常量。</p>
+
+<p>示例代码：</p>
+
+<pre><code class="language-kotlin">// Kotlin 文件名 3.3.1_JoinToString.kt
+// 添加该注解后可以在 Java 中通过 StringFunction.joinToString() 调用该函数
+// @file:JvmName(&quot;StringFunction&quot;)
+
+// 使用顶层属性声明常量，对应 Java 中的 public static finall
+const val UNIX_LINE_SEPARATOR = &quot;\n&quot;
+// 顶层属性，对应 Java 中的静态字段
+var opCount = 0
+
+// 函数具有默认参数
+// @JvmOverloads 注解的函数，会编译成多个静态的 Java 重载方法，因为 Java 不支持默认参数，所以默认参数都会被省略，默认参数会放到对应的重载方法中
+@JvmOverloads
+fun &lt;T&gt; joinToString(
+    collection: Collection&lt;T&gt;,
+    separator: String = &quot;,&quot;,
+    prefix: String = &quot;{&quot;,
+    postfix: String = &quot;}&quot;
+): String {
+    val result = StringBuilder(prefix)
+
+    for ((index, element) in collection.withIndex()) {
+        if (index &gt; 0) result.append(separator)
+        result.append(element)
+    }
+    result.append(postfix)
+    return result.toString()
+}
+
+fun main() {
+    val list = listOf(1, 2, 3)
+    // 调用函数时，为了增加可读性，可以使用命名参数，但只有 Kotlin 函数可以使用
+    // 使用命名参数时不要求参数的顺序与声明顺序保持一致，对于没有标明名称的参数则必须按照声明顺序入参
+    // 为了避免混淆，当一个参数使用了命名参数时，它之后的所有参数都要标明名称
+    println(joinToString(list, postfix = &quot;]&quot;, prefix = &quot;[&quot;, separator = &quot;|&quot;))
+}
+</code></pre>
+
+<p>上面的示例中 joinToString() 函数使用了 @JvmOverloads 注解，在与 Java 代码互操作时，编译器会编译成下面四个等价的重栽方法：</p>
+
+<pre><code class="language-java">    // Java 类名不支持以数字开头，编译后的文件名为 _3_3_1_JoinToString.java
+    // 如果 Kotlin 文件是小写字母开头，对应的 Java 文件会改为大写字母开头
+    // . 会变为 _
+    // 数字开头会变为 _ 开头
+    // 示例代码未做判空处理
+    public static &lt;T&gt; String joinToString(Collectioin&lt;T&gt; collection, String separator, String prefix, String postfix){
+        int index = 0;
+        StringBuilder result = new StringBuilder(prefix);
+        for (T t : collection) {
+            if (index &gt; 0) {
+                result.append(separator);
+            }
+            result.append(t);
+            index++;
+        }
+        result.append(postfix);
+        return result.toString();
+    }
+
+    // 从最后一个参数开始逐个省略
+    public static &lt;T&gt; String joinToString(Collectioin&lt;T&gt; collection, String separator, String prefix){
+        return joinToString(collections, separator, prefix, &quot;}&quot;)
+    }
+
+    public static &lt;T&gt; String joinToString(Collectioin&lt;T&gt; collection, String separator){
+        return joinToString(collections, separator, &quot;{&quot;, &quot;}&quot;)
+    }
+
+    // 该重栽方法相当与所以参数都使用了默认参数
+    public static &lt;T&gt; String joinToString(Collectioin&lt;T&gt; collection){
+        return joinToString(collections, &quot;,&quot;, &quot;{&quot;, &quot;}&quot;)
+    }
+
+    // test
+    public static void main(String[] args) {
+        List&lt;Integer&gt; list = Arrays.asList(1, 2, 3);
+        System.out.println(_3_3_1_JoinToStringKt.joinToString(list));
+        System.out.println(_3_3_1_JoinToStringKt.joinToString(list, &quot;|&quot;));
+        System.out.println(_3_3_1_JoinToStringKt.joinToString(list, &quot;|&quot;, &quot;[&quot;));
+        System.out.println(_3_3_1_JoinToStringKt.joinToString(list, &quot;|&quot;, &quot;[&quot;, &quot;]&quot;));
+    }
+</code></pre>
+
+<h3 id="扩展函数">扩展函数</h3>
+
+<p>Kotlin 可以平滑地与现有代码集成，通过扩展函数可以方便的对第三方库扩展，不要要源代码。扩展函数本质上是类的成员函数，不过定义在类的外边。扩展函数可以访问被扩展类对象的其他方法和属性，就好像是在这个类自己的方法中访问它们一样。但扩展函数并不能打破其封装性，和在类内部定义的方法不同的是，扩展函数不能访问私有的或者受保护的成员和方法</p>
+
+<p>示例如下：</p>
+
+<pre><code class="language-kotlin">package extentions
+// String 叫接收者类型
+// this 叫接受者对象
+// this 可以省略
+// 可以访问接收者对象的非私有的方法和属性
+fun String.lastChar() = this.get(this.length - 1)
+
+fun main(args: Array&lt;String&gt;) {
+    println(&quot;Kotlin&quot;.lastChar())
+}
+</code></pre>
+
+<p>想在其他包使用该扩展函数，需要 improt 导入，导入时可以用关键字 as 修改导入的类或者函数的名称，使用 as  别名一方面可以简化调用，另外一个方面当有多个同名函数时，因为扩展函数只能使用一级函数名(即不能通过全类名)，所以导包时必须使用 as 别名。</p>
+
+<pre><code class="language-kotlin">// 使用 as 设定别名
+// 扩展函数只能使用简单的一级函数名
+improt extentions.lastChar as last
+
+fun main(){
+    println(&quot;Kotlin&quot;.last())
+}
+</code></pre>
+
+<p>扩展函数本质上是静态函数，它是静态函数的一个高效语法糖，其静态性决定了扩展函数不能被子类重写，它把调用对象作为它第一个参数。调用扩展函数，不会创建适配的对象或者任何运行时的损耗。和其他顶层函数一样，包含这个函数的 Java 类的名称是由这个函数声明的文件名决定的，映射规则与顶层函数一致。上面的扩展函数在 Java 中调用如下：</p>
+
+<pre><code class="language-java">char c = ExtentionsKt.lastChar(&quot;Java&quot;);
+</code></pre>
+
+<p>扩展函数可以使用更具体的接收者类型：</p>
+
+<pre><code class="language-kotlin">// 移除了泛型，这个扩展函数只适用与 Collection&lt;String&gt; 集合
+fun Collection&lt;String&gt;.join(
+    separator: String = &quot;,&quot;,
+    prefix: String = &quot;{&quot;,
+    postfix: String = &quot;}&quot;
+
+    // 这个是 Collection&lt;T&gt; 的扩展函数
+) = joinToString(separator, prefix, postfix)
+</code></pre>
+
+<p>扩展函数会被编译为静态函数，其不能被子类重写：</p>
+
+<pre><code class="language-kotlin">// Kotlin 类默认是 final 类型，不能被继承，如若需要被继承，需要使用 open 显式指定
+open class View {
+    open fun click() {
+        println(&quot;View clicked&quot;)
+    }
+}
+
+class Button : View() {
+    override fun click() {
+        println(&quot;Button clicked&quot;)
+    }
+}
+
+fun View.showOff() = println(&quot;I'm a view&quot;)
+fun Button.showOff() = println(&quot;I'm a button&quot;)
+
+fun main() {
+    val view: View = Button()
+    // 输出 -&gt; Button clicked
+    view.click()
+    // 输出 -&gt; I'm a view
+    // 扩展函数不能被重写
+    // 扩展函数不是类的一部分，声明在类之外，其调用由变量的静态类型决定，而非变量的运行时类型
+    view.showOff()
+}
+</code></pre>
+
+<p>如果一个类的成员函数和扩展函数有相同的签名，成员函数会被优先使用。</p>
+
+<h3 id="扩展属性">扩展属性</h3>
+
+<p>扩展属性可以扩展类的 API，可以用来访问属性，用的是属性语法而不是函数语法。扩展属性没有任何状态，没有支持字段来存储它。</p>
+
+<p>扩展属性示例：</p>
+
+<pre><code class="language-kotlin">// 文件名：Stringutil.kt
+
+// 扩展属性不用声明类型
+// val 变量必须定义 getter，因为没有支持字段，也就没有默认实现
+val String.lastChar
+    get() = get(length - 1)
+
+var StringBuilder.lastChar
+    get() = get(length - 1)
+    // setter 访问器不需要声明类型
+    set(value) = setCharAt(length - 1, value)
+
+fun main() {
+    println(&quot;Kotlin&quot;.lastChar)
+    val sb = StringBuilder(&quot;Kotlij&quot;)
+    sb.lastChar = 'n'
+    println(sb.lastChar)
+}
+
+// 上面的扩展属性在 Java 中可以这样调用：
+StringUtilKt.getLastChar(String str);
+StringUtilKt.setLastChar(StringBuilder sb, char c)
+StringUtilKt.getLastChar(StringBuilder sb)
+</code></pre>
+
+<h3 id="可变参数">可变参数</h3>
+
+<p>Kotlin 使用 varargs 关键字表示可变参数，与 Java 不同的是，如果要传递的参数已经被包装到数组中，Java 可以直接原样传递数组，而 Kotlin 要求先使用展开运算符显式地解包数组，以便数组中的每个元素在函数中都能作为单独的参数来调用：</p>
+
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) {
+    // listOf 扩展函数的参数是 varargs 类型
+    // * 是展开运算符
+    val list = listOf(&quot;list&quot;, *args)
+    println(list)
+}
+</code></pre>
+
+<h3 id="中缀调用">中缀调用</h3>
+
+<p>中缀调用是一种特殊的函数调用，可以与只有一个参数的函数一起使用，无论是普通函数还是扩展函数，要允许使用中缀符号调用函数，需要使用 infix 修饰符来标记它。</p>
+
+<p>中缀调用示例：</p>
+
+<pre><code class="language-kotlin">fun main() {
+    // mapOf() 参数为普通调用
+    val map = mapOf(1.to(&quot;one&quot;), 7.to(&quot;seven&quot;), 53.to(&quot;fifty-three&quot;))
+
+    // mapOf() 参数为中缀调用，与上边等价
+    val infixMap = mapOf(1 to &quot;one&quot;, 7 to &quot;seven&quot;, 53 to &quot;fifty-three&quot;)
+
+    println(map)
+    println(infixMap)
+}
+</code></pre>
+
+<p>to 函数是库函数，用于创建 Pair，其源码如下：</p>
+
+<pre><code class="language-kotlin">// 需要使用 infix 修饰符 to() 函数才能使用中缀调用
+public infix fun &lt;A, B&gt; A.to(that: B): Pair&lt;A, B&gt; = Pair(this, that)
+</code></pre>
+
+<h3 id="解构声明">解构声明</h3>
+
+<p>使用一个对象初始化多个变量叫做结构声明：</p>
+
+<pre><code class="language-kotlin">// 将 Pair 解构为两个变量
+val (key, value) = 1 to &quot;one&quot;
+
+val list = listOf(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;)
+// 将 list 的 key 和 value 解构到两个变量中
+for((index, value) in list.withIndex()){
+    println(&quot;$index:$value&quot;)
+}
+</code></pre>
+
+<h3 id="三重引号字符串">三重引号字符串</h3>
+
+<p>Kotlin 支持三重引号字符串，可以避免自负转义(即同时也不支持转义)，可以包含任何自负，包括换行符，还支持字符串模版。</p>
+
+<p>示例代码：</p>
+
+<pre><code class="language-kotlin">var kotlinLogo = &quot;&quot;&quot;| //
+                   .| //
+                   .| / \&quot;&quot;&quot;
+
+const val PRICE = 100
+// 第一个 $ 是字面量，第二个 $ 是字符串模版
+const val UNIT_PRICE = &quot;&quot;&quot;$$PRICE&quot;&quot;&quot;
+
+
+fun main() {
+    println(kotlinLogo.trimMargin(&quot;.&quot;))
+
+    // -&gt; $100
+    println(UNIT_PRICE)
+}
+</code></pre>
+
+<h3 id="局部函数">局部函数</h3>
+
+<p>Kotlin 支持局部函数，即函数嵌套函数，局部函数可以访问外部函数的参数。</p>
+
+<p>先看一段未使用局部函数的示例代码：</p>
+
+<pre><code class="language-kotlin">class User(val id: Int, val name: String, val address: String)
+
+fun saveUser(user: User) {
+
+    if (user.name.isEmpty()) {
+        throw IllegalArgumentException(&quot;Can't save user ${user.id} : empty Name&quot;)
+    }
+
+    if (user.address.isEmpty()) {
+        throw IllegalArgumentException(&quot;Can't save user ${user.id} : empty Address&quot;)
+    }
+
+    // todo save user
+
+}
+
+fun main() {
+    saveUser(User(1, &quot;&quot;, &quot;&quot;))
+}
+</code></pre>
+
+<p>如果有多个字段需要校验，则会有很多的重复代码，下面使用局部函数重构上面的代码：</p>
+
+<pre><code class="language-kotlin">class User(val id: Int, val name: String, val address: String)
+
+// 校验逻辑可能只是保存功能使用，所以不应该将其定义为 User 的成员函数
+// 应该定义为扩展函数
+fun User.validateBeforeSave() {
+
+    // 扩展函数的局部函数
+    fun validate(value: String, fieldName: String) {
+        if (value.isEmpty()) {
+            // 局部函数可以访问外部函数的参数
+            throw IllegalArgumentException(&quot;Can't save user $id : empty $fieldName&quot;)
+        }
+    }
+
+    validate(name, &quot;Name&quot;)
+    validate(address, &quot;Address&quot;)
+}
+
+fun saveUser(user: User) {
+
+    user.validateBeforeSave()
+
+    // todo save user
+}
+
+fun main() {
+    saveUser(User(1, &quot;&quot;, &quot;&quot;))
+}
+</code></pre>
+
+<h2 id="4-类-对象和接口">4 类、对象和接口</h2>
+
+<h3 id="继承">继承</h3>
 
             </div>
         </article>
@@ -762,10 +1135,10 @@ fun main() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://wptdxii.github.io/tags/note">Note</a></span><span class="tag"><a href="https://wptdxii.github.io/tags/kotlin">Kotlin</a></span>
                 </p>
 
-            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>5501 Words</p>
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>8740 Words</p>
 
             <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-17 20:11 &#43;0800</p>
-                <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-git-commit"><circle cx="12" cy="12" r="4"></circle><line x1="1.05" y1="12" x2="7" y2="12"></line><line x1="17.01" y1="12" x2="22.96" y2="12"></line></svg><a href="https://github.com/wptdxii/blog-hugo/commit/7b2a64077b72d8285091cf6c8b61396340423538" target="_blank" rel="noopener">7b2a640</a> @ 2019-04-24</p>
+                <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-git-commit"><circle cx="12" cy="12" r="4"></circle><line x1="1.05" y1="12" x2="7" y2="12"></line><line x1="17.01" y1="12" x2="22.96" y2="12"></line></svg><a href="https://github.com/wptdxii/blog-hugo/commit/c376a13fe732ceede1e68e0f559c30ad7a55087e" target="_blank" rel="noopener">c376a13</a> @ 2019-04-26</p>
         </div>
 
         
